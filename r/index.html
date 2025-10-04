@@ -202,7 +202,62 @@ img:not(.popup-img) {
   cursor: default;
 }
 
+/* --- CTA Buttons --- */
+.cta-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+}
 
+/* --- Menu Modal Styling --- */
+.menu-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.menu-content {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: var(--shadow);
+  position: relative;
+  font-family: Inter, system-ui;
+  animation: fadeIn 0.25s ease;
+}
+
+.menu-content h2 {
+  font-family: 'Playfair Display', serif;
+  color: #111;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.close-menu {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--muted);
+}
+
+.close-menu:hover {
+  color: var(--accent);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
   </style>
 </head>
@@ -247,6 +302,12 @@ img:not(.popup-img) {
         <div style="margin-top:12px;" class="muted">
         <p class="lead">Produits et services de qualité, conçus avec passion et savoir-faire — votre satisfaction au cœur de notre engagement depuis 1907.</p>
         </div>
+
+<div class="cta-row">
+  <button class="btn" id="openMenu">Menu</button>
+  <a href="reserver.html" class="btn secondary">Réserver</a>
+</div>
+        
           <div style="margin-top:12px;" class="muted">
             <!-- <strong>Tel:</strong> <a href="tel:+33123456789">01 23 45 67 89</a>--> <!-- • -->
             <strong>Email:</strong> <a href="mailto:contact@example.com"<span id="email-text">contact@example.com</span></a>
@@ -480,6 +541,35 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 </script>
+
+  <script>
+
+// ---------- MENU MODAL ----------
+const openMenuBtn = document.getElementById('openMenu');
+const closeMenuBtn = document.getElementById('closeMenu');
+const menuModal = document.getElementById('menuModal');
+
+if (openMenuBtn && menuModal && closeMenuBtn) {
+  openMenuBtn.addEventListener('click', () => {
+    menuModal.style.display = 'flex';
+    menuModal.setAttribute('aria-hidden', 'false');
+  });
+
+  closeMenuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    menuModal.style.display = 'none';
+    menuModal.setAttribute('aria-hidden', 'true');
+  });
+
+  menuModal.addEventListener('click', (e) => {
+    if (e.target === menuModal) {
+      menuModal.style.display = 'none';
+      menuModal.setAttribute('aria-hidden', 'true');
+    }
+  });
+}
+    
+  </script>
   
 <!-- Modal viewer -->
 
@@ -487,5 +577,20 @@ document.addEventListener('DOMContentLoaded', function () {
   <img id="modalImg" alt="">
 </div>
 
+<!-- Menu Modal -->
+<div class="menu-modal" id="menuModal" aria-hidden="true">
+  <div class="menu-content">
+    <button class="close-menu" id="closeMenu" aria-label="Fermer le menu">&times;</button>
+    <h2>Notre Menu</h2>
+    <p class="muted">Découvrez nos spécialités, nos plats faits maison, et nos produits du terroir.</p>
+    <ul class="muted">
+      <li>🍯 Tartine au miel artisanal</li>
+      <li>🥖 Pain de campagne croustillant</li>
+      <li>🧀 Plateau de fromages régionaux</li>
+      <li>🍷 Sélection de vins de Toulouse</li>
+    </ul>
+  </div>
+</div>
+  
 </body>
 </html>
