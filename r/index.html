@@ -304,8 +304,8 @@ img:not(.popup-img) {
         </div>
 
 <div class="cta-row">
-  <button class="btn" id="openMenu">Menu</button>
-  <a href="reserver.html" class="btn secondary">Réserver</a>
+ <button class="btn secondary" id="openMenu">Menu</button>
+<a href="reserver.html" class="btn secondary">Réserver</a>
 </div>
         
           <div style="margin-top:12px;" class="muted">
@@ -542,34 +542,34 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-  <script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // ---------- MENU MODAL ----------
+  const openMenuBtn = document.getElementById('openMenu');
+  const closeMenuBtn = document.getElementById('closeMenu');
+  const menuModal = document.getElementById('menuModal');
 
-// ---------- MENU MODAL ----------
-const openMenuBtn = document.getElementById('openMenu');
-const closeMenuBtn = document.getElementById('closeMenu');
-const menuModal = document.getElementById('menuModal');
+  if (openMenuBtn && menuModal && closeMenuBtn) {
+    openMenuBtn.addEventListener('click', () => {
+      menuModal.style.display = 'flex';
+      menuModal.setAttribute('aria-hidden', 'false');
+    });
 
-if (openMenuBtn && menuModal && closeMenuBtn) {
-  openMenuBtn.addEventListener('click', () => {
-    menuModal.style.display = 'flex';
-    menuModal.setAttribute('aria-hidden', 'false');
-  });
-
-  closeMenuBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    menuModal.style.display = 'none';
-    menuModal.setAttribute('aria-hidden', 'true');
-  });
-
-  menuModal.addEventListener('click', (e) => {
-    if (e.target === menuModal) {
+    closeMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       menuModal.style.display = 'none';
       menuModal.setAttribute('aria-hidden', 'true');
-    }
-  });
-}
-    
-  </script>
+    });
+
+    menuModal.addEventListener('click', (e) => {
+      if (e.target === menuModal) {
+        menuModal.style.display = 'none';
+        menuModal.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
+});
+</script>
   
 <!-- Modal viewer -->
 
