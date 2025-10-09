@@ -221,6 +221,71 @@
   padding: 4px 6px !important;
   vertical-align: top;
 }
+
+/* --- Formulaire en ligne --- */
+.two-column-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px 30px;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.two-column-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.two-column-form .form-group.wide {
+  grid-column: span 2;
+}
+
+.two-column-form label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.two-column-form input,
+.two-column-form textarea {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 13px;
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.two-column-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.two-column-form button {
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #f6b93b, #e58e26);
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  align-self: start;
+}
+
+.two-column-form button:hover {
+  background: linear-gradient(90deg, #e58e26, #f6b93b);
+  transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+  .two-column-form {
+    grid-template-columns: 1fr;
+  }
+}
+
     
   </style>
 </head>
@@ -304,51 +369,86 @@
     </div>
 
   <div class="card">
-       <h2>Méthode 2</h2>
-    <p>Remplissez le formulaire en ligne</p>
+  <h2>Méthode 2</h2>
+  <p>Remplissez le formulaire en ligne</p>
 </div>
 
- <div class="cardt">
-       <h2>Formulaire en ligne</h2>
-   <form action="https://formspree.io/f/myznpaqg" method="POST">
+<div class="cardt">
+  <h2>Formulaire en ligne</h2>
+
+  <form action="https://formspree.io/f/myznpaqg" method="POST" class="two-column-form">
+
     <div class="form-group">
-        <label for="Mon_Commerce">Mon Commerce</label>
-        <input type="text" id="Mon_Commerce" name="Mon Commerce" placeholder="Votre personnalisation ici" required>
+      <label for="Mon_Commerce">Mon Commerce</label>
+      <input type="text" id="Mon_Commerce" name="Mon Commerce" placeholder="Votre personnalisation ici" required>
     </div>
 
     <div class="form-group">
-        <label for="Ma_Spécialité_—_Toulouse">Ma Spécialité — Toulouse</label>
-        <input type="text" id="Ma_Spécialité_—_Toulouse" name="Ma Spécialité — Toulouse" placeholder="Votre personnalisation ici" required>
+      <label for="Ma_Specialite">Ma Spécialité — Toulouse</label>
+      <input type="text" id="Ma_Specialite" name="Ma Spécialité — Toulouse" placeholder="Votre personnalisation ici" required>
+    </div>
+
+    <div class="form-group wide">
+      <label for="Slogan">Produits et services de qualité, conçus avec passion et savoir-faire — votre satisfaction au cœur de notre engagement depuis 1907.</label>
+      <input type="text" id="Slogan" name="Slogan" placeholder="Votre personnalisation ici" required>
     </div>
 
     <div class="form-group">
-        <label for="Photo_1">Photo 1</label>
-        <input type="text" id="Photo_1" name="Photo 1" placeholder="Votre personnalisation ici" required>
+      <label for="Email">Adresse e-mail</label>
+      <input type="email" id="Email" name="Adresse e-mail" placeholder="contact@example.com" required>
     </div>
 
     <div class="form-group">
-        <label for="Produits">Produits et services de qualité, conçus avec passion et savoir-faire — votre satisfaction au cœur de notre engagement...</label>
-        <input type="text" id="Produits" name="Produits et services de qualité..." placeholder="Votre personnalisation ici" required>
+      <label for="Horaires">Horaires</label>
+      <input type="text" id="Horaires" name="Horaires" placeholder="Votre personnalisation ici">
     </div>
 
     <div class="form-group">
-        <label for="Description_concise">Description concise de votre page, riche en mots-clés (environ 160 caractères).</label>
-        <input type="text" id="Description_concise" name="Description concise de votre page" placeholder="Votre personnalisation ici" required>
+      <label for="Adresse">Adresse</label>
+      <input type="text" id="Adresse" name="Adresse" placeholder="Votre personnalisation ici">
     </div>
 
     <div class="form-group">
-        <label for="Mots_cles">Mots-clés : 5 à 10 mots-clés représentatifs de votre activité.</label>
-        <input type="text" id="Mots_cles" name="Mots-clés" placeholder="Votre personnalisation ici" required>
+      <label for="Telephone">Téléphone</label>
+      <input type="text" id="Telephone" name="Téléphone" placeholder="Votre personnalisation ici">
     </div>
 
     <div class="form-group">
-        <label for="Nom_commercial">Nom commercial de l'entreprise</label>
-        <input type="text" id="Nom_commercial" name="Nom commercial de l'entreprise" placeholder="Votre personnalisation ici" required>
+      <label for="Reseaux">Réseaux Sociaux</label>
+      <input type="text" id="Reseaux" name="Réseaux Sociaux" placeholder="Votre personnalisation ici">
     </div>
 
-    <button type="submit">Envoyer</button>
-</form>
- </div>
+    <div class="form-group wide">
+      <label for="SEOIntro">Ci-dessous la partie SEO / Référencement</label>
+      <textarea id="SEOIntro" name="Partie SEO / Référencement" placeholder="Ajoutez vos remarques ici" rows="2"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="TitrePage">Titre de la page (60 caractères max)</label>
+      <input type="text" id="TitrePage" name="Titre de la page" placeholder="Votre personnalisation ici">
+    </div>
+
+    <div class="form-group">
+      <label for="DescriptionSEO">Description concise (≈160 caractères)</label>
+      <input type="text" id="DescriptionSEO" name="Description concise" placeholder="Votre personnalisation ici">
+    </div>
+
+    <div class="form-group">
+      <label for="MotsCles">Mots-clés (5 à 10)</label>
+      <input type="text" id="MotsCles" name="Mots-clés" placeholder="Votre personnalisation ici">
+    </div>
+
+    <div class="form-group">
+      <label for="NomCommercial">Nom commercial</label>
+      <input type="text" id="NomCommercial" name="Nom commercial" placeholder="Votre personnalisation ici">
+    </div>
+
+    <div class="form-group wide">
+      <button type="submit">Envoyer</button>
+    </div>
+
+  </form>
+</div>
 
  <div class="card">
        <h2>Photos</h2>
