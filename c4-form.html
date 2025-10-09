@@ -223,21 +223,11 @@
 }
 
 /* --- Formulaire en ligne --- */
-.two-column-form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px 30px;
-  margin-top: 10px;
-  font-size: 12.5px;
-}
-
-.two-column-form .form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.two-column-form .form-group.wide {
-  grid-column: span 2;
+/* ===== Scoped to the form container only ===== */
+.cardt h2 {
+  font-size: 16px; /* consistent size for form header */
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
 .two-column-form label {
@@ -246,49 +236,37 @@
   color: #333;
   margin-bottom: 4px;
   line-height: 1.3em;
-  font-size: 12.5px;
+  font-size: 13px; /* fixed for desktop */
 }
 
 .two-column-form input {
-  padding: 7px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 12.5px;
-  font-family: inherit;
-  box-sizing: border-box;
-}
-
-.two-column-form button {
-  padding: 10px 20px;
-  background: linear-gradient(90deg, #f6b93b, #e58e26);
-  color: white;
   font-size: 13px;
-  font-weight: bold;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s ease;
-  align-self: start;
 }
 
-.two-column-form button:hover {
-  background: linear-gradient(90deg, #e58e26, #f6b93b);
-  transform: scale(1.03);
-}
-
+/* Section headers inside the form */
 .form-section {
-  grid-column: span 2;
-  margin: 25px 0 5px;
-  font-size: 13px;
+  font-size: 14px; /* fixed */
   font-style: italic;
+  font-weight: 500;
   color: #444;
-  border-bottom: 2px solid #f6b93b;
-  padding-bottom: 4px;
 }
 
+/* Responsive sizes scoped to form only */
 @media (max-width: 768px) {
-  .two-column-form {
-    grid-template-columns: 1fr;
+  .two-column-form label,
+  .two-column-form input,
+  .form-section,
+  .cardt h2 {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .two-column-form label,
+  .two-column-form input,
+  .form-section,
+  .cardt h2 {
+    font-size: 11.5px;
   }
 }
     
