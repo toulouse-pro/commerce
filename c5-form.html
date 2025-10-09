@@ -163,21 +163,12 @@
     }
 
     /* === GRID FIXED === */
-   /* .cardt form {
+   .cardt form {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 16px 30px;
       align-items: start; /* ensure vertical top alignment */
-    }*/
-
-    .cardt form {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* equal width columns */
-  column-gap: 30px;
-  row-gap: 16px;
-  align-items: start;
-  width: 100%;
-}
+    }
 
     .cardt .form-group {
       display: flex;
@@ -204,7 +195,7 @@
       align-items: flex-end;
     }
 
-   /* .cardt input {
+   .cardt input {
       padding: 7px 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -212,18 +203,7 @@
       font-family: inherit;
       box-sizing: border-box;
       height: 36px; /* uniform height for inputs */
-    }*/
-
-    .cardt input {
-  width: 100%; /* make input fill its grid cell */
-  box-sizing: border-box;
-  padding: 7px 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 13px;
-  font-family: inherit;
-  height: 36px;
-}
+    }
 
     .cardt .form-section {
       grid-column: span 2;
