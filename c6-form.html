@@ -171,13 +171,13 @@
       align-items: start;
     }
 
-    .cardt .form-group {
+  /*  .cardt .form-group {
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: stretch;
       width: 100%;
-    }
+    }*/
 
     .cardt .form-group.wide {
       grid-column: span 2;
@@ -199,7 +199,7 @@
       width: 100%;
     }
 
-   .cardt input {
+  /* .cardt input {
       padding: 7px 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -208,7 +208,19 @@
       box-sizing: border-box;
       height: 36px;
       width: 100%;
-    }
+    }*:
+
+    /* Ensure all form groups take full width of their grid cell */
+.cardt .form-group {
+  width: 100%;
+}
+
+/* Ensure all input fields take full width of their container */
+.cardt input {
+  width: 100%;
+  box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
 
     .cardt .form-section {
       grid-column: span 2;
@@ -230,7 +242,7 @@
       width: 100%;
     }
 
-    .cardt button {
+   /* .cardt button {
       grid-column: span 2;
       justify-self: center; /* Center the button */
       padding: 10px 20px;
@@ -243,7 +255,16 @@
       cursor: pointer;
       transition: 0.3s ease;
       margin-top: 20px;
-    }
+    }*/
+
+    /* Center the button horizontally */
+.cardt button {
+  grid-column: span 2; /* Span both columns */
+  justify-self: center; /* Center the button */
+  display: block; /* Ensure it behaves as a block element */
+  margin: 0 auto; /* Center the button */
+}
+
 
     .cardt button:hover {
       background: linear-gradient(90deg, #e58e26, #f6b93b);
