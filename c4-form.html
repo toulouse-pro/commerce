@@ -223,48 +223,111 @@
 }
 
 /* --- Formulaire en ligne --- */
-/* ===== Scoped to the form container only ===== */
-.cardt h2 {
-  font-size: 16px; /* consistent size for form header */
-  font-weight: 600;
-  margin-bottom: 6px;
+/* === FORM CARD === */
+.cardt {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-top: 25px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.two-column-form label {
+.cardt h2 {
+  font-size: 16px; /* fixed, not responsive */
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.cardt form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 30px;
+}
+
+/* === Form group === */
+.cardt .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Wide fields (spanning both columns) === */
+.cardt .form-group.wide {
+  grid-column: span 2;
+}
+
+/* === Labels === */
+.cardt label {
   font-style: italic;
   font-weight: 500;
   color: #333;
+  font-size: 13px; /* fixed desktop size */
   margin-bottom: 4px;
   line-height: 1.3em;
-  font-size: 13px; /* fixed for desktop */
+  white-space: normal; /* allow full text */
 }
 
-.two-column-form input {
+/* === Inputs === */
+.cardt input {
+  padding: 7px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   font-size: 13px;
+  font-family: inherit;
+  box-sizing: border-box;
 }
 
-/* Section headers inside the form */
-.form-section {
-  font-size: 14px; /* fixed */
+/* === Section titles === */
+.cardt .form-section {
+  grid-column: span 2;
+  margin: 25px 0 5px;
+  font-size: 14px;
   font-style: italic;
-  font-weight: 500;
   color: #444;
+  border-bottom: 2px solid #f6b93b;
+  padding-bottom: 4px;
 }
 
-/* Responsive sizes scoped to form only */
+/* === Submit button === */
+.cardt button {
+  grid-column: span 2;
+  justify-self: start;
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #f6b93b, #e58e26);
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.cardt button:hover {
+  background: linear-gradient(90deg, #e58e26, #f6b93b);
+  transform: scale(1.03);
+}
+
+/* === Responsive breakpoints === */
 @media (max-width: 768px) {
-  .two-column-form label,
-  .two-column-form input,
-  .form-section,
+  .cardt form {
+    grid-template-columns: 1fr;
+  }
+
+  .cardt label,
+  .cardt input,
+  .cardt .form-section,
   .cardt h2 {
     font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .two-column-form label,
-  .two-column-form input,
-  .form-section,
+  .cardt label,
+  .cardt input,
+  .cardt .form-section,
   .cardt h2 {
     font-size: 11.5px;
   }
