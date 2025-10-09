@@ -583,28 +583,40 @@ document.getElementById('downloadTable').addEventListener('click', function() {
     });
   }
 </script>
-
+  
 <script>
-  // form submit via fetch (keeps your behavior)
-  var form = document.querySelector('form');
-  if (form) {
-    form.onsubmit = function(e) {
-      e.preventDefault();
-      fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-      })
-      .then(response => {
-        alert('Message sent successfully!');
+var form = document.querySelector('form');
+if (form) {
+  form.onsubmit = function(e) {
+    e.preventDefault();
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: {
+        'Accept': 'application/json', // Tell Formspree to return JSON
+      },
+    })
+    .then(response => {
+      if (response.ok) {
+        // Success: Show a success message
+        alert('Message envoyé avec succès !');
         form.reset();
-      })
-      .catch(error => {
-        alert('Error sending message. Please try again.');
-      });
-    };
-  }
-</script>
-
+      } else {
+        // Handle non-OK responses (e.g., validation errors)
+        response.json().then(data => {
+          alert('Erreur : ' + (data.error || 'Veuillez réessayer.'));
+        });
+      }
+    })
+    .catch(error => {
+      // Only show an error if the request actually failed
+      console.error('Erreur réseau :', error);
+      alert('Erreur réseau. Veuillez vérifier votre connexion.');
+    });
+  };
+}
+  </script>
+  
 <script>
 /* ===== TABLE POST-PROCESS: convert <br> to comma, renumber rows skipping blank-number rows ===== */
 document.addEventListener('DOMContentLoaded', function () {
