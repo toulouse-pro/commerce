@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>💚 Formulaire</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --accent: green;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 12px;
+      --max-width: 700px;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", Arial, sans-serif;
+      background: var(--bg);
+      color: #111;
+      line-height: 1.2;
+    }
+
+    .top-btn {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: block;
+      margin: 0 auto 16px auto;
+      padding: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      background: #fff;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      text-align: center;
+      transition: background 0.3s, transform 0.2s;
+      width: var(--max-width);
+      max-width: 80%;
+    }
+
+    .top-btn::before {
+      content: "←";
+      color: #fff;
+      -webkit-text-stroke: 1px var(--accent);
+      margin-right: 8px;
+      font-size: 1.2em;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      animation: slideUp 0.6s ease;
+      width: var(--max-width);
+      max-width: 85%;
+    }
+
+    .card h2 {
+      font-size: 1.4rem;
+      margin: 0 0 4px 0;
+      color: var(--accent);
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      margin: 0 0 6px 0;
+      color: #333;
+    }
+
+    .card p {
+      color: #555;
+      margin: 4px 0;
+      font-size: 0.92rem;
+      line-height: 1.3;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(15px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .top-btn {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+      .card h2 { font-size: 1.2rem; }
+      .card h3 { font-size: 0.95rem; }
+    }
+
+    /* === TABLE FIX === */
+    #customTable {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 600px;
+      font-family: Arial, sans-serif;
+      font-size: 7px !important;
+      white-space: nowrap !important;
+    }
+
+    #customTable th,
+    #customTable td {
+      text-align: left !important;
+      font-size: 7px !important;
+      white-space: nowrap !important;
+      padding: 4px 6px !important;
+      vertical-align: top;
+    }
+
+    #customTable td:first-child { width: 5%; }
+    #customTable thead th:first-child { text-align: center !important; }
+
+    /* === FORMULAIRE === */
+    .cardt {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-top: 25px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cardt h2 {
+      font-size: 1.4rem;
+      margin: 0 0 4px 0;
+      color: var(--accent);
+    }
+
+    .cardt h3 {
+      font-size: 1rem;
+      margin: 0 0 6px 0;
+      color: #333;
+    }
+
+    .cardt p {
+      color: #555;
+      margin: 4px 0;
+      font-size: 0.92rem;
+      line-height: 1.3;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    /* === GRID FIXED === */
+    .cardt form {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px 30px;
+      align-items: start; /* ensure vertical top alignment */
+    }
+
+    .cardt .form-group {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+    }
+
+    .cardt .form-group.wide {
+      grid-column: span 2;
+      margin-top: 5px;
+    }
+
+    .cardt label {
+      font-style: italic;
+      font-weight: 500;
+      color: #333;
+      font-size: 13px;
+      margin-bottom: 4px;
+      line-height: 1.3em;
+      white-space: normal;
+      min-height: 32px; /* uniform height for labels */
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .cardt input {
+      padding: 7px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 13px;
+      font-family: inherit;
+      box-sizing: border-box;
+      height: 36px; /* uniform height for inputs */
+    }
+
+    .cardt .form-section {
+      grid-column: span 2;
+      margin: 25px 0 5px;
+      font-size: 14px;
+      font-style: italic;
+      color: #444;
+      border-bottom: 2px solid #f6b93b;
+      padding-bottom: 4px;
+    }
+
+    .cardt button {
+      grid-column: span 2;
+      justify-self: start;
+      padding: 10px 20px;
+      background: linear-gradient(90deg, #f6b93b, #e58e26);
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .cardt button:hover {
+      background: linear-gradient(90deg, #e58e26, #f6b93b);
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 768px) {
+      .cardt form {
+        grid-template-columns: 1fr;
+      }
+
+      .cardt label,
+      .cardt input,
+      .cardt .form-section,
+      .cardt h2 {
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .cardt label,
+      .cardt input,
+      .cardt .form-section,
+      .cardt h2 {
+        font-size: 11.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- (Your full HTML content remains unchanged below) -->
+<!-- ... -->
