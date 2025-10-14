@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="unicorn">
+<html lang="fr" data-theme="crazy-unicorn">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -313,6 +313,47 @@
       nav.site-nav { width: calc(100% - 24px); left: 12px; right: 12px; }
     }
 
+[data-theme="crazy-unicorn"] {
+  /* Base colors */
+  --bg: #fffbff;             /* super light lavender/pink */
+  --text: #4b006e;           /* deep purple */
+  --text-dark: #2a0045;      
+  --muted: #b87eff;           /* pastel purple */
+
+  /* Accent / brand */
+  --accent: #ff00ff;          /* neon magenta */
+  --accent-light: #ff80ff;    
+  --accent-dark: #cc00cc;     
+
+  /* Backgrounds */
+  --surface: #fff0ff;        
+  --surface-alt: rgba(255,240,255,0.95);
+  --surface-gradient: linear-gradient(135deg, #ff00ff 0%, #00ffff 50%, #ffea00 100%);
+
+  /* Borders */
+  --border-light: rgba(255,0,255,0.3);
+  --border-mid: rgba(0,255,255,0.4);
+  --border-strong: rgba(255,234,0,0.5);
+  --border-stronger: rgba(255,0,255,0.7);
+  --border-accent: rgba(255,0,255,0.5);
+  --border-accent-hover: rgba(0,255,255,0.25);
+
+  /* Shadows */
+  --shadow: 0 6px 22px rgba(203,0,255,0.5);
+  --shadow-accent: 0 6px 18px rgba(255,0,255,0.35);
+  --shadow-strong: 0 18px 40px rgba(0,255,255,0.5);
+  --shadow-btn: 0 4px 10px rgba(255,234,0,0.5);
+
+  /* Overlay / transparency */
+  --overlay-dark: rgba(0,0,0,0.6);
+  --overlay-light: rgba(255,0,255,0.15);
+
+  /* Feedback colors */
+  --success: #00ff9f;         /* neon mint */
+  --warning: #ffea00;         /* neon yellow */
+  --error: #ff007f;           /* neon pink */
+}
+    
     [data-theme="unicorn"] {
   /* Base colors */
   --bg: #fff8ff;          /* very light lavender */
