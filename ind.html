@@ -326,8 +326,227 @@
       </div>
     </header>
 
-    <!-- rest of your content remains identical -->
-    <!-- ... (Avis, Horaires, Photos, etc.) -->
+    <section id="avis" aria-labelledby="avis-title">
+      <div class="section-title"><h2 id="avis-title">Avis clients</h2><span class="muted">Ce que disent nos clients</span></div>
+      <div style="display:flex;gap:16px;align-items:center;">
+        <div style="font-size:28px;font-weight:700;color:var(--accent);">4.8</div>
+        <div>
+          <div class="muted">Note moyenne — basé sur 124 avis</div>
+          <div class="stars" aria-hidden="true">★★★★★</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+        <div class="review">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>Julie P.</strong><span class="stars">★★★★★</span>
+          </div>
+          <p class="muted" style="margin:8px 0 0;">Les produits sont incroyables. Service chaleureux, une adresse incontournable.</p>
+        </div>
+        <div class="review">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>Marc L.</strong><span class="stars">★★★★☆</span>
+          </div>
+          <p class="muted" style="margin:8px 0 0;">Qualité excellente. Un peu d’attente aux heures de pointe mais ça vaut la peine.</p>
+        </div>
+        <div class="review">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>Camille R.</strong><span class="stars">★★★★★</span>
+          </div>
+          <p class="muted" style="margin:8px 0 0;">Produits de qualité et bien présentés, parfait pour les occasions spéciales.</p>
+        </div>
+        <div class="review">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <strong>Alex D.</strong><span class="stars">★★★★☆</span>
+          </div>
+          <p class="muted" style="margin:8px 0 0;">Bonne expérience globale. Service correct.</p>
+        </div>
+      </div>
+      <p style="margin-top:12px;" class="muted">Vous avez aimé ? <a href="mailto:contact@example.com">Laissez-nous un avis</a> ou sur Google / Facebook.</p>
+    </section>
+
+    <section id="..." aria-labelledby="...-title">
+      <div class="section-title"><h2 id="...">Bienvenue dans ma boutique !</h2></div>
+      <div class="hero-left">
+        <div class="hero-right">
+          <img src="images/RecordStoreOwner.jpg" alt="Entrepreneur">
+        </div>
+        <div class="card">
+          <p class="muted">Nous sommes ravis de vous accompagner et de répondre à vos besoins avec attention et professionnalisme.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="horaires" aria-labelledby="horaires-title">
+      <div class="section-title"><h2 id="horaires-title">Horaires</h2></div>
+      <table class="hours" aria-describedby="horaires-desc">
+        <tbody>
+          <tr><td>Lundi</td><td>9:00 — 19:00</td></tr>
+          <tr><td>Mardi</td><td>9:00 — 19:00</td></tr>
+          <tr><td>Mercredi</td><td>9:00 — 19:00</td></tr>
+          <tr><td>Jeudi</td><td>9:00 — 19:00</td></tr>
+          <tr><td>Vendredi</td><td>9:00 — 19:00</td></tr>
+          <tr><td>Samedi</td><td>9:00 — 13:00</td></tr>
+          <tr><td>Dimanche</td><td>Fermé</td></tr>
+        </tbody>
+      </table>
+      <p id="horaires-desc" class="muted">Fermé les jours fériés — Spécialités sur commande.</p>
+    </section>
+
+    <section id="photos" aria-labelledby="photos-title">
+      <div class="section-title"><h2 id="photos-title">Photos</h2><span class="muted">Notre Sélection</span></div>
+      <div class="gallery" id="gallery">
+        <img loading="lazy" src="images/inside1.jpg" alt="inside 1" class="popup-img">
+        <img loading="lazy" src="images/inside2.jpeg" alt="inside 2" class="popup-img">
+        <img loading="lazy" src="images/inside3.jpg" alt="inside 3" class="popup-img">
+      </div>
+    </section>
+
+    <section id="menu" aria-labelledby="menu-title">
+      <div class="section-title"><h2 id="menu-title">Spécialités</h2><span class="muted">Choisissez vos favoris</span></div>
+      <div class="info-row">
+        <div class="card">
+          <h3 style="margin:0 0 6px 0;">Nos Produits Phares</h3>
+          <p class="muted">Produit classique. Produit complet. Produit traditionnel.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 6px 0;">Nos Spécialités</h3>
+          <p class="muted">Spécialité maison. Spécialité populaire. Spécialité artisanale.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 6px 0;">Services sur mesure</h3>
+          <p class="muted">Prestations adaptées. Solutions personnalisées. Créations exclusives (sur commande).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="carte" aria-labelledby="carte-title">
+      <div class="section-title"><h2 id="carte-title">Nous trouver</h2><span class="muted">Plan et itinéraire</span></div>
+      <div class="map">
+        <iframe title="Mon Commerce Spécialisé" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2888.278973552961!2d1.4125611752737637!3d43.62155225447857!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aebb303d6a08b9%3A0xa3e9906247b3992!2sStade%20Toulousain!5e0!3m2!1sen!2sde!4v1759135891249!5m2!1sen!2sde" style="width:100%;height:100%;border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <aside style="display:flex;flex-direction:column;gap:8px;">
+        <div class="card">
+          <strong>Adresse</strong>
+          <div class="muted">114 rue des Troènes, 31200 Toulouse</div>
+          <div style="margin-top:8px;"><strong>Téléphone</strong><div class="muted"><a href="tel:+33123456789">01 23 45 67 89</a></div></div>
+          <div style="margin-top:8px;"><strong>Réseaux Sociaux</strong><div class="muted"><a href="https://facebook.com" aria-label="Facebook">Facebook</a> • <a href="https://instagram.com" aria-label="Instagram">Instagram</a></div></div>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      © Mon Commerce Spécialisé — Tous droits réservés — <span class="muted">Site développé avec <a href="c-deal.html" style="text-decoration: none;">❤️</a></span>
+    </footer>
   </main>
+
+  <div class="modal" id="imgModal" aria-hidden="true">
+    <img id="modalImg" alt="">
+  </div>
+
+  <div id="cookie-banner" class="cookie-banner">
+    <span>🍪 Ce site utilise des cookies</span>
+    <div class="cookie-actions">
+      <button id="cookie-accept" class="cookie-btn accept">OK</button>
+      <button id="cookie-decline" class="cookie-btn decline">Non, merci</button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const hamburger = document.getElementById('hamburger');
+      const nav = document.getElementById('site-nav');
+      const modal = document.getElementById('imgModal');
+      const modalImg = document.getElementById('modalImg');
+      const copyIcon = document.getElementById("copy-icon");
+      const emailText = document.getElementById("email-text")?.innerText || '';
+      const copiedPopup = document.getElementById("copied-popup");
+      const banner = document.getElementById('cookie-banner');
+      const acceptBtn = document.getElementById('cookie-accept');
+      const declineBtn = document.getElementById('cookie-decline');
+
+      // Nav toggle
+      if (hamburger && nav) {
+        hamburger.addEventListener('click', () => {
+          const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+          hamburger.setAttribute('aria-expanded', String(!expanded));
+          nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+          nav.setAttribute('aria-hidden', String(expanded));
+        });
+
+        nav.querySelectorAll('a').forEach(a => {
+          a.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = document.querySelector(a.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            nav.style.display = 'none';
+            nav.setAttribute('aria-hidden', 'true');
+            hamburger.setAttribute('aria-expanded', 'false');
+          });
+        });
+      }
+
+      // Image modal
+      document.querySelectorAll('.popup-img').forEach(img => {
+        img.addEventListener('click', (e) => {
+          modalImg.src = img.dataset.large || img.src;
+          modalImg.alt = img.alt || '';
+          modal.style.display = 'flex';
+          modal.setAttribute('aria-hidden', 'false');
+          e.stopPropagation();
+        });
+      });
+
+      modal.addEventListener('click', () => {
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+        modalImg.src = '';
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+          modal.style.display = 'none';
+          modal.setAttribute('aria-hidden', 'true');
+          modalImg.src = '';
+        }
+      });
+
+      // Contact email copy
+      if (copyIcon) {
+        copyIcon.addEventListener("click", () => {
+          navigator.clipboard.writeText(emailText).then(() => {
+            copiedPopup.style.display = "inline";
+            setTimeout(() => { copiedPopup.style.display = "none"; }, 2000);
+          }).catch(err => console.error("Échec de la copie :", err));
+        });
+      }
+
+      // Cookie banner
+      if (localStorage.getItem('cookieConsent')) {
+        banner.style.display = 'none';
+        banner.setAttribute('aria-hidden', 'true');
+      }
+
+      acceptBtn.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'true');
+        hideBanner();
+      });
+
+      declineBtn.addEventListener('click', () => {
+        localStorage.setItem('cookieConsent', 'false');
+        hideBanner();
+      });
+
+      function hideBanner() {
+        banner.style.opacity = '0';
+        setTimeout(() => {
+          banner.style.display = 'none';
+          banner.setAttribute('aria-hidden', 'true');
+        }, 300);
+      }
+    });
+  </script>
 </body>
 </html>
