@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="fr" data-theme="unicorn">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -312,6 +312,47 @@
       .btn { flex: 1; text-align: center; }
       nav.site-nav { width: calc(100% - 24px); left: 12px; right: 12px; }
     }
+
+    [data-theme="unicorn"] {
+  /* Base colors */
+  --bg: #fff8ff;          /* very light lavender */
+  --text: #4b3f72;        /* soft purple for text */
+  --text-dark: #3a2c5c;   
+  --muted: #9b7cb6;        /* pastel muted purple */
+
+  /* Accent / brand */
+  --accent: #ff6ec7;       /* hot pink */
+  --accent-light: #ffb3e0; /* lighter pink */
+  --accent-dark: #d94ca3;  /* deeper pink/magenta */
+
+  /* Backgrounds */
+  --surface: #fff0f8;      /* very pale pink */
+  --surface-alt: rgba(255,240,248,0.95);
+  --surface-gradient: linear-gradient(180deg, rgba(255,110,199,0.08), rgba(255,179,224,0.03));
+
+  /* Borders */
+  --border-light: rgba(255,182,193,0.3);
+  --border-mid: rgba(255,182,193,0.5);
+  --border-strong: rgba(255,182,193,0.7);
+  --border-stronger: rgba(255,182,193,0.9);
+  --border-accent: rgba(255,110,199,0.25);
+  --border-accent-hover: rgba(255,110,199,0.12);
+
+  /* Shadows */
+  --shadow: 0 6px 22px rgba(203, 153, 236, 0.25); /* soft purple shadow */
+  --shadow-accent: 0 6px 18px rgba(255,110,199,0.18);
+  --shadow-strong: 0 18px 40px rgba(203,153,236,0.5);
+  --shadow-btn: 0 4px 10px rgba(255,110,199,0.2);
+
+  /* Overlay / transparency */
+  --overlay-dark: rgba(0,0,0,0.6);
+  --overlay-light: rgba(255,182,193,0.15);
+
+  /* Feedback colors */
+  --success: #9fffbe;     /* mint green */
+  --warning: #ffe066;     /* soft yellow */
+  --error: #ff6b81;       /* coral pink */
+}
 
 [data-theme="dark"] {
   /* Base colors */
