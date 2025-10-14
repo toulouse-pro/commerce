@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -312,6 +312,48 @@
       .btn { flex: 1; text-align: center; }
       nav.site-nav { width: calc(100% - 24px); left: 12px; right: 12px; }
     }
+
+[data-theme="dark"] {
+  /* Base colors */
+  --bg: #0b0b0b;
+  --text: #f0f0f0;
+  --text-dark: #e0e0e0;
+  --muted: #aaaaaa;
+
+  /* Accent / brand */
+  --accent: #ffb547;
+  --accent-light: #ffd787;
+  --accent-dark: #e6a430;
+
+  /* Backgrounds */
+  --surface: #181818;
+  --surface-alt: rgba(24,24,24,0.95);
+  --surface-gradient: linear-gradient(180deg, rgba(255,181,71,0.06), rgba(255,181,71,0.02));
+
+  /* Borders */
+  --border-light: rgba(255,255,255,0.08);
+  --border-mid: rgba(255,255,255,0.12);
+  --border-strong: rgba(255,255,255,0.15);
+  --border-stronger: rgba(255,255,255,0.25);
+  --border-accent: rgba(255,181,71,0.15);
+  --border-accent-hover: rgba(255,181,71,0.08);
+
+  /* Shadows */
+  --shadow: 0 6px 22px rgba(0,0,0,0.5);
+  --shadow-accent: 0 6px 18px rgba(255,181,71,0.18);
+  --shadow-strong: 0 18px 40px rgba(0,0,0,0.6);
+  --shadow-btn: 0 4px 10px rgba(255,181,71,0.2);
+
+  /* Overlay / transparency */
+  --overlay-dark: rgba(0,0,0,0.8);
+  --overlay-light: rgba(255,255,255,0.08);
+
+  /* Feedback colors (optional) */
+  --success: #4caf50;
+  --warning: #ff9800;
+  --error: #e53935;
+}
+    
   </style>
 </head>
 
