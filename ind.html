@@ -312,20 +312,22 @@
 
   <main class="container" id="top">
     <!-- ✅ Fixed hero structure -->
-    <header class="hero">
+    <header class="hero" role="banner" aria-label="Présentation">
       <div class="hero-left">
-        <p class="lead">Produits et services de qualité, conçus avec passion et savoir-faire — votre satisfaction au cœur de notre engagement depuis 1963.</p>
-        <div class="muted" style="margin-top:12px;">
+        <div class="hero-right">
+          <img src="images/Ralph.jpg" alt="Vitrine">
+        </div>
+        <div style="margin-top:12px;" class="muted">
+          <p class="lead">Produits et services de qualité, conçus avec passion et savoir-faire — votre satisfaction au cœur de notre engagement depuis 1963.</p>
+        </div>
+        <div style="margin-top:12px;" class="muted">
           <strong>Email:</strong> <a href="mailto:contact@example.com"><span id="email-text">contact@example.com</span></a>
-          <i class="fa-regular fa-clone" id="copy-icon" style="cursor:pointer;margin-left:8px;"></i>
-          <span id="copied-popup" style="display:none;margin-left:10px;color:blue;font-size:0.8rem;">Copié !</span>
+          <i class="fa-regular fa-clone" id="copy-icon" style="cursor: pointer; margin-left: 8px;" title="Copy to clipboard"></i>
+          <span id="copied-popup" style="display:none; margin-left: 10px; color: blue; font-size: 0.8rem;">Copié !</span>
         </div>
       </div>
-      <div class="hero-right">
-        <img src="images/Ralph.jpg" alt="Vitrine">
-      </div>
     </header>
-
+    
     <section id="avis" aria-labelledby="avis-title">
       <div class="section-title"><h2 id="avis-title">Avis clients</h2><span class="muted">Ce que disent nos clients</span></div>
       <div style="display:flex;gap:16px;align-items:center;">
