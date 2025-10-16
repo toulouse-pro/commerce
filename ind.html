@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="black-white-red-green">
+<html lang="fr" data-theme="black-white-red-green-soft">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -264,42 +264,43 @@
       .hero-right { width: 100%; }
     }
 
-[data-theme="black-white-red-green"] {
-  --bg: #000000; /* Solid black base */
-  --text: #ffffff; /* Pure white text */
-  --text-dark: #e0e0e0; /* Light gray for secondary text */
-  --muted: #b5b5b5; /* Muted gray details */
+[data-theme="black-white-red-green-soft"] {
+  --bg: #101313; /* slightly off-black for less stark background */
+  --text: #f8f8f8; /* soft, nearly white text */
+  --text-dark: #b9b9b9; /* gentle gray for secondary text */
+  --muted: #8ca398; /* dusty green-gray for muted content */
 
-  /* Red and Green Accents */
-  --accent: #ff1a1a; /* Bold neon red accent */
-  --accent-light: #ff4040; /* Electric, light red highlight */
-  --accent-dark: #b30000; /* Deep red for depth */
-  --accent-green: #39ff14; /* Neon green for main accent (NOT muted) */
+  /* Red and Green Accents—softer, less neon */
+  --accent: #c72929; /* muted chili red for accents */
+  --accent-light: #da6c51; /* soft red-orange highlight */
+  --accent-dark: #861a1a; /* deep burgundy red */
+  --accent-green: #4eda6b; /* fresh mid green accent (not neon) */
 
-  /* Green highlight—prominent, high contrast */
-  --highlight: #00ff00; /* Classic neon green highlight */
+  /* Highlight and action states — smooth green */
+  --highlight: #7ee582; /* pastel mint-green for highlights */
 
-  /* Card + Top Bar Colors */
-  --surface: #191919; /* Near-black for cards */
-  --surface-alt: rgba(41, 41, 41, 0.95);
-  --surface-gradient: linear-gradient(135deg, #00ff00 0%, #000000 100%);
+  /* Card + top bar colors */
+  --surface: #222726; /* dark slate for cards, easy on eyes */
+  --surface-alt: rgba(34, 39, 38, 0.92); /* translucent slate for overlays */
+  --surface-gradient: linear-gradient(135deg, #4eda6b 0%, #101313 100%);
 
-  /* Borders with vivid green and red accents */
-  --border-light: rgba(255,255,255,0.15);
-  --border-mid: rgba(255, 26, 26, 0.3);
-  --border-strong: rgba(57,255,20,0.65); /* Strong neon green border */
-  --border-accent: rgba(255, 26, 26, 0.4);
-  --border-accent-hover: rgba(39,255,20,0.34); /* Neon green hover accent */
+  /* Borders and outlines with color blending */
+  --border-light: rgba(248, 248, 248, 0.12); /* subtle white border */
+  --border-mid: rgba(199, 41, 41, 0.19); /* muted red accent */
+  --border-strong: rgba(78, 218, 107, 0.23); /* soft green glow border */
+  --border-accent: rgba(126, 229, 130, 0.27);
+  --border-accent-hover: rgba(218, 108, 81, 0.17);
 
-  /* Neon colored shadows */
-  --shadow: 0 6px 22px rgba(57,255,20,0.25); /* Green glow */
-  --shadow-accent: 0 6px 18px rgba(255,26,26,0.18); /* Red glow */
-  --shadow-strong: 0 18px 40px rgba(0,0,0,0.4);
-  --shadow-btn: 0 4px 10px rgba(57,255,20,0.23);
+  /* Smoothed colored shadows */
+  --shadow: 0 6px 22px rgba(78,218,107,0.09); /* mint green, soft */
+  --shadow-accent: 0 6px 18px rgba(199,41,41,0.12); /* red shadow */
+  --shadow-strong: 0 18px 40px rgba(16,19,19,0.16); /* semi-transparent black */
+  --shadow-btn: 0 4px 10px rgba(126,229,130,0.13); /* green hint */
 
-  --overlay-dark: rgba(0,0,0,0.5);
-  --overlay-light: rgba(39,255,20,0.14);
+  --overlay-dark: rgba(16, 19, 19, 0.37);
+  --overlay-light: rgba(78,218,107,0.08);
 }
+
 
 
     
