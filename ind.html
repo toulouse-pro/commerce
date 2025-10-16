@@ -265,41 +265,42 @@
     }
 
 [data-theme="black-white-red-green"] {
-  --bg: #000000; /* solid black background for depth */
-  --text: #ffffff; /* pure white for readable contrast */
-  --text-dark: #e0e0e0; /* light gray for muted text */
-  --muted: #b5b5b5; /* subtle gray for secondary details */
+  --bg: #000000; /* Solid black base */
+  --text: #ffffff; /* Pure white text */
+  --text-dark: #e0e0e0; /* Light gray for secondary text */
+  --muted: #b5b5b5; /* Muted gray details */
 
-  /* Red and green highlight range */
-  --accent: #ff1a1a; /* bold, eye-catching red accent */
-  --accent-light: #ff4040; /* slightly softer, luminous red highlight */
-  --accent-dark: #b30000; /* deep red for strong visual separation */
-  --accent-green: #39ff14; /* neon green accent for icons/alerts */
+  /* Red and Green Accents */
+  --accent: #ff1a1a; /* Bold neon red accent */
+  --accent-light: #ff4040; /* Electric, light red highlight */
+  --accent-dark: #b30000; /* Deep red for depth */
+  --accent-green: #39ff14; /* Neon green for main accent (NOT muted) */
 
-  /* Highlight and success states */
-  --highlight: #39ff14; /* bright green for highlight and active states */
+  /* Green highlight—prominent, high contrast */
+  --highlight: #00ff00; /* Classic neon green highlight */
 
-  /* Card + top bar colors */
-  --surface: #191919; /* off-black for surfaces/cards */
-  --surface-alt: rgba(41, 41, 41, 0.95); /* dark gray overlay for depth */
-  --surface-gradient: linear-gradient(135deg, #252525 0%, #191919 100%);
+  /* Card + Top Bar Colors */
+  --surface: #191919; /* Near-black for cards */
+  --surface-alt: rgba(41, 41, 41, 0.95);
+  --surface-gradient: linear-gradient(135deg, #00ff00 0%, #000000 100%);
 
-  /* Borders with colored accents */
+  /* Borders with vivid green and red accents */
   --border-light: rgba(255,255,255,0.15);
-  --border-mid: rgba(255, 26, 26, 0.3); /* red accent for borders */
-  --border-strong: rgba(57,255,20,0.4); /* green accent border */
-  --border-accent: rgba(255, 26, 26, 0.5);
-  --border-accent-hover: rgba(39,255,20,0.3);
+  --border-mid: rgba(255, 26, 26, 0.3);
+  --border-strong: rgba(57,255,20,0.65); /* Strong neon green border */
+  --border-accent: rgba(255, 26, 26, 0.4);
+  --border-accent-hover: rgba(39,255,20,0.34); /* Neon green hover accent */
 
-  /* Vibrant colored shadows */
-  --shadow: 0 6px 22px rgba(255,26,26,0.2); /* soft red shadow */
-  --shadow-accent: 0 6px 18px rgba(57,255,20,0.15); /* green glow */
+  /* Neon colored shadows */
+  --shadow: 0 6px 22px rgba(57,255,20,0.25); /* Green glow */
+  --shadow-accent: 0 6px 18px rgba(255,26,26,0.18); /* Red glow */
   --shadow-strong: 0 18px 40px rgba(0,0,0,0.4);
-  --shadow-btn: 0 4px 10px rgba(255,26,26,0.25);
+  --shadow-btn: 0 4px 10px rgba(57,255,20,0.23);
 
   --overlay-dark: rgba(0,0,0,0.5);
   --overlay-light: rgba(39,255,20,0.14);
 }
+
 
     
   </style>
