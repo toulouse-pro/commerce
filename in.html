@@ -8,21 +8,53 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
-    :root {
-      --max-width: 700px;
-      --radius: 10px;
+    /* === Theme Variables (semantic by element) === */
+    [data-theme="black-white-red-green-balanced"] {
+      /* Global structure */
+      --page-bg: #141716;
+      --text-color: #f2f2f2;
+
+      /* Topbar */
+      --topbar-bg: #141716;
+      --topbar-text: #f2f2f2;
+      --topbar-shadow: 0 6px 16px rgba(0,0,0,0.25);
+
+      /* Brand */
+      --brand-name-color: #f2f2f2;
+      --brand-tag-color: #56c47b;
+
+      /* Hamburger menu */
+      --hamburger-bg: #141716;
+      --hamburger-border: #d04a4a;
+      --hamburger-bar: #f2f2f2;
+
+      /* Navigation menu */
+      --nav-bg: rgba(20,23,22,0.95);
+      --nav-text: #f2f2f2;
+      --nav-hover-bg: #e06b6b;
+      --nav-hover-text: #141716;
+      --nav-shadow: 0 6px 16px rgba(0,0,0,0.25);
+
+      /* Hero section */
+      --hero-bg: rgba(28,32,30,0.92);
+      --hero-shadow: 0 6px 16px rgba(0,0,0,0.25);
+
+      /* Email link */
+      --email-link-color: #d04a4a;
+      --email-link-hover: #56c47b;
     }
 
-    html, body { height: 100%; }
+    /* === Global styles === */
     body {
       margin: 0;
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       background: var(--page-bg);
-      color: var(--text-primary);
-      -webkit-font-smoothing: antialiased;
+      color: var(--text-color);
       line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* === Topbar === */
     .topbar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -31,9 +63,9 @@
       gap: 12px;
       align-items: center;
       padding: 10px 12px;
-      background: var(--nav-bg);
-      box-shadow: var(--shadow-header);
-      border-bottom: none;
+      background: var(--topbar-bg);
+      color: var(--topbar-text);
+      box-shadow: var(--topbar-shadow);
     }
 
     .brand {
@@ -43,44 +75,46 @@
       padding-left: 6px;
     }
 
+    .brand .name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--brand-name-color);
+    }
+
+    .brand .tag {
+      font-size: 0.75rem;
+      color: var(--brand-tag-color);
+    }
+
+    /* === Hamburger === */
     .hamburger {
       width: 44px; height: 44px;
       display: grid; place-items: center;
-      background: var(--nav-bg);
+      background: var(--hamburger-bg);
       border-radius: 8px;
-      box-shadow: var(--shadow-header);
-      border: 1px solid var(--nav-border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      border: 1px solid var(--hamburger-border);
       cursor: pointer;
     }
 
     .hamburger .bars {
       width: 22px; height: 2px;
-      background: var(--text-secondary);
-      box-shadow: 0 6px 0 var(--text-secondary), 0 -6px 0 var(--text-secondary);
+      background: var(--hamburger-bar);
+      box-shadow: 0 6px 0 var(--hamburger-bar), 0 -6px 0 var(--hamburger-bar);
       border-radius: 2px;
     }
 
-    .brand .name {
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--text-primary);
-    }
-
-    .brand .tag {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
+    /* === Navigation === */
     nav.site-nav {
       position: fixed;
       left: 12px; top: 72px;
       z-index: 999;
-      background: var(--nav-bg-alt);
+      background: var(--nav-bg);
       backdrop-filter: blur(6px);
       border-radius: 12px;
       padding: 10px;
-      box-shadow: var(--shadow-header);
+      box-shadow: var(--nav-shadow);
       max-width: 240px;
       display: none;
     }
@@ -92,141 +126,59 @@
       color: var(--nav-text);
       text-decoration: none;
       font-weight: 600;
+      transition: background 0.3s, color 0.3s;
     }
 
     nav.site-nav a:hover {
       background: var(--nav-hover-bg);
+      color: var(--nav-hover-text);
     }
 
+    /* === Container === */
     .container {
-      max-width: var(--max-width);
+      max-width: 700px;
       margin: 0 auto;
-      padding: 60px 20px 90px;
+      padding: 100px 20px 90px;
     }
 
+    /* === Hero Section === */
     header.hero {
       display: flex;
-      gap: 28px;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       padding: 28px 12px 5px;
       border-radius: 12px;
-      margin-top: 20px;
-      background: var(--card-gradient);
+      background: var(--hero-bg);
+      box-shadow: var(--hero-shadow);
     }
 
-    .hero-left { flex: 1; min-width: 240px; }
-    .hero-right { max-width: 700px; flex-shrink: 0; }
-
-    .hero p.lead { color: var(--text-muted); margin: 8px 0 16px; }
-
-    .btn {
-      display: inline-block;
-      padding: 10px 14px;
-      border-radius: var(--radius);
-      text-decoration: none;
-      font-weight: 600;
-      background: var(--btn-primary-bg);
-      color: var(--btn-primary-text);
-      box-shadow: var(--btn-success-shadow);
-    }
-
-    .btn.secondary {
-      background: transparent;
-      color: var(--btn-primary-bg);
-      border: 1px solid var(--card-border-accent);
-      box-shadow: none;
-    }
-
-    img, .gallery img {
+    .hero-right img {
       width: 100%;
-      height: auto;
-      object-fit: contain;
       border-radius: 12px;
       display: block;
     }
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
+    .hero p.lead {
+      color: var(--text-color);
+      margin: 8px 0 16px;
     }
 
-    section {
-      margin-top: 18px;
-      padding: 22px;
-      border-radius: 12px;
-      background: var(--card-bg);
-      box-shadow: var(--shadow-default);
+    /* === Email Section === */
+    .email-link {
+      color: var(--email-link-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
     }
 
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
+    .email-link:hover {
+      color: var(--email-link-hover);
     }
-
-    .section-title h2 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 700;
-      font-family: 'Playfair Display', serif;
-    }
-
-    .muted { color: var(--text-muted); font-size: 0.95rem; }
-    .stars { color: var(--highlight-text); font-weight: 700; }
 
     @media (max-width: 800px) {
       .hero { flex-direction: column; }
       .hero-right { width: 100%; }
     }
-
-[data-theme="black-white-red-green-balanced"] {
-  /* === Page & Text === */
-  --page-bg: #141716;
-  --text-primary: #f2f2f2;
-  --text-secondary: #bfbfbf;
-  --text-muted: #8e9a92;
-
-  /* === Buttons & Interactive Elements === */
-  --btn-primary-bg: #d04a4a;
-  --btn-primary-text: #1c201e;
-  --btn-hover-bg: #e06b6b;
-  --btn-active-bg: #8b2525;
-  --btn-success-bg: #56c47b;
-  --btn-success-shadow: 0 6px 12px rgba(124,212,154,0.12);
-
-  /* === Navigation & Header === */
-  --nav-bg: #1c201e;
-  --nav-bg-alt: rgba(28, 32, 30, 0.92);
-  --nav-text: #f2f2f2;
-  --nav-hover-bg: rgba(208,107,107,0.18);
-  --nav-border: rgba(255,255,255,0.08);
-
-  /* === Cards / Surfaces === */
-  --card-bg: #1c201e;
-  --card-bg-alt: rgba(28, 32, 30, 0.92);
-  --card-gradient: linear-gradient(135deg, #1c201e 0%, #141716 100%);
-  --card-border: rgba(208,74,74,0.2);
-  --card-border-strong: rgba(86,196,123,0.25);
-  --card-border-accent: rgba(124,212,154,0.28);
-
-  /* === Highlights & Accents === */
-  --highlight-bg: #7cd49a;
-  --highlight-text: #56c47b;
-  --link-hover-bg: rgba(208,107,107,0.18);
-
-  /* === Shadows === */
-  --shadow-default: 0 6px 16px rgba(0,0,0,0.25);
-  --shadow-strong: 0 12px 28px rgba(0,0,0,0.3);
-  --shadow-header: 0 6px 16px rgba(0,0,0,0.25);
-  --shadow-btn: 0 4px 8px rgba(208,74,74,0.14);
-
-  /* === Overlays & Effects === */
-  --overlay-dark: rgba(20,23,22,0.35);
-  --overlay-light: rgba(124,212,154,0.07);
-  backdrop-filter: blur(4px) contrast(0.95);
-}
   </style>
 </head>
 
@@ -256,7 +208,7 @@
         <div class="hero-right">
           <img src="color/Neon.jpg" alt="Vitrine">
         </div>
-        <div style="margin-top:12px;" class="muted">
+        <div style="margin-top:12px;">
           <p class="lead">
             Bienvenue chez Neon Laundry, la meilleure laverie de la ville.
             Nous proposons une gamme de services pour répondre à tous vos besoins
@@ -264,10 +216,10 @@
             de votre linge de lit ou de vos serviettes.
           </p>
         </div>
-        <div style="margin-top:12px;" class="muted">
+        <div style="margin-top:12px;">
           <strong>Email:</strong>
-          <a href="mailto:contact@example.com" style="color: red;">
-            <span id="email-text" style="color: red;">contact@example.com</span>
+          <a href="mailto:contact@example.com" class="email-link">
+            <span id="email-text">contact@example.com</span>
           </a>
         </div>
       </div>
@@ -278,14 +230,6 @@
     document.addEventListener('DOMContentLoaded', function () {
       const hamburger = document.getElementById('hamburger');
       const nav = document.getElementById('site-nav');
-      const modal = document.getElementById('imgModal');
-      const modalImg = document.getElementById('modalImg');
-      const copyIcon = document.getElementById("copy-icon");
-      const emailText = document.getElementById("email-text")?.innerText || '';
-      const copiedPopup = document.getElementById("copied-popup");
-      const banner = document.getElementById('cookie-banner');
-      const acceptBtn = document.getElementById('cookie-accept');
-      const declineBtn = document.getElementById('cookie-decline');
 
       if (hamburger && nav) {
         hamburger.addEventListener('click', () => {
@@ -293,17 +237,6 @@
           hamburger.setAttribute('aria-expanded', String(!expanded));
           nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
           nav.setAttribute('aria-hidden', String(expanded));
-        });
-
-        nav.querySelectorAll('a').forEach(a => {
-          a.addEventListener('click', (e) => {
-            e.preventDefault();
-            const target = document.querySelector(a.getAttribute('href'));
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            nav.style.display = 'none';
-            nav.setAttribute('aria-hidden', 'true');
-            hamburger.setAttribute('aria-expanded', 'false');
-          });
         });
       }
     });
