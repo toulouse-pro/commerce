@@ -7,40 +7,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <title>Mon Commerce — Ma Spécialité à Toulouse</title>
-  <meta name="description" content="Mon Entreprise — découvrez nos services et produits à Toulouse. Horaires, photos, avis clients et contact. Passez nous voir !">
-  <meta name="keywords" content="entreprise, services, produits, Toulouse, professionnel, horaires, contact">
-  <meta name="author" content="Nom de l'entreprise">
-  <link rel="canonical" href="https://www.site.com/">
-  <meta name="robots" content="index, follow">
-
   <style>
     :root {
-      /*--bg: #ffffff;
-      --text: #111111;
-      --text-dark: #222222;
-      --muted: #6b6b6b;
-      --accent: #d99a3b;
-      --accent-light: #f0c56a;
-      --accent-dark: #c5862e;
-      --surface: #ffffff;
-      --surface-alt: rgba(255,255,255,0.98);
-      --surface-gradient: linear-gradient(180deg, rgba(217,154,59,0.06), rgba(217,154,59,0.02));
-      --border-light: rgba(0,0,0,0.04);
-      --border-mid: rgba(0,0,0,0.06);
-      --border-strong: rgba(0,0,0,0.1);
-      --border-stronger: rgba(0,0,0,0.2);
-      --border-accent: rgba(217,154,59,0.15);
-      --border-accent-hover: rgba(217,154,59,0.08);
-      --shadow: 0 6px 22px rgba(0,0,0,0.08);
-      --shadow-accent: 0 6px 18px rgba(217,154,59,0.18);
-      --shadow-strong: 0 18px 40px rgba(0,0,0,0.6);
-      --shadow-btn: 0 4px 10px rgba(217,154,59,0.2);
-      --overlay-dark: rgba(0,0,0,0.7);
-      --overlay-light: rgba(0,0,0,0.08);
-      --success: #4caf50;
-      --warning: #ff9800;
-      --error: #e53935;*/
       --max-width: 700px;
       --radius: 10px;
     }
@@ -147,7 +115,6 @@
       background: var(--surface-gradient);
     }
 
-    /* Added for correct flex layout */
     .hero-left { flex: 1; min-width: 240px; }
     .hero-right { max-width: 700px; flex-shrink: 0; }
 
@@ -207,58 +174,9 @@
       font-family: 'Playfair Display', serif;
     }
 
-   /* .hours {
-      width: 100%;
-      border-collapse: collapse;
-    }
-
-    .hours td {
-      padding: 6px 8px;
-      border-bottom: 1px dashed #f0f0f0;
-    }*/
-
     .muted { color: var(--muted); font-size: 0.95rem; }
     .stars { color: var(--accent); font-weight: 700; }
 
-    /*.review {
-      padding: 10px;
-      border-radius: 10px;
-      background: var(--surface);
-      border: 1px solid var(--border-light);
-    }
-
-    .map {
-      width: 100%;
-      height: 300px;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid var(--border-mid);
-    }
-
-    footer {
-      padding: 18px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin: 28px 5px 18px;
-    }
-
-    .cookie-actions { display: flex; gap: 6px; }
-
-    .cookie-btn {
-      border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .cookie-btn.accept { background: var(--accent); color: var(--surface); box-shadow: var(--shadow-btn); }
-    .cookie-btn.accept:hover { background: var(--accent-dark); }
-    .cookie-btn.decline { background: transparent; color: var(--muted); border: 1px solid var(--border-strong); }
-    .cookie-btn.decline:hover { color: var(--text); border-color: var(--border-stronger); }
-*/
     @media (max-width: 800px) {
       .hero { flex-direction: column; }
       .hero-right { width: 100%; }
@@ -350,134 +268,6 @@
         </div>
       </div>
     </header>
-    
-  <!--  <section id="avis" aria-labelledby="avis-title">
-      <div class="section-title"><h2 id="avis-title">Avis clients</h2><span class="muted">Ce que disent nos clients</span></div>
-      <div style="display:flex;gap:16px;align-items:center;">
-        <div style="font-size:28px;font-weight:700;color:var(--accent);">4.8</div>
-        <div>
-          <div class="muted">Note moyenne — basé sur 124 avis</div>
-          <div class="stars" aria-hidden="true">★★★★★</div>
-        </div>
-      </div>
-      <div style="margin-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
-        <div class="review">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong>Julie P.</strong><span class="stars">★★★★★</span>
-          </div>
-          <p class="muted" style="margin:8px 0 0;">Les produits sont incroyables. Service chaleureux, une adresse incontournable.</p>
-        </div>
-        <div class="review">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong>Marc L.</strong><span class="stars">★★★★☆</span>
-          </div>
-          <p class="muted" style="margin:8px 0 0;">Qualité excellente. Un peu d’attente aux heures de pointe mais ça vaut la peine.</p>
-        </div>
-        <div class="review">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong>Camille R.</strong><span class="stars">★★★★★</span>
-          </div>
-          <p class="muted" style="margin:8px 0 0;">Produits de qualité et bien présentés, parfait pour les occasions spéciales.</p>
-        </div>
-        <div class="review">
-          <div style="display:flex;justify-content:space-between;align-items:center;">
-            <strong>Alex D.</strong><span class="stars">★★★★☆</span>
-          </div>
-          <p class="muted" style="margin:8px 0 0;">Bonne expérience globale. Service correct.</p>
-        </div>
-      </div>
-      <p style="margin-top:12px;" class="muted">Vous avez aimé ? <a href="mailto:contact@example.com">Laissez-nous un avis</a> ou sur Google / Facebook.</p>
-    </section>
-
-    <section id="..." aria-labelledby="...-title">
-      <div class="section-title"><h2 id="...">Bienvenue dans ma boutique !</h2></div>
-      <div class="hero-left">
-        <div class="hero-right">
-          <img src="images/RecordStoreOwner.jpg" alt="Entrepreneur">
-        </div>
-        <div class="card">
-          <p class="muted">Nous sommes ravis de vous accompagner et de répondre à vos besoins avec attention et professionnalisme.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="horaires" aria-labelledby="horaires-title">
-      <div class="section-title"><h2 id="horaires-title">Horaires</h2></div>
-      <table class="hours" aria-describedby="horaires-desc">
-        <tbody>
-          <tr><td>Lundi</td><td>9:00 — 19:00</td></tr>
-          <tr><td>Mardi</td><td>9:00 — 19:00</td></tr>
-          <tr><td>Mercredi</td><td>9:00 — 19:00</td></tr>
-          <tr><td>Jeudi</td><td>9:00 — 19:00</td></tr>
-          <tr><td>Vendredi</td><td>9:00 — 19:00</td></tr>
-          <tr><td>Samedi</td><td>9:00 — 13:00</td></tr>
-          <tr><td>Dimanche</td><td>Fermé</td></tr>
-        </tbody>
-      </table>
-      <p id="horaires-desc" class="muted">Fermé les jours fériés — Spécialités sur commande.</p>
-    </section>
-
-    <section id="photos" aria-labelledby="photos-title">
-      <div class="section-title"><h2 id="photos-title">Photos</h2><span class="muted">Notre Sélection</span></div>
-      <div class="gallery" id="gallery">
-        <img loading="lazy" src="images/inside1.jpg" alt="inside 1" class="popup-img">
-        <img loading="lazy" src="images/inside2.jpeg" alt="inside 2" class="popup-img">
-        <img loading="lazy" src="images/inside3.jpg" alt="inside 3" class="popup-img">
-      </div>
-    </section>
-
-    <section id="menu" aria-labelledby="menu-title">
-      <div class="section-title"><h2 id="menu-title">Spécialités</h2><span class="muted">Choisissez vos favoris</span></div>
-      <div class="info-row">
-        <div class="card">
-          <h3 style="margin:0 0 6px 0;">Nos Produits Phares</h3>
-          <p class="muted">Produit classique. Produit complet. Produit traditionnel.</p>
-        </div>
-        <div class="card">
-          <h3 style="margin:0 0 6px 0;">Nos Spécialités</h3>
-          <p class="muted">Spécialité maison. Spécialité populaire. Spécialité artisanale.</p>
-        </div>
-        <div class="card">
-          <h3 style="margin:0 0 6px 0;">Services sur mesure</h3>
-          <p class="muted">Prestations adaptées. Solutions personnalisées. Créations exclusives (sur commande).</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="carte" aria-labelledby="carte-title">
-      <div class="section-title"><h2 id="carte-title">Nous trouver</h2><span class="muted">Plan et itinéraire</span></div>
-      <div class="map">
-        <iframe title="Mon Commerce Spécialisé" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2888.278973552961!2d1.4125611752737637!3d43.62155225447857!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12aebb303d6a08b9%3A0xa3e9906247b3992!2sStade%20Toulousain!5e0!3m2!1sen!2sde!4v1759135891249!5m2!1sen!2sde" style="width:100%;height:100%;border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-    </section>
-
-    <section id="contact" aria-labelledby="contact-title">
-      <aside style="display:flex;flex-direction:column;gap:8px;">
-        <div class="card">
-          <strong>Adresse</strong>
-          <div class="muted">114 rue des Troènes, 31200 Toulouse</div>
-          <div style="margin-top:8px;"><strong>Téléphone</strong><div class="muted"><a href="tel:+33123456789">01 23 45 67 89</a></div></div>
-          <div style="margin-top:8px;"><strong>Réseaux Sociaux</strong><div class="muted"><a href="https://facebook.com" aria-label="Facebook">Facebook</a> • <a href="https://instagram.com" aria-label="Instagram">Instagram</a></div></div>
-        </div>
-      </aside>
-    </section>
-
-    <footer>
-      © Mon Commerce Spécialisé — Tous droits réservés — <span class="muted">Site développé avec <a href="c-deal.html" style="text-decoration: none;">❤️</a></span>
-    </footer>
-  </main>
-
-  <div class="modal" id="imgModal" aria-hidden="true">
-    <img id="modalImg" alt="">
-  </div>
-
-  <div id="cookie-banner" class="cookie-banner">
-    <span>🍪 Ce site utilise des cookies</span>
-    <div class="cookie-actions">
-      <button id="cookie-accept" class="cookie-btn accept">OK</button>
-      <button id="cookie-decline" class="cookie-btn decline">Non, merci</button>
-    </div>
-  </div> -->
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
