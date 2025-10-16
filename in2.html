@@ -9,41 +9,50 @@
 
   <style>
     /* === Theme Variables (semantic by element) === */
-    [data-theme="black-white-red-green-purple"] {
-      /* Global */
-      --page-bg: #141216;
-      --text-color: #f2f2f2;
+[data-theme="black-white-red-green-purple"] {
+  /* === Core Palette === */
+  --black: #141216;
+  --white: #f2f2f2;
+  --purple: #b266ff;
+  --green: #56c47b;
+  --red: #d04a4a;
+  --shadow-dark: rgba(0, 0, 0, 0.3);
+  --shadow-light: rgba(0, 0, 0, 0.25);
 
-      /* Topbar */
-      --topbar-bg: #141216;
-      --topbar-text: #f2f2f2;
-      --topbar-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  /* === Global === */
+  --page-bg: var(--black);
+  --text-color: var(--white);
 
-      /* Brand */
-      --brand-name-color: #b266ff; /* neon purple */
-      --brand-name-glow: 0 0 12px #b266ff;
-      --brand-tag-color: #56c47b;
+  /* === Topbar === */
+  --topbar-bg: var(--black);
+  --topbar-text: var(--white);
+  --topbar-shadow: 0 6px 16px var(--shadow-dark);
 
-      /* Hamburger */
-      --hamburger-bg: #1b181f;
-      --hamburger-border: #b266ff;
-      --hamburger-bar: #f2f2f2;
+  /* === Brand === */
+  --brand-name-color: var(--purple);
+  --brand-name-glow: 0 0 12px var(--purple);
+  --brand-tag-color: var(--green);
 
-      /* Navigation */
-      --nav-bg: rgba(27, 24, 31, 0.95);
-      --nav-text: #f2f2f2;
-      --nav-hover-bg: #b266ff;
-      --nav-hover-text: #141216;
-      --nav-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  /* === Hamburger === */
+  --hamburger-bg: #1b181f;
+  --hamburger-border: var(--purple);
+  --hamburger-bar: var(--white);
 
-      /* Hero */
-      --hero-bg: rgba(30, 26, 35, 0.9);
-      --hero-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  /* === Navigation === */
+  --nav-bg: rgba(27, 24, 31, 0.95);
+  --nav-text: var(--white);
+  --nav-hover-bg: var(--purple);
+  --nav-hover-text: var(--black);
+  --nav-shadow: 0 6px 16px var(--shadow-light);
 
-      /* Email */
-      --email-link-color: #d04a4a;
-      --email-link-hover: #b266ff;
-    }
+  /* === Hero === */
+  --hero-bg: rgba(30, 26, 35, 0.9);
+  --hero-shadow: 0 6px 16px var(--shadow-light);
+
+  /* === Email === */
+  --email-link-color: var(--red);
+  --email-link-hover: var(--purple);
+}
 
     /* === Global styles === */
     body {
