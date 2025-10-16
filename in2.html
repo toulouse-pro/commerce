@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="black-white-red-green-purple">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* === Theme Variables (semantic by element) === */
+    [data-theme="black-white-red-green-purple"] {
+      /* Global */
+      --page-bg: #141216;
+      --text-color: #f2f2f2;
+
+      /* Topbar */
+      --topbar-bg: #141216;
+      --topbar-text: #f2f2f2;
+      --topbar-shadow: 0 6px 16px rgba(0,0,0,0.3);
+
+      /* Brand */
+      --brand-name-color: #b266ff; /* neon purple */
+      --brand-name-glow: 0 0 12px #b266ff;
+      --brand-tag-color: #56c47b;
+
+      /* Hamburger */
+      --hamburger-bg: #1b181f;
+      --hamburger-border: #b266ff;
+      --hamburger-bar: #f2f2f2;
+
+      /* Navigation */
+      --nav-bg: rgba(27, 24, 31, 0.95);
+      --nav-text: #f2f2f2;
+      --nav-hover-bg: #b266ff;
+      --nav-hover-text: #141216;
+      --nav-shadow: 0 6px 16px rgba(0,0,0,0.25);
+
+      /* Hero */
+      --hero-bg: rgba(30, 26, 35, 0.9);
+      --hero-shadow: 0 6px 16px rgba(0,0,0,0.25);
+
+      /* Email */
+      --email-link-color: #d04a4a;
+      --email-link-hover: #b266ff;
+    }
+
+    /* === Global styles === */
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--page-bg);
+      color: var(--text-color);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* === Topbar === */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      background: var(--topbar-bg);
+      color: var(--topbar-text);
+      box-shadow: var(--topbar-shadow);
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding-left: 6px;
+    }
+
+    .brand .name {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--brand-name-color);
+      text-shadow: var(--brand-name-glow);
+      transition: text-shadow 0.3s, color 0.3s;
+    }
+
+    .brand .name:hover {
+      text-shadow: 0 0 20px #c87cff, 0 0 30px #c87cff;
+      color: #d3aaff;
+    }
+
+    .brand .tag {
+      font-size: 0.75rem;
+      color: var(--brand-tag-color);
+    }
+
+    /* === Hamburger === */
+    .hamburger {
+      width: 44px; height: 44px;
+      display: grid; place-items: center;
+      background: var(--hamburger-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      border: 1px solid var(--hamburger-border);
+      cursor: pointer;
+    }
+
+    .hamburger .bars {
+      width: 22px; height: 2px;
+      background: var(--hamburger-bar);
+      box-shadow: 0 6px 0 var(--hamburger-bar), 0 -6px 0 var(--hamburger-bar);
+      border-radius: 2px;
+    }
+
+    /* === Navigation === */
+    nav.site-nav {
+      position: fixed;
+      left: 12px; top: 72px;
+      z-index: 999;
+      background: var(--nav-bg);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: var(--nav-shadow);
+      max-width: 240px;
+      display: none;
+    }
+
+    nav.site-nav a {
+      display: block;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    nav.site-nav a:hover {
+      background: var(--nav-hover-bg);
+      color: var(--nav-hover-text);
+    }
+
+    /* === Container === */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 100px 20px 90px;
+    }
+
+    /* === Hero === */
+    header.hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 28px 12px 5px;
+      border-radius: 12px;
+      background: var(--hero-bg);
+      box-shadow: var(--hero-shadow);
+    }
+
+    .hero-right img {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .hero p.lead {
+      color: var(--text-color);
+      margin: 8px 0 16px;
+    }
+
+    /* === Email === */
+    .email-link {
+      color: var(--email-link-color);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+
+    .email-link:hover {
+      color: var(--email-link-hover);
+    }
+
+    @media (max-width: 800px) {
+      .hero { flex-direction: column; }
+      .hero-right { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <button class="hamburger" id="hamburger"><span class="bars"></span></button>
+    <a href="index.html" style="text-decoration: none; color: inherit;">
+      <div class="brand">
+        <span class="name">NEON LAUNDRY</span>
+        <span class="tag">Nous lavons — Toulouse</span>
+      </div>
+    </a>
+  </div>
+
+  <nav class="site-nav" id="site-nav">
+    <a href="#avis">Avis</a>
+    <a href="#horaires">Horaires</a>
+    <a href="#photos">Photos</a>
+    <a href="#menu">Spécialités</a>
+    <a href="#carte">Nous trouver</a>
+    <a href="#contact">Contact</a>
+  </nav>
+ 
+  <main class="container" id="top">
+    <header class="hero" role="banner" aria-label="Présentation">
+      <div class="hero-left">
+        <div class="hero-right">
+          <img src="color/Neon.jpg" alt="Vitrine">
+        </div>
+        <div style="margin-top:12px;">
+          <p class="lead">
+            Bienvenue chez Neon Laundry, la meilleure laverie de la ville.
+            Nous proposons une gamme de services pour répondre à tous vos besoins
+            en matière de lessive, que ce soit pour le nettoyage de vos vêtements,
+            de votre linge de lit ou de vos serviettes.
+          </p>
+        </div>
+        <div style="margin-top:12px;">
+          <strong>Email:</strong>
+          <a href="mailto:contact@example.com" class="email-link">
+            <span id="email-text">contact@example.com</span>
+          </a>
+        </div>
+      </div>
+    </header>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const hamburger = document.getElementById('hamburger');
+      const nav = document.getElementById('site-nav');
+
+      if (hamburger && nav) {
+        hamburger.addEventListener('click', () => {
+          const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+          hamburger.setAttribute('aria-expanded', String(!expanded));
+          nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
+          nav.setAttribute('aria-hidden', String(expanded));
+        });
+      }
+    });
+  </script>
+</body>
+</html>
