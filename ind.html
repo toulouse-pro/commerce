@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="black-white-red-green-soft">
+<html lang="fr" data-theme="black-white-red-green-balanced">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -264,41 +264,44 @@
       .hero-right { width: 100%; }
     }
 
-[data-theme="black-white-red-green-soft"] {
-  --bg: #101313; /* slightly off-black for less stark background */
-  --text: #f8f8f8; /* soft, nearly white text */
-  --text-dark: #b9b9b9; /* gentle gray for secondary text */
-  --muted: #8ca398; /* dusty green-gray for muted content */
+[data-theme="black-white-red-green-balanced"] {
+  --bg: #141716; /* deep charcoal instead of pure black */
+  --text: #f2f2f2; /* soft white text for comfortable contrast */
+  --text-dark: #bfbfbf;
+  --muted: #8e9a92;
 
-  /* Red and Green Accents—softer, less neon */
-  --accent: #c72929; /* muted chili red for accents */
-  --accent-light: #da6c51; /* soft red-orange highlight */
-  --accent-dark: #861a1a; /* deep burgundy red */
-  --accent-green: #4eda6b; /* fresh mid green accent (not neon) */
+  /* Mellow accents */
+  --accent: #d04a4a; /* calm red */
+  --accent-light: #e06b6b; /* slightly pinkish tone for warmth */
+  --accent-dark: #8b2525; /* subdued dark red */
+  --accent-green: #56c47b; /* medium pastel green */
 
-  /* Highlight and action states — smooth green */
-  --highlight: #7ee582; /* pastel mint-green for highlights */
+  /* Smooth green highlight */
+  --highlight: #7cd49a;
 
-  /* Card + top bar colors */
-  --surface: #222726; /* dark slate for cards, easy on eyes */
-  --surface-alt: rgba(34, 39, 38, 0.92); /* translucent slate for overlays */
-  --surface-gradient: linear-gradient(135deg, #4eda6b 0%, #101313 100%);
+  /* Softer card + surface blending */
+  --surface: #1c201e; /* near-background tone for gentle layering */
+  --surface-alt: rgba(28, 32, 30, 0.92);
+  --surface-gradient: linear-gradient(135deg, #1c201e 0%, #141716 100%);
 
-  /* Borders and outlines with color blending */
-  --border-light: rgba(248, 248, 248, 0.12); /* subtle white border */
-  --border-mid: rgba(199, 41, 41, 0.19); /* muted red accent */
-  --border-strong: rgba(78, 218, 107, 0.23); /* soft green glow border */
-  --border-accent: rgba(126, 229, 130, 0.27);
-  --border-accent-hover: rgba(218, 108, 81, 0.17);
+  /* Subtle, cohesive borders */
+  --border-light: rgba(255,255,255,0.08);
+  --border-mid: rgba(208,74,74,0.2);
+  --border-strong: rgba(86,196,123,0.25);
+  --border-accent: rgba(124,212,154,0.28);
+  --border-accent-hover: rgba(208,107,107,0.18);
 
-  /* Smoothed colored shadows */
-  --shadow: 0 6px 22px rgba(78,218,107,0.09); /* mint green, soft */
-  --shadow-accent: 0 6px 18px rgba(199,41,41,0.12); /* red shadow */
-  --shadow-strong: 0 18px 40px rgba(16,19,19,0.16); /* semi-transparent black */
-  --shadow-btn: 0 4px 10px rgba(126,229,130,0.13); /* green hint */
+  /* Soft, unobtrusive shadows */
+  --shadow: 0 6px 16px rgba(0,0,0,0.25);
+  --shadow-accent: 0 6px 12px rgba(124,212,154,0.12);
+  --shadow-strong: 0 12px 28px rgba(0,0,0,0.3);
+  --shadow-btn: 0 4px 8px rgba(208,74,74,0.14);
 
-  --overlay-dark: rgba(16, 19, 19, 0.37);
-  --overlay-light: rgba(78,218,107,0.08);
+  --overlay-dark: rgba(20,23,22,0.35);
+  --overlay-light: rgba(124,212,154,0.07);
+
+  /* Optional: slight blur for card blending */
+  backdrop-filter: blur(4px) contrast(0.95);
 }
 
 
