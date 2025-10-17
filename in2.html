@@ -11,76 +11,62 @@
     /* === Theme Variables (semantic by element) === */
 [data-theme="neon"] {
   /* === Core Palette === */
-  --black: #0a0a0a;
-  --white: #ffffff;
-  --neon-purple: #bf00ff;
-  --neon-green: #39ff14;
-  --neon-blue: #00ffff;
-  --neon-pink: #ff00ff;
-  --neon-yellow: #ffff00;
-  --shadow-dark: rgba(0, 0, 0, 0.4);
-  --shadow-light: rgba(0, 0, 0, 0.2);
+  --black: #1a1a1a;        /* Dark grayish-black for a soft base */
+  --white: #f0f0f0;        /* Off-white for gentle contrast */
+  --neon-purple: #c080ff;  /* Soft lavender-purple */
+  --neon-green: #80ffaa;   /* Pale mint green */
+  --neon-blue: #80d4ff;    /* Light sky blue */
+  --neon-pink: #ff80bf;    /* Soft coral pink */
+  --neon-yellow: #ffffb3;  /* Creamy yellow */
+  --shadow-dark: rgba(0, 0, 0, 0.2);
+  --shadow-light: rgba(0, 0, 0, 0.1);
 
   /* === Body === */
-  --body-bg: var(--black); /* Dark background for neon pop */
+  --body-bg: var(--black); /* Dark base */
   --body-text: var(--white);
 
   /* === Topbar === */
-  --topbar-bg: var(--neon-blue); /* Bright blue topbar */
+  --topbar-bg: var(--neon-blue);   /* Light sky blue */
   --topbar-text: var(--white);
-  --topbar-border: var(--neon-green); /* Green border */
-  --topbar-shadow: 0 4px 12px var(--shadow-dark);
+  --topbar-border: var(--neon-green); /* Pale mint green border */
+  --topbar-shadow: 0 2px 8px var(--shadow-dark);
 
   /* === Hamburger === */
-  --hamburger-bg: var(--neon-purple); /* Purple hamburger */
-  --hamburger-border: var(--neon-yellow); /* Yellow border */
+  --hamburger-bg: var(--neon-purple); /* Soft lavender-purple */
+  --hamburger-border: var(--neon-yellow); /* Creamy yellow border */
   --hamburger-bar: var(--white);
-  --hamburger-hover: var(--neon-pink); /* Pink hover */
+  --hamburger-hover: var(--neon-pink); /* Soft coral pink hover */
 
   /* === Brand === */
-  --brand-name-color: var(--neon-yellow); /* Yellow brand name */
-  --brand-name-glow: 0 0 10px var(--neon-yellow);
-  --brand-tag-color: var(--neon-green); /* Green tag */
-  --brand-bg: var(--neon-blue); /* Blue background */
+  --brand-name-color: var(--neon-yellow); /* Creamy yellow name */
+  --brand-name-glow: 0 0 6px var(--neon-yellow); /* Subtle glow */
+  --brand-tag-color: var(--neon-green); /* Pale mint green tag */
+  --brand-bg: var(--neon-blue); /* Light sky blue background */
 
   /* === Navigation === */
-  --nav-bg: var(--neon-purple); /* Purple navigation */
+  --nav-bg: var(--neon-purple); /* Soft lavender-purple */
   --nav-text: var(--white);
-  --nav-hover-bg: var(--neon-green); /* Green hover */
+  --nav-hover-bg: var(--neon-green); /* Pale mint green hover */
   --nav-hover-text: var(--black);
-  --nav-border: var(--neon-yellow); /* Yellow border */
-  --nav-shadow: 0 4px 12px var(--shadow-light);
+  --nav-border: var(--neon-yellow); /* Creamy yellow border */
+  --nav-shadow: 0 2px 8px var(--shadow-light);
 
   /* === Hero === */
-  --hero-bg: var(--neon-pink); /* Pink hero background */
+  --hero-bg: var(--neon-pink); /* Soft coral pink */
   --hero-text: var(--white);
-  --hero-border: var(--neon-blue); /* Blue border */
-  --hero-shadow: 0 4px 12px var(--shadow-dark);
+  --hero-border: var(--neon-blue); /* Light sky blue border */
+  --hero-shadow: 0 2px 8px var(--shadow-dark);
 
   /* === Lead Text === */
-  --lead-text-color: var(--neon-green); /* Green for lead text */
-  --lead-bg: transparent; /* No background for readability */
+  --lead-text-color: var(--neon-green); /* Pale mint green */
+  --lead-bg: transparent;
 
   /* === Email === */
-  --email-link-color: var(--neon-yellow); /* Yellow email link */
-  --email-link-hover: var(--neon-purple); /* Purple hover */
-  --email-text: var(--white); /* White email label */
-  --email-bg: var(--neon-blue); /* Blue background for email */
+  --email-link-color: var(--neon-yellow); /* Creamy yellow link */
+  --email-link-hover: var(--neon-purple); /* Soft lavender-purple hover */
+  --email-text: var(--white); /* Off-white */
+  --email-bg: var(--neon-blue); /* Light sky blue */
 }
-    /* === Topbar === */
-    .topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      padding: 10px 12px;
-      background: var(--topbar-bg);
-      color: var(--topbar-text);
-      box-shadow: var(--topbar-shadow);
-    }
-
     .brand {
       display: flex;
       flex-direction: column;
@@ -207,7 +193,7 @@
     <button class="hamburger" id="hamburger"><span class="bars"></span></button>
     <a href="index.html" style="text-decoration: none; color: inherit;">
       <div class="brand">
-        <span class="name">L LAUNDRY</span>
+        <span class="name">Fruits</span>
         <span class="tag">Nous lavons — Toulouse</span>
       </div>
     </a>
