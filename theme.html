@@ -11,34 +11,34 @@
     /* === TABAC DE LA GARE THEME === */
     [data-theme="tabac"] {
       /* === Core Palette === */
-      --body-bg: #e7e0d7; /* Warm beige-gray (building wall tone) */
-      --body-text: #1a1a1a; /* Dark gray text */
+      --body-bg: #e7e0d7; /* Warm beige-gray */
+      --body-text: #1a1a1a; /* Dark gray */
 
       --topbar-bg: #111111; /* Deep black */
       --topbar-text: #ffffff; /* White */
-      --topbar-border: #ff0000; /* Bright red border */
+      --topbar-border: #ff0000; /* Bright red underline */
       --topbar-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 
-      --hamburger-bg: #111111; /* Black to blend with topbar */
-      --hamburger-border: #ff0000; /* Red outline */
+      --hamburger-bg: #111111; /* Black */
+      --hamburger-border: #ff0000; /* Red border */
       --hamburger-bar: #ffffff; /* White bars */
       --hamburger-hover: #ff0000; /* Red hover */
 
-      --brand-name-color: #ffffff; /* White text for brand */
-      --brand-name-glow: 0 0 6px #ff0000; /* Subtle red glow */
-      --brand-tag-color: #79b464; /* Green accent (plant tone) */
+      --brand-name-color: #ffffff;
+      --brand-name-glow: 0 0 6px #ff0000;
+      --brand-tag-color: #79b464; /* Green accent */
       --brand-bg: transparent;
 
-      --nav-bg: #111111; /* Black nav background */
-      --nav-text: #ffffff; /* White nav text */
-      --nav-hover-bg: #ff0000; /* Red hover */
+      --nav-bg: #111111;
+      --nav-text: #ffffff;
+      --nav-hover-bg: #ff0000;
       --nav-hover-text: #ffffff;
       --nav-border: #ff0000;
       --nav-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
-      --hero-bg: #ffffff; /* White hero section */
-      --hero-text: #1a1a1a; /* Dark text */
-      --hero-border: #79b464; /* Green accent */
+      --hero-bg: #ffffff;
+      --hero-text: #1a1a1a;
+      --hero-border: none; /* no green stripe */
       --hero-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
       --lead-text-color: #1a1a1a;
@@ -57,6 +57,7 @@
       margin: 0;
     }
 
+    /* === Topbar === */
     .topbar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -68,9 +69,10 @@
       background: var(--topbar-bg);
       color: var(--topbar-text);
       box-shadow: var(--topbar-shadow);
-      border-bottom: 2px solid var(--topbar-border);
+      border-bottom: 2px solid var(--topbar-border); /* keep red underline */
     }
-    
+
+    /* === Brand === */
     .brand {
       display: flex;
       flex-direction: column;
@@ -112,6 +114,10 @@
       background: var(--hamburger-hover);
     }
 
+    .hamburger.active {
+      background: var(--hamburger-hover); /* red when active */
+    }
+
     .hamburger .bars {
       width: 22px; height: 2px;
       background: var(--hamburger-bar);
@@ -130,6 +136,7 @@
       box-shadow: var(--nav-shadow);
       border: 1px solid var(--nav-border);
       display: none;
+      transition: all 0.3s ease;
     }
 
     nav.site-nav a {
@@ -163,7 +170,7 @@
       border-radius: 12px;
       background: var(--hero-bg);
       box-shadow: var(--hero-shadow);
-      border-left: 4px solid var(--hero-border);
+      border-left: none; /* remove green line */
     }
 
     .hero-right img {
@@ -220,7 +227,7 @@
     <header class="hero" role="banner" aria-label="Présentation">
       <div class="hero-left">
         <div class="hero-right">
-          <img src="color/Neon.jpg" alt="Vitrine">
+          <img src="color/Tabac.jpeg" alt="Vitrine">
         </div>
         <div style="margin-top:12px;">
           <p class="lead">
@@ -245,10 +252,9 @@
 
       if (hamburger && nav) {
         hamburger.addEventListener('click', () => {
-          const expanded = hamburger.getAttribute('aria-expanded') === 'true';
-          hamburger.setAttribute('aria-expanded', String(!expanded));
-          nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
-          nav.setAttribute('aria-hidden', String(expanded));
+          hamburger.classList.toggle('active');
+          const isActive = hamburger.classList.contains('active');
+          nav.style.display = isActive ? 'block' : 'none';
         });
       }
     });
