@@ -9,86 +9,94 @@
 
   <style>
     /* === Theme Variables (semantic by element) === */
-[data-theme="neon"] {
-  /* === Core Palette (Actual Colors) === */
-  --body-bg: #1a1a1a; /* Dark base */
-  --body-text: #f0f0f0; /* Off-white text */
+    [data-theme="neon"] {
+      /* === Core Palette (actual literal values) === */
+      --core-body-bg: #1a1a1a;             /* Dark base */
+      --core-body-text: #f0f0f0;           /* Off-white text */
 
-  --topbar-bg: #80d4ff; /* Light sky blue */
-  --topbar-text: #f0f0f0;
-  --topbar-border: #80ffaa; /* Pale mint green border */
-  --topbar-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      --core-topbar-bg: #80d4ff;           /* Light sky blue */
+      --core-topbar-text: #f0f0f0;
+      --core-topbar-border: #80ffaa;
+      --core-topbar-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
-  --hamburger-bg: #c080ff; /* Soft lavender-purple */
-  --hamburger-border: #ffffb3; /* Creamy yellow border */
-  --hamburger-bar: #f0f0f0; /* White bars */
-  --hamburger-hover: #ff80bf; /* Soft coral pink hover */
+      --core-hamburger-bg: #c080ff;
+      --core-hamburger-border: #ffffb3;
+      --core-hamburger-bar: #f0f0f0;
+      --core-hamburger-hover: #ff80bf;
 
-  --brand-name-color: #ffffb3; /* Creamy yellow name */
-  --brand-name-glow: 0 0 6px #ffffb3; /* Subtle yellow glow */
-  --brand-tag-color: #80ffaa; /* Pale mint green tag */
-  --brand-bg: #80d4ff; /* Light sky blue background */
+      --core-brand-name-color: #ffffb3;
+      --core-brand-name-glow: 0 0 6px #ffffb3;
+      --core-brand-tag-color: #80ffaa;
+      --core-brand-bg: #80d4ff;
 
-  --nav-bg: #c080ff; /* Soft lavender-purple */
-  --nav-text: #f0f0f0; /* White text */
-  --nav-hover-bg: #80ffaa; /* Pale mint green hover */
-  --nav-hover-text: #1a1a1a; /* Black hover text */
-  --nav-border: #ffffb3; /* Creamy yellow border */
-  --nav-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      --core-nav-bg: #c080ff;
+      --core-nav-text: #f0f0f0;
+      --core-nav-hover-bg: #80ffaa;
+      --core-nav-hover-text: #1a1a1a;
+      --core-nav-border: #ffffb3;
+      --core-nav-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
-  --hero-bg: #ff80bf; /* Soft coral pink */
-  --hero-text: #f0f0f0; /* White text */
-  --hero-border: #80d4ff; /* Light sky blue border */
-  --hero-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      --core-hero-bg: #ff80bf;
+      --core-hero-text: #f0f0f0;
+      --core-hero-border: #80d4ff;
+      --core-hero-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
-  --lead-text-color: #80ffaa; /* Pale mint green */
-  --lead-bg: transparent;
+      --core-lead-text-color: #80ffaa;
+      --core-lead-bg: transparent;
 
-  --email-link-color: #ffffb3; /* Creamy yellow link */
-  --email-link-hover: #c080ff; /* Lavender-purple hover */
-  --email-text: #f0f0f0; /* White text */
-  --email-bg: #80d4ff; /* Light sky blue background */
+      --core-email-link-color: #ffffb3;
+      --core-email-link-hover: #c080ff;
+      --core-email-text: #f0f0f0;
+      --core-email-bg: #80d4ff;
 
+      /* === Component variables (mapped to core values) === */
+      --body-bg:          var(--core-body-bg);
+      --body-text:        var(--core-body-text);
 
-  /* === Self-Referencing Structure for Theming === */
-  --body-bg: var(--body-bg);
-  --body-text: var(--body-text);
+      --topbar-bg:        var(--core-topbar-bg);
+      --topbar-text:      var(--core-topbar-text);
+      --topbar-border:    var(--core-topbar-border);
+      --topbar-shadow:    var(--core-topbar-shadow);
 
-  --topbar-bg: var(--topbar-bg);
-  --topbar-text: var(--topbar-text);
-  --topbar-border: var(--topbar-border);
-  --topbar-shadow: var(--topbar-shadow);
+      --hamburger-bg:     var(--core-hamburger-bg);
+      --hamburger-border: var(--core-hamburger-border);
+      --hamburger-bar:    var(--core-hamburger-bar);
+      --hamburger-hover:  var(--core-hamburger-hover);
 
-  --hamburger-bg: var(--hamburger-bg);
-  --hamburger-border: var(--hamburger-border);
-  --hamburger-bar: var(--hamburger-bar);
-  --hamburger-hover: var(--hamburger-hover);
+      --brand-name-color: var(--core-brand-name-color);
+      --brand-name-glow:  var(--core-brand-name-glow);
+      --brand-tag-color:  var(--core-brand-tag-color);
+      --brand-bg:         var(--core-brand-bg);
 
-  --brand-name-color: var(--brand-name-color);
-  --brand-name-glow: var(--brand-name-glow);
-  --brand-tag-color: var(--brand-tag-color);
-  --brand-bg: var(--brand-bg);
+      --nav-bg:           var(--core-nav-bg);
+      --nav-text:         var(--core-nav-text);
+      --nav-hover-bg:     var(--core-nav-hover-bg);
+      --nav-hover-text:   var(--core-nav-hover-text);
+      --nav-border:       var(--core-nav-border);
+      --nav-shadow:       var(--core-nav-shadow);
 
-  --nav-bg: var(--nav-bg);
-  --nav-text: var(--nav-text);
-  --nav-hover-bg: var(--nav-hover-bg);
-  --nav-hover-text: var(--nav-hover-text);
-  --nav-border: var(--nav-border);
-  --nav-shadow: var(--nav-shadow);
+      --hero-bg:          var(--core-hero-bg);
+      --hero-text:        var(--core-hero-text);
+      --hero-border:      var(--core-hero-border);
+      --hero-shadow:      var(--core-hero-shadow);
 
-  --hero-bg: var(--hero-bg);
-  --hero-text: var(--hero-text);
-  --hero-border: var(--hero-border);
-  --hero-shadow: var(--hero-shadow);
+      --lead-text-color:  var(--core-lead-text-color);
+      --lead-bg:          var(--core-lead-bg);
 
-  --lead-text-color: var(--lead-text-color);
-  --lead-bg: var(--lead-bg);
+      --email-link-color: var(--core-email-link-color);
+      --email-link-hover: var(--core-email-link-hover);
+      --email-text:       var(--core-email-text);
+      --email-bg:         var(--core-email-bg);
+    }
 
-  --email-link-color: var(--email-link-color);
-  --email-link-hover: var(--email-link-hover);
-  --email-text: var(--email-text);
-  --email-bg: var(--email-bg);
-}
+    /* === General Body === */
+    body {
+      margin: 0;
+      background: var(--body-bg);
+      color: var(--body-text);
+      font-family: 'Inter', sans-serif;
+    }
+
     .topbar {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -200,7 +208,7 @@
     }
 
     .hero p.lead {
-      color: var(--text-color);
+      color: var(--hero-text);
       margin: 8px 0 16px;
     }
 
@@ -225,7 +233,9 @@
 
 <body>
   <div class="topbar">
-    <button class="hamburger" id="hamburger"><span class="bars"></span></button>
+    <button class="hamburger" id="hamburger" aria-expanded="false">
+      <span class="bars"></span>
+    </button>
     <a href="index.html" style="text-decoration: none; color: inherit;">
       <div class="brand">
         <span class="name">color</span>
