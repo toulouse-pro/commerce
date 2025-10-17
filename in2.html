@@ -13,9 +13,11 @@
   /* === Core Palette === */
   --black: #141216;
   --white: #f2f2f2;
-  --purple: #ff69b4; /* Bright hot pink/magenta (like ripe plums or cherries) */
-  --green: #00ff7f;  /* Spring green (like fresh limes or kiwis) */
-  --red: #ff4500;    /* Orange red (like ripe strawberries or cherries) */
+  --purple: #800080; /* Rich purple (like some packaging) */
+  --green: #32cd32;  /* Lime green (from product labels) */
+  --red: #ff0000;    /* Bright red (from cans and signs) */
+  --yellow: #ffff00; /* Bright yellow (from packaging) */
+  --blue: #1e90ff;   /* Dodger blue (from drink bottles) */
   --shadow-dark: rgba(0, 0, 0, 0.3);
   --shadow-light: rgba(0, 0, 0, 0.25);
 
@@ -29,19 +31,19 @@
   --topbar-shadow: 0 6px 16px var(--shadow-dark);
 
   /* === Brand === */
-  --brand-name-color: var(--purple); /* Hot pink for vibrant brand identity */
+  --brand-name-color: var(--purple); /* Rich purple for brand identity */
   --brand-name-glow: 0 0 12px var(--purple);
-  --brand-tag-color: var(--green);   /* Bright green for fresh appeal */
+  --brand-tag-color: var(--green);   /* Lime green for freshness */
 
   /* === Hamburger === */
   --hamburger-bg: #1b181f;
-  --hamburger-border: var(--purple); /* Hot pink border pops against dark */
+  --hamburger-border: var(--yellow); /* Bright yellow for a pop */
   --hamburger-bar: var(--white);
 
   /* === Navigation === */
   --nav-bg: rgba(27, 24, 31, 0.95);
   --nav-text: var(--white);
-  --nav-hover-bg: var(--purple);     /* Hot pink hover creates excitement */
+  --nav-hover-bg: var(--red);        /* Bright red for hover energy */
   --nav-hover-text: var(--black);
   --nav-shadow: 0 6px 16px var(--shadow-light);
 
@@ -50,20 +52,9 @@
   --hero-shadow: 0 6px 16px var(--shadow-light);
 
   /* === Email === */
-  --email-link-color: var(--red);    /* Vibrant orange-red draws attention */
-  --email-link-hover: var(--purple); /* Transitions to hot pink on hover */
+  --email-link-color: var(--blue);   /* Dodger blue for clickable links */
+  --email-link-hover: var(--purple); /* Transitions to purple on hover */
 }
-
-    /* === Global styles === */
-    body {
-      margin: 0;
-      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: var(--page-bg);
-      color: var(--text-color);
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-    }
-
     /* === Topbar === */
     .topbar {
       position: fixed;
