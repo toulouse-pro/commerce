@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="earthy-natural-muted">
+<html lang="fr" data-theme="vibrant-fruit-rainbow">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,44 +9,48 @@
 
   <style>
     /* === Theme Variables (semantic by element) === */
-[data-theme="earthy-natural-muted"] {
+[data-theme="vibrant-fruit-rainbow"] {
   /* === Core Palette === */
-  --black: #2a2824;          /* Deep brown-black */
-  --white: #f8f6f3;          /* Warm off-white */
-  --purple: #8b6f47;         /* Muted gold-brown (replaces purple) */
-  --green: #6b8c42;          /* Sage green */
-  --red: #a85c5c;            /* Dusty red */
-  --shadow-dark: rgba(42, 40, 36, 0.3);
-  --shadow-light: rgba(42, 40, 36, 0.2);
+  --black: #1a120b;          /* Deep brown-black (for contrast) */
+  --white: #fffcf2;          /* Creamy white */
+  --purple: #9b59b6;         /* Amethyst (for brand) */
+  --green: #2ecc71;          /* Emerald (for navigation) */
+  --red: #e74c3c;            /* Strawberry (for email links) */
+  --orange: #f39c12;         /* Tangerine (for hero) */
+  --blue: #3498db;           /* Sky Blue (for topbar) */
+  --pink: #e91e63;           /* Watermelon (for hamburger) */
+  --yellow: #f1c40f;         /* Lemon (for shadows/accents) */
+  --shadow-dark: rgba(26, 18, 11, 0.2);
+  --shadow-light: rgba(26, 18, 11, 0.15);
 
   /* === Global === */
   --page-bg: var(--black);
   --text-color: var(--white);
 
   /* === Topbar === */
-  --topbar-bg: var(--black);
+  --topbar-bg: var(--blue);
   --topbar-text: var(--white);
   --topbar-shadow: 0 6px 16px var(--shadow-dark);
 
   /* === Brand === */
   --brand-name-color: var(--purple);
-  --brand-name-glow: 0 0 8px var(--purple);
-  --brand-tag-color: var(--green);
+  --brand-name-glow: 0 0 12px var(--purple);
+  --brand-tag-color: var(--pink);
 
   /* === Hamburger === */
-  --hamburger-bg: #3a3630;
-  --hamburger-border: var(--purple);
+  --hamburger-bg: var(--pink);
+  --hamburger-border: var(--yellow);
   --hamburger-bar: var(--white);
 
   /* === Navigation === */
-  --nav-bg: rgba(58, 54, 48, 0.95);
-  --nav-text: var(--white);
-  --nav-hover-bg: var(--purple);
+  --nav-bg: var(--green);
+  --nav-text: var(--black);
+  --nav-hover-bg: var(--yellow);
   --nav-hover-text: var(--black);
   --nav-shadow: 0 6px 16px var(--shadow-light);
 
   /* === Hero === */
-  --hero-bg: rgba(60, 56, 50, 0.9);
+  --hero-bg: var(--orange);
   --hero-shadow: 0 6px 16px var(--shadow-light);
 
   /* === Email === */
