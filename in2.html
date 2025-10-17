@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="vibrant-fruit-rainbow">
+<html lang="fr" data-theme="black-white-red-green-purple">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -9,55 +9,50 @@
 
   <style>
     /* === Theme Variables (semantic by element) === */
-[data-theme="vibrant-fruit-rainbow"] {
+[data-theme="black-white-red-green-purple"] {
   /* === Core Palette === */
-  --black: #1a120b;          /* Deep brown-black (for contrast) */
-  --white: #fffcf2;          /* Creamy white */
-  --purple: #9b59b6;         /* Amethyst (for brand) */
-  --green: #2ecc71;          /* Emerald (for navigation) */
-  --red: #e74c3c;            /* Strawberry (for email links) */
-  --orange: #f39c12;         /* Tangerine (for hero) */
-  --blue: #3498db;           /* Sky Blue (for topbar) */
-  --pink: #e91e63;           /* Watermelon (for hamburger) */
-  --yellow: #f1c40f;         /* Lemon (for shadows/accents) */
-  --shadow-dark: rgba(26, 18, 11, 0.2);
-  --shadow-light: rgba(26, 18, 11, 0.15);
+  --black: #141216;
+  --white: #f2f2f2;
+  --purple: #ff69b4; /* Bright hot pink/magenta (like ripe plums or cherries) */
+  --green: #00ff7f;  /* Spring green (like fresh limes or kiwis) */
+  --red: #ff4500;    /* Orange red (like ripe strawberries or cherries) */
+  --shadow-dark: rgba(0, 0, 0, 0.3);
+  --shadow-light: rgba(0, 0, 0, 0.25);
 
   /* === Global === */
   --page-bg: var(--black);
   --text-color: var(--white);
 
   /* === Topbar === */
-  --topbar-bg: var(--blue);
+  --topbar-bg: var(--black);
   --topbar-text: var(--white);
   --topbar-shadow: 0 6px 16px var(--shadow-dark);
 
   /* === Brand === */
-  --brand-name-color: var(--purple);
+  --brand-name-color: var(--purple); /* Hot pink for vibrant brand identity */
   --brand-name-glow: 0 0 12px var(--purple);
-  --brand-tag-color: var(--pink);
+  --brand-tag-color: var(--green);   /* Bright green for fresh appeal */
 
   /* === Hamburger === */
-  --hamburger-bg: var(--pink);
-  --hamburger-border: var(--yellow);
+  --hamburger-bg: #1b181f;
+  --hamburger-border: var(--purple); /* Hot pink border pops against dark */
   --hamburger-bar: var(--white);
 
   /* === Navigation === */
-  --nav-bg: var(--green);
-  --nav-text: var(--black);
-  --nav-hover-bg: var(--yellow);
+  --nav-bg: rgba(27, 24, 31, 0.95);
+  --nav-text: var(--white);
+  --nav-hover-bg: var(--purple);     /* Hot pink hover creates excitement */
   --nav-hover-text: var(--black);
   --nav-shadow: 0 6px 16px var(--shadow-light);
 
   /* === Hero === */
-  --hero-bg: var(--orange);
+  --hero-bg: rgba(30, 26, 35, 0.9);
   --hero-shadow: 0 6px 16px var(--shadow-light);
 
   /* === Email === */
-  --email-link-color: var(--red);
-  --email-link-hover: var(--purple);
+  --email-link-color: var(--red);    /* Vibrant orange-red draws attention */
+  --email-link-hover: var(--purple); /* Transitions to hot pink on hover */
 }
-
 
     /* === Global styles === */
     body {
