@@ -13,47 +13,47 @@
   /* === Core Palette === */
   --black: #141216;
   --white: #f2f2f2;
-  --purple: #800080; /* Rich purple (like some packaging) */
-  --green: #32cd32;  /* Lime green (from product labels) */
-  --red: #ff0000;    /* Bright red (from cans and signs) */
-  --yellow: #ffff00; /* Bright yellow (from packaging) */
-  --blue: #1e90ff;   /* Dodger blue (from drink bottles) */
+  --purple: #800080; /* Rich purple */
+  --green: #32cd32;  /* Lime green */
+  --red: #ff0000;    /* Bright red */
+  --yellow: #ffff00; /* Bright yellow */
+  --blue: #1e90ff;   /* Dodger blue */
   --shadow-dark: rgba(0, 0, 0, 0.3);
   --shadow-light: rgba(0, 0, 0, 0.25);
 
   /* === Global === */
-  --page-bg: var(--black);
-  --text-color: var(--white);
+  --page-bg: var(--yellow); /* Bright yellow background */
+  --text-color: var(--black); /* Adjusted for contrast */
 
   /* === Topbar === */
-  --topbar-bg: var(--black);
+  --topbar-bg: var(--blue);   /* Dodger blue topbar */
   --topbar-text: var(--white);
   --topbar-shadow: 0 6px 16px var(--shadow-dark);
 
   /* === Brand === */
-  --brand-name-color: var(--purple); /* Rich purple for brand identity */
+  --brand-name-color: var(--purple); /* Rich purple */
   --brand-name-glow: 0 0 12px var(--purple);
-  --brand-tag-color: var(--green);   /* Lime green for freshness */
+  --brand-tag-color: var(--green);   /* Lime green */
 
   /* === Hamburger === */
-  --hamburger-bg: #1b181f;
-  --hamburger-border: var(--yellow); /* Bright yellow for a pop */
+  --hamburger-bg: var(--red);    /* Bright red hamburger background */
+  --hamburger-border: var(--yellow); /* Bright yellow border */
   --hamburger-bar: var(--white);
 
   /* === Navigation === */
-  --nav-bg: rgba(27, 24, 31, 0.95);
-  --nav-text: var(--white);
-  --nav-hover-bg: var(--red);        /* Bright red for hover energy */
-  --nav-hover-text: var(--black);
+  --nav-bg: var(--green);       /* Lime green navigation */
+  --nav-text: var(--black);     /* Adjusted for readability */
+  --nav-hover-bg: var(--purple); /* Rich purple hover */
+  --nav-hover-text: var(--white);
   --nav-shadow: 0 6px 16px var(--shadow-light);
 
   /* === Hero === */
-  --hero-bg: rgba(30, 26, 35, 0.9);
+  --hero-bg: var(--red);        /* Bright red hero section */
   --hero-shadow: 0 6px 16px var(--shadow-light);
 
   /* === Email === */
-  --email-link-color: var(--blue);   /* Dodger blue for clickable links */
-  --email-link-hover: var(--purple); /* Transitions to purple on hover */
+  --email-link-color: var(--blue);   /* Dodger blue links */
+  --email-link-hover: var(--purple); /* Purple on hover */
 }
     /* === Topbar === */
     .topbar {
@@ -195,7 +195,7 @@
     <button class="hamburger" id="hamburger"><span class="bars"></span></button>
     <a href="index.html" style="text-decoration: none; color: inherit;">
       <div class="brand">
-        <span class="name">NEON LAUNDRY</span>
+        <span class="name">L LAUNDRY</span>
         <span class="tag">Nous lavons — Toulouse</span>
       </div>
     </a>
