@@ -235,7 +235,23 @@
   border-radius: 3px;
 }
     p + ul { margin-top: 4px; }
-  
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+      gap: 12px;
+    }
+
+    img, .gallery img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      border-radius: 12px;
+      display: block;
+    }
+    img.popup-img { cursor: pointer; }
+    img:not(.popup-img) { cursor: default; }
+
   </style>
 </head>
 <body>
@@ -267,6 +283,11 @@
       <h2>0€</h2>
       <h3>Option: Couleurs sur mesure</h3>
       <p>Personnalisez gratuitement les couleurs de votre site. Découvrez quelques exemples ci-dessous.</p>
+          <div class="gallery" id="gallery">
+        <img loading="lazy" src="images/Table.png" alt="inside 1" class="popup-img">
+        <img loading="lazy" src="images/Restaurant.jpg" alt="inside 2" class="popup-img">
+        <img loading="lazy" src="images/Cocktail.jpg" alt="inside 3" class="popup-img">
+      </div>
     </div>
     
      <div class="card">
