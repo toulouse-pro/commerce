@@ -202,5 +202,42 @@
     </div>
   </div>
 
+  <div class="menu-modal" id="menuModal" aria-hidden="true">
+    <div class="menu-content">
+      <button class="close-menu" id="closeMenu" aria-label="Fermer le menu">&times;</button>
+      <h2>Notre Menu</h2>
+      <p class="muted">Découvrez nos spécialités, nos plats faits maison, et nos produits du terroir.</p>
+      <ul class="muted">
+        <li>🥖 Pain de campagne croustillant</li>
+        <li>🧀 Plateau de fromages régionaux</li>
+        <li>🍷 Sélection de vins de Toulouse</li>
+      </ul>
+    </div>
+  </div>
+  <script>
+
+       // MENU modal
+      const openMenuBtn = document.getElementById('openMenu');
+      const closeMenuBtn = document.getElementById('closeMenu');
+      const menuModal = document.getElementById('menuModal');
+      if (openMenuBtn && closeMenuBtn && menuModal) {
+        openMenuBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          menuModal.classList.add('visible');
+          menuModal.setAttribute('aria-hidden', 'false');
+        });
+        closeMenuBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          menuModal.classList.remove('visible');
+          menuModal.setAttribute('aria-hidden', 'true');
+        });
+        menuModal.addEventListener('click', (e) => {
+          if (e.target === menuModal) {
+            menuModal.classList.remove('visible');
+            menuModal.setAttribute('aria-hidden', 'true');
+          }
+        });
+      }
+  </script>
 </body>
 </html>
