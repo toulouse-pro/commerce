@@ -39,7 +39,7 @@
       text-align: center;
       transition: background 0.3s, transform 0.2s;
       width: var(--max-width);
-      max-width: 80%;
+      max-width: 80%in;
     }
    /* .top-btn:hover {
       background: var(--accent);
@@ -236,19 +236,33 @@
 }
     p + ul { margin-top: 4px; }
 
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
-      gap: 12px;
-    }
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
 
-    img, .gallery img {
-      width: 33%;
+    @media (max-width: 600px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+    /*img, .gallery img {
       height: auto;
       object-fit: contain;
       border-radius: 12px;
       display: block;
-    }
+    }*/
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 12px;
+  cursor: pointer;
+}
+    
     img.popup-img { cursor: pointer; }
     img:not(.popup-img) { cursor: default; }
 
@@ -381,30 +395,36 @@
   </script>
 
 <script>
-  // IMAGE modal
-      const modal = document.getElementById('imgModal');
-      const modalImg = document.getElementById('modalImg');
-      document.querySelectorAll('.popup-img').forEach(img => {
-        img.addEventListener('click', (e) => {
-          modalImg.src = img.dataset.large || img.src;
-          modalImg.alt = img.alt || '';
-          modal.classList.add('visible');
-          modal.setAttribute('aria-hidden', 'false');
-          e.stopPropagation();
-        });
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('imgModal');
+  const modalImg = document.getElementById('modalImg');
+
+  if (modal && modalImg) {
+    document.querySelectorAll('.popup-img').forEach(img => {
+      img.addEventListener('click', (e) => {
+        modalImg.src = img.dataset.large || img.src;
+        modalImg.alt = img.alt || '';
+        modal.classList.add('visible');
+        modal.setAttribute('aria-hidden', 'false');
+        e.stopPropagation();
       });
-      modal.addEventListener('click', () => {
+    });
+
+    modal.addEventListener('click', () => {
+      modal.classList.remove('visible');
+      modal.setAttribute('aria-hidden', 'true');
+      modalImg.src = '';
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('visible')) {
         modal.classList.remove('visible');
         modal.setAttribute('aria-hidden', 'true');
         modalImg.src = '';
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('visible')) {
-          modal.classList.remove('visible');
-          modal.setAttribute('aria-hidden', 'true');
-          modalImg.src = '';
-        }
-      });
+      }
+    });
+  }
+});
 </script>
 
 <!-- Image popup modal -->
