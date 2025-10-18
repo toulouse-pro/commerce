@@ -243,7 +243,7 @@
     }
 
     img, .gallery img {
-      width: 100%;
+      width: 33%;
       height: auto;
       object-fit: contain;
       border-radius: 12px;
@@ -376,5 +376,33 @@
         });
       }
   </script>
+
+<script>
+  // IMAGE modal
+      const modal = document.getElementById('imgModal');
+      const modalImg = document.getElementById('modalImg');
+      document.querySelectorAll('.popup-img').forEach(img => {
+        img.addEventListener('click', (e) => {
+          modalImg.src = img.dataset.large || img.src;
+          modalImg.alt = img.alt || '';
+          modal.classList.add('visible');
+          modal.setAttribute('aria-hidden', 'false');
+          e.stopPropagation();
+        });
+      });
+      modal.addEventListener('click', () => {
+        modal.classList.remove('visible');
+        modal.setAttribute('aria-hidden', 'true');
+        modalImg.src = '';
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('visible')) {
+          modal.classList.remove('visible');
+          modal.setAttribute('aria-hidden', 'true');
+          modalImg.src = '';
+        }
+      });
+</script>
+  
 </body>
 </html>
