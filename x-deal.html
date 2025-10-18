@@ -21,26 +21,26 @@
       line-height: 1.2;
     }
 
-    /* Bouton retour */
-    .top-btn {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: block;
-      margin: 0 auto 16px auto;
-      padding: 10px;
-      font-size: 1rem;
-      font-weight: 600;
-      background: #fff;
-      color: var(--accent);
-      text-decoration: none;
-      border: 1px solid var(--accent);
-      border-radius: var(--radius);
-      text-align: center;
-      transition: background 0.3s, transform 0.2s;
-      width: var(--max-width);
-      max-width: 80%in;
-    }
+.top-btn {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: inline-block;       /* ✅ makes it size to its text */
+  margin: 12px auto 16px auto;
+  padding: 10px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: #fff;
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  text-align: center;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: var(--shadow);
+  width: auto;                 /* ✅ stop forcing fixed width */
+  max-width: 90%;              /* ✅ responsive limit */
+}
    /* .top-btn:hover {
       background: var(--accent);
       color: #fff;
