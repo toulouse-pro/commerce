@@ -170,6 +170,63 @@
   cursor: pointer;
   color: var(--accent);
 }
+
+/* Buttons */
+.btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.btn:hover {
+  background: #c62828;
+  transform: scale(1.03);
+}
+
+.btn.secondary {
+  background: #fff;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.btn.secondary:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Popup content sizing */
+.menu-content {
+  background: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;       /* ✅ Prevents oversize on mobile */
+  overflow-y: auto;        /* ✅ Scrolls if content is tall */
+  text-align: center;
+  position: relative;
+}
+
+/* Mobile-friendly tweaks */
+@media (max-width: 600px) {
+  .menu-content {
+    padding: 16px;
+    max-width: 95%;
+    font-size: 0.9rem;
+  }
+
+  .btn {
+    padding: 8px 12px;
+    font-size: 0.95rem;
+  }
+}
     
   </style>
 </head>
@@ -242,9 +299,9 @@
       <p><strong>Mes données personnelles sont-elles protégées ?</strong><br><i>L’hébergement ne stocke que ce qui est déjà visible sur votre site (selon vos choix). Il n’y a aucun risque de compromission de la sécurité.</i></p>
       <p><strong>Puis-je choisir l'option photographe plus tard?</strong><br><i>Oui</i></p>
       <p><strong>Pourquoi créer un site web?</strong><br><i>Les arguments en sa faveur sont si nombreux qu’ils méritent un popup:</i></p>
-       <div class="cta-row">
-          <a href="#" class="btn secondary" id="openMenu">Pourquoi</a>
-        </div>
+<div class="cta-row">
+  <button class="btn secondary" id="openMenu">Pourquoi</button>
+</div>
     </div>
   </div>
 
