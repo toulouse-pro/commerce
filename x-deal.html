@@ -425,14 +425,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <!-- Image popup modal -->
 <div class="menu-modal" id="imgModal" aria-hidden="true">
-  <div class="menu-content" style="padding:0; background:none; box-shadow:none; border-radius:0;">
+  <div class="menu-content" style="padding: 10px; background: none; box-shadow: none; border-radius: 0;">
     <img id="modalImg" src="" alt="" style="
-      max-width: 95vw;
-      max-height: 90vh;
+      max-width: min(90%, 700px); /* Mimic index.html, slightly reduced from 95% */
+      max-height: 85vh; /* Slightly reduced for balance */
       border-radius: 12px;
       display: block;
       margin: auto;
       box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      object-fit: contain; /* Ensure full image visibility */
     ">
   </div>
 </div>
