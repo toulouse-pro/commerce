@@ -22,34 +22,25 @@
     }
 
 .top-btn {
-  position: fixed;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2000;                /* ✅ higher than everything else */
-  
-  display: block;
-  padding: 10px 0;
-  font-size: 1rem;
-  font-weight: 600;
-  background: #fff;
-  color: var(--accent);
-  text-decoration: none;
-  border: 1px solid var(--accent);
-  border-radius: var(--radius);
-  text-align: center;
-  transition: background 0.3s, transform 0.2s;
-  
-  width: var(--max-width);
-  max-width: 85%;
-  box-shadow: var(--shadow);
-}
-   /* .top-btn:hover {
-      background: var(--accent);
-      color: #fff;
-      transform: scale(1.02);
-    }*/
-    .top-btn::before {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: block;
+      margin: 0 auto 16px auto;
+      padding: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      background: #fff;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--accent);
+      border-radius: var(--radius);
+      text-align: center;
+      transition: background 0.3s, transform 0.2s;
+      width: var(--max-width);
+      max-width: 80%;
+    }
+   .top-btn::before {
       content: "←";
       color: #fff; /* flèche blanche */
       -webkit-text-stroke: 1px var(--accent); /* contour rouge */
@@ -63,7 +54,7 @@
       flex-direction: column;
       align-items: center;
       gap: 16px;
-      padding: 90px 12px 12px;
+      padding: 12px;
     }
 
     /* Cartes pricing */
