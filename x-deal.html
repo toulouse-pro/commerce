@@ -22,11 +22,11 @@
     }
 
 .top-btn {
-  position: fixed;              /* ✅ stays visible while scrolling */
-  top: 8px;                     /* distance from top of screen */
-  left: 50%;                    /* center horizontally */
-  transform: translateX(-50%);  /* center correction */
-  z-index: 1000;
+  position: fixed;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;                /* ✅ higher than everything else */
   
   display: block;
   padding: 10px 0;
@@ -40,8 +40,8 @@
   text-align: center;
   transition: background 0.3s, transform 0.2s;
   
-  width: var(--max-width);      /* ✅ same width as cards */
-  max-width: 85%;               /* ✅ responsive limit like cards */
+  width: var(--max-width);
+  max-width: 85%;
   box-shadow: var(--shadow);
 }
    /* .top-btn:hover {
@@ -63,8 +63,7 @@
       flex-direction: column;
       align-items: center;
       gap: 16px;
-      padding: 12px;
-      padding-top: 70px;
+      padding: 90px 12px 12px;
     }
 
     /* Cartes pricing */
