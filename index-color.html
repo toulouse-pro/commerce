@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="purple">
+<html lang="fr" data-theme="tech">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -18,59 +18,80 @@
   <style>
  /* === Base variables (fallbacks) === */
   :root {
-    --bg: #fff;
+    --bg: #ffffff;
     --accent: #d99a3b;
     --muted: #6b6b6b;
+    --brand: #d99a3b;
+    --topbar: #ffffff;
+    --hamburger: #6b6b6b;
     --max-width: 700px;
     --radius: 10px;
     --shadow: 0 6px 22px rgba(0,0,0,0.08);
   }
 
-  /* 🌿 Organic Honey */
+  /* 🌿 1. Organic Honey */
   html[data-theme="honey"] {
     --bg: #fffdf7;
     --accent: #d99a3b;
     --muted: #6b6b6b;
+    --brand: #c5841f;
+    --topbar: #f8f3e7;
+    --hamburger: #d99a3b;
     --shadow: 0 6px 22px rgba(0,0,0,0.08);
   }
 
-  /* 💎 Cool Tech */
+  /* 💎 2. Cool Tech */
   html[data-theme="tech"] {
     --bg: #f5f7fa;
     --accent: #3b82f6;
     --muted: #6b7280;
+    --brand: #1e40af;
+    --topbar: #e9eef5;
+    --hamburger: #3b82f6;
     --shadow: 0 6px 22px rgba(0,0,0,0.08);
   }
 
-  /* 🪐 Cosmic Purple */
+  /* 🪐 3. Cosmic Purple */
   html[data-theme="purple"] {
     --bg: #f9f8ff;
     --accent: #7e5bef;
     --muted: #6b6b6b;
+    --brand: #5b37d1;
+    --topbar: #ece9ff;
+    --hamburger: #7e5bef;
     --shadow: 0 6px 22px rgba(126,91,239,0.15);
   }
 
-  /* 🌊 Ocean Breeze */
+  /* 🌊 4. Ocean Breeze */
   html[data-theme="ocean"] {
     --bg: #f7fbfc;
     --accent: #00a8cc;
     --muted: #5c6b73;
+    --brand: #007f99;
+    --topbar: #e8f6f8;
+    --hamburger: #00a8cc;
     --shadow: 0 6px 22px rgba(0,168,204,0.12);
   }
 
-  /* 🌸 Soft Blush */
+  /* 🌸 5. Soft Blush */
   html[data-theme="blush"] {
     --bg: #fff9f9;
     --accent: #f76c6c;
     --muted: #7a7a7a;
+    --brand: #d94c4c;
+    --topbar: #ffecec;
+    --hamburger: #f76c6c;
     --shadow: 0 6px 22px rgba(247,108,108,0.12);
   }
 
-  /* 🌑 Noir Mode */
+  /* 🌑 6. Noir Mode */
   html[data-theme="noir"] {
     --bg: #0d1117;
     --accent: #58a6ff;
     --muted: #8b949e;
+    --brand: #1f6feb;
+    --topbar: #161b22;
+    --hamburger: #58a6ff;
     --shadow: 0 6px 22px rgba(0,0,0,0.6);
   }
 
@@ -79,7 +100,7 @@
       margin: 0;
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       background: var(--bg);
-      color: #111;
+      color: var(--muted);
       -webkit-font-smoothing: antialiased;
       line-height: 1.5;
     }
@@ -104,7 +125,7 @@
       height: 44px;
       display: grid;
       place-items: center;
-      background: var(--bg);
+      background: var(--hamburger);
       border-radius: 8px;
       box-shadow: var(--shadow);
       border: 1px solid rgba(0,0,0,0.04);
@@ -114,7 +135,7 @@
     .hamburger .bars {
       width: 22px;
       height: 2px;
-      background: #222;
+      /*background: #222;*/
       box-shadow: 0 6px 0 #222, 0 -6px 0 #222;
       border-radius: 2px;
     }
@@ -130,7 +151,7 @@
       font-family: 'Playfair Display', serif;
       font-weight: 700;
       font-size: 1rem;
-      color: #111;
+      color: var(--brand);
     }
 
     .brand .tag {
@@ -178,7 +199,9 @@
       padding: 28px 12px 5px;
       border-radius: 12px;
       margin-top: 20px;
-      background: linear-gradient(180deg, rgba(217,154,59,0.06), rgba(217,154,59,0.02));
+      background: var(--topbar);
+      color: var(--brand);
+      box-shadow: var(--shadow);
     }
 
     .hero-left { flex: 1; min-width: 240px; }
