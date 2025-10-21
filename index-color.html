@@ -90,7 +90,7 @@
     --muted: #7a7a7a;
     --brand: #d94c4c;
     --topbar: #ffecec;
-    --topbar-tint: #ffd8d8;
+    --topbar-tint: #ffe1e1;
     --hamburger-border: #f76c6c;
     --hamburger-line: #d94c4c;
     --shadow: 0 6px 22px rgba(247,108,108,0.12);
@@ -130,10 +130,11 @@
       align-items: center;
       padding: 10px 12px;
       color: var(--topbar);
-      background: var(--topbar-tint);
-      box-shadow: var(--shadow);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-    }
+      background: color-mix(in srgb, var(--topbar-tint) 85%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
 
     .hamburger {
       width: 44px;
@@ -147,12 +148,14 @@
       cursor: pointer;
     }
 
-    .hamburger .bars {
+   /* .hamburger */
+    .bars {
       width: 22px;
       height: 2px;
       /*background: #222;*/
-      color: var(--hamburger-line);
-      box-shadow: 0 6px 0 #222, 0 -6px 0 #222;
+      background: var(--hamburger-line);
+     /* box-shadow: 0 6px 0 #222, 0 -6px 0 #222;*/
+      box-shadow: 0 6px 0 var(--hamburger-line), 0 -6px 0 var(--hamburger-line);
       border-radius: 2px;
     }
 
