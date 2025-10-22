@@ -170,7 +170,7 @@
     /* === Hero === */
     header.hero {
       display: flex;
-      flex-direction: column;
+      /*flex-direction: column;*/
       align-items: flex-start;
       padding: 18px 12px 5px;
       border-radius: 12px;
@@ -178,6 +178,8 @@
       box-shadow: var(--hero-shadow);
       border-left: none; /* remove green line */
     }
+
+    header.hero { flex-direction: row; justify-content: space-between; }
 
     .hero-right img {
       width: 100%;
