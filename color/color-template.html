@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="palette">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -16,198 +16,438 @@
   <meta name="robots" content="index, follow">
   
   <style>
-[data-theme="palette"] 
-    {
-  --body-bg: #1a1a1a;           /* Deep dark background */
-  --body-text: #f2f0e6;         /* Light parchment text */
-  
-  --topbar-bg: #2a2a2a;
-  --topbar-text: #d4af37;       /* Gold text */
-  --topbar-border: #f2d16b;     /* Light gold accent */
-  --topbar-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 
-  --hamburger-bg: #2a2a2a;
-  --hamburger-border: #d4af37;
-  --hamburger-bar: #f2f0e6;
-  --hamburger-hover: #a7831f;
+:root[data-theme="dark"] {
+  /* === Base Colors === */
+  --body-bg: #111;
+  --body-text: #eee;
+  --muted: #aaa;
 
-  --brand-name-color: #f2d16b;
-  --brand-tag-color: #a69f8d;
-  --brand-bg: transparent;
+  /* === Topbar === */
+  --topbar-bg: #1a1a1a;
+  --topbar-text: #f4f4f4;
+  --topbar-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  --topbar-border: rgba(255,255,255,0.06);
 
-  --nav-bg: #2a2a2a;
-  --nav-text: #f2f0e6;
-  --nav-hover-bg: #d4af37;
-  --nav-hover-text: #1a1a1a;
-  --nav-border: #d4af37;
-  --nav-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+  /* === Hero Section === */
+  --hero-bg: linear-gradient(180deg, rgba(217,154,59,0.1), rgba(217,154,59,0.04));
+  --hero-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  --lead-text-color: #ccc;
 
-  --hero-bg: #1a1a1a;
-  --hero-text: #f2f0e6;
-  --hero-border: none;
-  --hero-shadow: 0 2px 12px rgba(212, 175, 55, 0.2);
+  /* === Brand === */
+  --brand-name-color: #fff;
+  --brand-name-glow: 0 0 8px rgba(217,154,59,0.3);
+  --brand-tag-color: #d0d0d0;
 
-  --lead-text-color: #d9d6c3;
-  --lead-bg: transparent;
+  /* === Navigation === */
+  --nav-bg: rgba(25,25,25,0.98);
+  --nav-text: #f5f5f5;
+  --nav-border: rgba(255,255,255,0.08);
+  --nav-shadow: 0 4px 12px rgba(0,0,0,0.6);
+  --nav-hover-bg: rgba(217,154,59,0.12);
+  --nav-hover-text: #fff;
 
-  --email-link-color: #f2d16b;
-  --email-link-hover: #d4af37;
-  --email-text: #f2f0e6;
-  --email-bg: transparent;
+  /* === Hamburger === */
+  --hamburger-bg: #1a1a1a;
+  --hamburger-hover: #2a2a2a;
+  --hamburger-border: rgba(255,255,255,0.08);
+  --hamburger-bar: #e6e6e6;
+
+  /* === Cards / Sections === */
+  --card-bg: #1a1a1a;
+  --card-border: rgba(255,255,255,0.08);
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  --border-color: rgba(255,255,255,0.1);
+  --border-hover: rgba(255,255,255,0.25);
+  --border-dashed: rgba(255,255,255,0.1);
+
+  /* === Buttons === */
+  --accent: #d99a3b;
+  --accent-hover: #e3a94d;
+  --btn-text: #111;
+  --btn-shadow: 0 6px 18px rgba(217,154,59,0.35);
+  --btn-shadow-hover: 0 8px 22px rgba(217,154,59,0.45);
+  --btn-secondary-border: rgba(217,154,59,0.25);
+
+  /* === Map / Overlay === */
+  --overlay-bg: rgba(0,0,0,0.85);
+  --modal-shadow: 0 18px 40px rgba(0,0,0,0.8);
+
+  /* === Cookie Banner === */
+  --cookie-bg: #1a1a1a;
+  --cookie-text: #eee;
+  --cookie-border: rgba(255,255,255,0.08);
+  --cookie-shadow: 0 2px 8px rgba(0,0,0,0.6);
+
+  /* === Shadows === */
+  --shadow: 0 2px 8px rgba(0,0,0,0.6);
 }
     
-    body {
-      background: var(--body-bg);
-      color: var(--body-text);
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-    }
+html, body { height: 100%; }
 
-    /* === Topbar === */
-    .topbar {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1000;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      padding: 10px 12px;
-      background: var(--topbar-bg);
-      color: var(--topbar-text);
-      box-shadow: var(--topbar-shadow);
-      border-bottom: 1px solid var(--topbar-border); /* keep red underline */
-    }
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--body-bg);
+  color: var(--body-text);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
 
-    /* === Brand === */
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      padding-left: 6px;
-    }
+/* === Topbar === */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--topbar-bg);
+  color: var(--topbar-text);
+  box-shadow: var(--topbar-shadow);
+  border-bottom: 1px solid var(--topbar-border);
+}
 
-    .brand .name {
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      font-size: 1rem;
-      color: var(--brand-name-color);
-      text-shadow: var(--brand-name-glow);
-      transition: text-shadow 0.3s, color 0.3s;
-    }
+/* === Hamburger === */
+.hamburger {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: var(--hamburger-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--hamburger-border);
+  cursor: pointer;
+  transition: background 0.3s;
+}
 
-    .brand .name:hover {
-      color: var(--email-link-hover);
-      text-shadow: 0 0 15px var(--email-link-hover);
-    }
+.hamburger:hover {
+  background: var(--hamburger-hover);
+}
 
-    .brand .tag {
-      font-size: 0.75rem;
-      color: var(--brand-tag-color);
-    }
+.hamburger.active {
+  background: var(--hamburger-hover);
+}
 
-    /* === Hamburger === */
-    .hamburger {
-      width: 44px; height: 44px;
-      display: grid; place-items: center;
-      background: var(--hamburger-bg);
-      border-radius: 8px;
-      border: 1px solid var(--hamburger-border);
-      cursor: pointer;
-      transition: background 0.3s;
-    }
+.hamburger .bars {
+  width: 22px;
+  height: 2px;
+  background: var(--hamburger-bar);
+  box-shadow: 0 6px 0 var(--hamburger-bar), 0 -6px 0 var(--hamburger-bar);
+  border-radius: 2px;
+}
 
-    .hamburger:hover {
-      background: var(--hamburger-hover);
-    }
+/* === Brand === */
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 6px;
+}
 
-    .hamburger.active {
-      background: var(--hamburger-hover); /* red when active */
-    }
+.brand .name {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--brand-name-color);
+  text-shadow: var(--brand-name-glow);
+  transition: text-shadow 0.3s, color 0.3s;
+}
 
-    .hamburger .bars {
-      width: 22px; height: 2px;
-      background: var(--hamburger-bar);
-      box-shadow: 0 6px 0 var(--hamburger-bar), 0 -6px 0 var(--hamburger-bar);
-      border-radius: 2px;
-    }
+.brand .name:hover {
+  color: var(--email-link-hover);
+  text-shadow: 0 0 15px var(--email-link-hover);
+}
 
-    /* === Navigation === */
-    nav.site-nav {
-      position: fixed;
-      left: 12px; top: 72px;
-      z-index: 999;
-      background: var(--nav-bg);
-      border-radius: 12px;
-      padding: 10px;
-      box-shadow: var(--nav-shadow);
-      border: 1px solid var(--nav-border);
-      display: none;
-      transition: all 0.3s ease;
-    }
+.brand .tag {
+  font-size: 0.75rem;
+  color: var(--brand-tag-color);
+}
 
-    nav.site-nav a {
-      display: block;
-      padding: 10px 12px;
-      border-radius: 8px;
-      color: var(--nav-text);
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.3s, color 0.3s;
-    }
+/* === Navigation === */
+nav.site-nav {
+  position: fixed;
+  left: 12px;
+  top: 72px;
+  z-index: 999;
+  background: var(--nav-bg);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: var(--nav-shadow);
+  border: 1px solid var(--nav-border);
+  max-width: 240px;
+  display: none;
+  transition: all 0.3s ease;
+}
 
-    nav.site-nav a:hover {
-      background: var(--nav-hover-bg);
-      color: var(--nav-hover-text);
-    }
+nav.site-nav a {
+  display: block;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--nav-text);
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s, color 0.3s;
+}
 
-    /* === Container === */
-    .container {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 85px 20px 90px;
-    }
+nav.site-nav a:hover {
+  background: var(--nav-hover-bg);
+  color: var(--nav-hover-text);
+}
 
-    /* === Hero === */
-    header.hero {
-      display: flex;
-      /*flex-direction: column;*/
-      align-items: flex-start;
-      padding: 18px 12px 5px;
-      border-radius: 12px;
-      background: var(--hero-bg);
-      box-shadow: var(--hero-shadow);
-      border-left: none; /* remove green line */
-    }
+/* === Layout === */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 60px 20px 90px;
+}
 
-    header.hero { flex-direction: row; justify-content: space-between; }
+/* === Hero === */
+header.hero {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+  padding: 28px 12px 5px;
+  border-radius: 12px;
+  margin-top: 20px;
+  background: var(--hero-bg);
+  box-shadow: var(--hero-shadow);
+}
 
-    .hero-right img {
-      width: 100%;
-      border-radius: 12px;
-      display: block;
-    }
+.hero-left { flex: 1; min-width: 240px; }
+.hero-right { max-width: 700px; flex-shrink: 0; }
 
-    .hero p.lead {
-      color: var(--lead-text-color);
-      margin: 8px 0 16px;
-    }
+.hero h1 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+}
 
-    /* === Email === */
-    .email-link {
-      color: var(--email-link-color);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
-    }
+.hero p.lead {
+  color: var(--lead-text-color);
+  margin: 8px 0 16px;
+}
 
-    .email-link:hover {
-      color: var(--email-link-hover);
-    }
+/* === Buttons === */
+.cta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
-    @media (max-width: 800px) {
-      .hero { flex-direction: column; }
-      .hero-right { width: 100%; }
-    }
+.btn {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  background: var(--accent);
+  color: var(--btn-text);
+  box-shadow: var(--btn-shadow);
+  transition: background 0.3s, box-shadow 0.3s;
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+  box-shadow: var(--btn-shadow-hover);
+}
+
+.btn.secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--btn-secondary-border);
+  box-shadow: none;
+}
+
+/* === Images === */
+img, .gallery img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  display: block;
+}
+
+img.popup-img { cursor: pointer; }
+img:not(.popup-img) { cursor: default; }
+
+/* === Sections === */
+section {
+  margin-top: 18px;
+  padding: 22px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--card-border);
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.section-title h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* === Gallery === */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+/* === Hours Table === */
+.hours {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.hours td {
+  padding: 6px 8px;
+  border-bottom: 1px dashed var(--border-dashed);
+}
+
+/* === Reviews === */
+.review {
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+}
+
+.stars {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* === Map === */
+.map {
+  width: 100%;
+  height: 300px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+/* === Footer === */
+footer {
+  padding: 18px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin: 28px 5px 18px;
+}
+
+/* === Modal === */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: var(--overlay-bg);
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal img {
+  max-width: min(95%, 700px);
+  max-height: 85%;
+  border-radius: 8px;
+  box-shadow: var(--modal-shadow);
+  cursor: default;
+}
+
+/* === Cookie Banner === */
+.cookie-banner {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--cookie-bg);
+  color: var(--cookie-text);
+  border: 1px solid var(--cookie-border);
+  border-radius: var(--radius);
+  box-shadow: var(--cookie-shadow);
+  padding: 10px;
+  width: 90%;
+  max-width: 350px;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 5000;
+  animation: fadeIn 0.3s ease;
+}
+
+.cookie-actions { display: flex; gap: 6px; }
+
+.cookie-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cookie-btn.accept {
+  background: var(--accent);
+  color: var(--btn-text);
+  box-shadow: var(--btn-shadow);
+}
+
+.cookie-btn.accept:hover {
+  background: var(--accent-hover);
+}
+
+.cookie-btn.decline {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border-color);
+}
+
+.cookie-btn.decline:hover {
+  color: var(--body-text);
+  border-color: var(--border-hover);
+}
+
+/* === Animation === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* === Responsive === */
+@media (max-width: 800px) {
+  .hero { flex-direction: column; }
+  .hero-right { width: 100%; }
+  nav.site-nav { left: 12px; right: 12px; }
+}
+
+@media (max-width: 600px) {
+  .container { padding: 60px 12px 80px; }
+  header.hero { flex-direction: column; padding: 20px 12px; }
+  .btn { flex: 1; text-align: center; }
+  nav.site-nav { width: calc(100% - 24px); left: 12px; right: 12px; }
+}
   </style>
 </head>
 
