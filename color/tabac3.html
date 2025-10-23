@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="dark">
+<html lang="fr" data-theme="art-deco">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -7,81 +7,46 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <!-- SEO -->
-  <title>Mon Commerce — Ma Spécialité à Toulouse</title>
-  <meta name="description" content="Mon Entreprise — découvrez nos services et produits à Toulouse. Horaires, photos, avis clients et contact. Passez nous voir !">
-  <meta name="keywords" content="entreprise, services, produits, Toulouse, professionnel, horaires, contact">
-  <meta name="author" content="Nom de l'entreprise">
-  <link rel="canonical" href="https://www.site.com/">
-  <meta name="robots" content="index, follow">
-  
   <style>
+[data-theme="art-deco"] {
+  --body-bg: #252B32;           /* Deep dark background */
+  --body-text: #F0FBF6;         /* Light parchment text */
+  
+  --topbar-bg: #252B32;
+  --topbar-text: #d4af37;       /* Gold text */
+  --topbar-border: red;     /* Light gold accent */
+  --topbar-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 
-:root[data-theme="dark"] {
-  /* === Base Colors === */
-  --body-bg: #111;
-  --body-text: #aaa;
-  --text-a: #aaa;
+  --hamburger-bg: #252B32;
+  --hamburger-border: white;
+  --hamburger-bar: white;
+  --hamburger-hover: #252B32;
 
-  /* === Topbar === */
-  --topbar-bg: #1a1a1a;
-  --topbar-text: #aaa;
-  --topbar-shadow: 0 2px 6px rgba(0,0,0,0.4);
-  --topbar-border: #d99a3b;
+  --brand-name-color: white;
+  --brand-tag-color: white;
+  --brand-bg: transparent;
 
-  /* === Hero Section === */
-  --hero-bg: linear-gradient(180deg, rgba(217,154,59,0.1), rgba(217,154,59,0.04));
-  --hero-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  --lead-text-color: #aaa;
+  --nav-bg: #252B32;
+  --nav-text: #F0FBF6;
+  --nav-hover-bg: #d4af37;
+  --nav-hover-text: #1a1a1a;
+  --nav-border: red;
+  --nav-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
 
-  /* === Brand === */
-  --brand-name-color: #a69f8d;
-  --brand-name-glow: 0 0 8px rgba(217,154,59,0.3);
-  --brand-tag-color: #a69f8d;
+  --hero-bg: #636D6F;
+  --hero-text: white;
+  --hero-border: none;
+  --hero-shadow: 0 2px 12px rgba(212, 175, 55, 0.2);
 
-  /* === Navigation === */
-  --nav-bg: #1a1a1a;
-  --nav-text: #aaa;
-  --nav-border: rgba(255,255,255,0.08);
-  --nav-shadow: 0 4px 12px rgba(0,0,0,0.6);
-  --nav-hover-bg: rgba(217,154,59,0.12);
-  --nav-hover-text: #a69f8d;
+  --lead-text-color: white;
+  --lead-bg: transparent;
 
-  /* === Hamburger === */
-  --hamburger-bg: #1a1a1a;
-  --hamburger-hover: #2a2a2a;
-  --hamburger-border: #a69f8d;
-  --hamburger-bar: #a69f8d;
-
-  /* === Cards / Sections === */
-  --card-bg: #1a1a1a;
-  --card-border: rgba(255,255,255,0.08);
-  --card-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  --border-color: #a69f8d;
-  --border-hover: rgba(255,255,255,0.25);
-  --border-dashed: rgba(255,255,255,0.1);
-
-  /* === Buttons === */
-  --accent: #d99a3b;
-  --accent-hover: #e3a94d;
-  --btn-text: #a69f8d;
-  --btn-shadow: 0 6px 18px rgba(217,154,59,0.35);
-  --btn-shadow-hover: 0 8px 22px rgba(217,154,59,0.45);
-  --btn-secondary-border: rgba(217,154,59,0.25);
-
-  /* === Map / Overlay === */
-  --overlay-bg: rgba(0,0,0,0.85);
-  --modal-shadow: 0 18px 40px rgba(0,0,0,0.8);
-
-  /* === Cookie Banner === */
-  --cookie-bg: #1a1a1a;
-  --cookie-text: #aaa;
-  --cookie-border: rgba(255,255,255,0.08);
-  --cookie-shadow: 0 2px 8px rgba(0,0,0,0.6);
-
-  /* === Shadows === */
-  --shadow: 0 2px 8px rgba(0,0,0,0.6);
+  --email-link-color: white;
+  --email-link-hover: green;
+  --email-text: green;
+  --email-bg: transparent;
 }
+
     
 html, body { height: 100%; }
 
@@ -453,18 +418,16 @@ footer {
 
 <body>
   <div class="topbar">
-    <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="site-nav" aria-label="Ouvrir le menu">
-      <span class="bars"></span>
-    </button>
+    <button class="hamburger" id="hamburger"><span class="bars"></span></button>
     <a href="index.html" style="text-decoration: none; color: inherit;">
       <div class="brand">
-        <span class="name">The Back Room</span>
-        <span class="tag">Cocktails 1920's — Mixologie</span>
+        <span class="name">TABAC DE LA GARE</span>
+        <span class="tag">Anbiance & Conversations — Toulouse</span>
       </div>
     </a>
   </div>
 
-  <nav class="site-nav" id="site-nav" aria-hidden="true">
+  <nav class="site-nav" id="site-nav">
     <a href="#avis">Avis</a>
     <a href="#horaires">Horaires</a>
     <a href="#photos">Photos</a>
@@ -472,27 +435,26 @@ footer {
     <a href="#carte">Nous trouver</a>
     <a href="#contact">Contact</a>
   </nav>
-
+ 
   <main class="container" id="top">
-      <header class="hero" role="banner" aria-label="Présentation">
-     <div class="hero-left">
+    <header class="hero" role="banner" aria-label="Présentation">
+      <div class="hero-left">
         <div class="hero-right">
-          <img src="Art-deco.jpg" alt="Vitrine">
+          <img src="Tabac.jpeg" alt="Vitrine">
         </div>
-        <div style="margin-top:12px;" class="muted">
-          <p class="lead">Produits et services de qualité, conçus avec passion et savoir-faire — votre satisfaction au cœur de notre engagement depuis 1963.</p>
+        <div style="margin-top:12px;">
+          <p class="lead">
+            Un atelier chaleureux dédié à l’entretien et à la réparation de vos chaussures et articles en cuir.
+       Retrouvez ici nos prestations, nos horaires et notre savoir-faire artisanal.</p>
         </div>
-        <div style="margin-top:12px;" class="muted">
-        <strong>Email:</strong> 
-<a href="mailto:contact@example.com" style="color: var(--accent); text-decoration: none;">
-  contact@example.com
-</a>
-          <i class="fa-regular fa-clone" id="copy-icon" style="cursor: pointer; margin-left: 8px;" title="Copy to clipboard"></i>
-          <span id="copied-popup" style="display:none; margin-left: 10px; color: var(--accent); font-size: 0.8rem;">Copié !</span>
+        <div style="margin-top:12px;">
+          <strong>Email:</strong>
+          <a href="mailto:contact@example.com" class="email-link">
+            <span id="email-text">contact@example.com</span>
+          </a>
         </div>
-    </div>
+      </div>
     </header>
-
     <section id="avis" aria-labelledby="avis-title">
       <div class="section-title"><h2 id="avis-title">Avis clients</h2><span class="text-a">Ce que disent nos clients</span></div>
       <div style="display:flex;gap:16px;align-items:center;">
