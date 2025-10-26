@@ -3,14 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <!-- SEO -->
   <title>Mon Commerce — Ma Spécialité à Toulouse</title>
   <meta name="description" content="Mon Entreprise — découvrez nos services et produits à Toulouse. Horaires, photos, avis clients et contact. Passez nous voir !">
-  <meta name="keywords" content="entreprise, services, produits, Toulouse, professionnel, horaires, contact">
   <meta name="author" content="Nom de l'entreprise">
   <link rel="canonical" href="https://www.site.com/">
   <meta name="robots" content="index, follow">
@@ -35,39 +33,38 @@
       line-height: 1.5;
     }
 
-.topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  background: var(--bg);
-  box-shadow: var(--shadow);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  display: block;
-}
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: var(--bg);
+      box-shadow: var(--shadow);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      display: block;
+    }
 
-.topbar .inner {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 10px 20px;
-}
+    .topbar .inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 20px;
+    }
 
-.hamburger {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  background: var(--bg);
-  border-radius: 8px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(0,0,0,0.04);
-  cursor: pointer;
-}
-
+    .hamburger {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      background: var(--bg);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.04);
+      cursor: pointer;
+    }
 
     .hamburger .bars {
       width: 22px;
@@ -96,21 +93,21 @@
       color: var(--muted);
     }
 
- nav.site-nav {
-  position: fixed;
-  top: 72px;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(6px);
-  border-radius: 12px;
-  padding: 10px;
-  box-shadow: var(--shadow);
-  max-width: 240px;
-  margin-left: calc((100vw - var(--max-width)) / 2 + 20px);
-  display: none;
-}
+    nav.site-nav {
+      position: fixed;
+      top: 72px;
+      left: 0;
+      right: 0;
+      z-index: 999;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      padding: 10px;
+      box-shadow: var(--shadow);
+      max-width: 240px;
+      margin-left: calc((100vw - var(--max-width)) / 2 + 20px);
+      display: none;
+    }
 
     nav.site-nav a {
       display: block;
@@ -141,8 +138,6 @@
       background: linear-gradient(180deg, rgba(217,154,59,0.06), rgba(217,154,59,0.02));
     }
 
-    .hero-left { flex: 1; min-width: 240px; }
-    .hero-right { max-width: 700px; flex-shrink: 0; }
     .hero h1 {
       margin: 0;
       font-family: 'Playfair Display', serif;
@@ -298,7 +293,6 @@
       align-items: center;
       gap: 10px;
       z-index: 5000;
-      animation: fadeIn 0.3s ease;
     }
 
     .cookie-actions { display: flex; gap: 6px; }
@@ -331,55 +325,35 @@
       border-color: rgba(0,0,0,0.2);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, 20px); }
-      to { opacity: 1; transform: translate(-50%, 0); }
-    }
-
+    /* Unified mobile styles */
     @media (max-width: 600px) {
       .hero { flex-direction: column; }
       .hero-right { width: 100%; }
-      nav.site-nav { left: 12px; right: 12px; }
-    }
-
-    @media (max-width: 600px) {
       .container { padding: 60px 12px 80px; }
       header.hero { flex-direction: column; padding: 20px 12px; }
       .btn { flex: 1; text-align: center; }
-      nav.site-nav { width: calc(100% - 24px); left: 12px; right: 12px; }
+      nav.site-nav { width: calc(100% - 24px); left: 12px; right: 12px; max-width: 150px; margin-left: 12px; }
+      .topbar .inner { padding: 10px 12px; }
     }
-
-@media (max-width: 600px) {
-  .topbar .inner { padding: 10px 12px; }
-
-  nav.site-nav {
-    margin-left: 12px;
-    max-width: 150px;
-    width: auto;
-  }
-}
-
-
-
   </style>
 </head>
 
 <body>
   <div class="topbar">
     <div class="inner">
-    <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="site-nav" aria-label="Ouvrir le menu">
-      <span class="bars"></span>
-    </button>
-    <a href="index.html" style="text-decoration: none; color: inherit;">
-      <div class="brand">
-        <span class="name">Mon Commerce</span>
-        <span class="tag">Ma Spécialité — Toulouse</span>
-      </div>
-    </a>
-  </div>
+      <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="site-nav" aria-label="Ouvrir le menu">
+        <span class="bars"></span>
+      </button>
+      <a href="index.html" style="text-decoration: none; color: inherit;">
+        <div class="brand">
+          <span class="name">Mon Commerce</span>
+          <span class="tag">Ma Spécialité — Toulouse</span>
+        </div>
+      </a>
+    </div>
   </div>
 
-  <nav class="site-nav" id="site-nav" aria-hidden="true">
+  <nav class="site-nav" id="site-nav">
     <a href="#avis">Avis</a>
     <a href="#horaires">Horaires</a>
     <a href="#photos">Photos</a>
@@ -533,6 +507,7 @@
     </div>
   </div>
 
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const hamburger = document.getElementById('hamburger');
@@ -546,13 +521,11 @@
       const acceptBtn = document.getElementById('cookie-accept');
       const declineBtn = document.getElementById('cookie-decline');
 
-      // Nav toggle
       if (hamburger && nav) {
         hamburger.addEventListener('click', () => {
           const expanded = hamburger.getAttribute('aria-expanded') === 'true';
           hamburger.setAttribute('aria-expanded', String(!expanded));
           nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
-          nav.setAttribute('aria-hidden', String(expanded));
         });
 
         nav.querySelectorAll('a').forEach(a => {
@@ -561,51 +534,43 @@
             const target = document.querySelector(a.getAttribute('href'));
             if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             nav.style.display = 'none';
-            nav.setAttribute('aria-hidden', 'true');
             hamburger.setAttribute('aria-expanded', 'false');
           });
         });
       }
 
-      // Image modal
       document.querySelectorAll('.popup-img').forEach(img => {
         img.addEventListener('click', (e) => {
           modalImg.src = img.dataset.large || img.src;
           modalImg.alt = img.alt || '';
           modal.style.display = 'flex';
-          modal.setAttribute('aria-hidden', 'false');
           e.stopPropagation();
         });
       });
 
       modal.addEventListener('click', () => {
         modal.style.display = 'none';
-        modal.setAttribute('aria-hidden', 'true');
         modalImg.src = '';
       });
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.style.display === 'flex') {
           modal.style.display = 'none';
-          modal.setAttribute('aria-hidden', 'true');
           modalImg.src = '';
         }
       });
 
-      // Contact email copy
       if (copyIcon) {
         copyIcon.addEventListener("click", () => {
           navigator.clipboard.writeText(emailText).then(() => {
             copiedPopup.style.display = "inline";
             setTimeout(() => { copiedPopup.style.display = "none"; }, 2000);
-          }).catch(err => console.error("Échec de la copie :", err));
+          });
         });
       }
 
-      // Cookie banner
       if (localStorage.getItem('cookieConsent')) {
         banner.style.display = 'none';
-        banner.setAttribute('aria-hidden', 'true');
       }
 
       acceptBtn.addEventListener('click', () => {
@@ -620,10 +585,7 @@
 
       function hideBanner() {
         banner.style.opacity = '0';
-        setTimeout(() => {
-          banner.style.display = 'none';
-          banner.setAttribute('aria-hidden', 'true');
-        }, 300);
+        setTimeout(() => { banner.style.display = 'none'; }, 300);
       }
     });
   </script>
