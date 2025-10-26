@@ -35,33 +35,6 @@
       line-height: 1.5;
     }
 
-   /* .topbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      padding: 10px 20px;
-      background: var(--bg);
-      box-shadow: var(--shadow);
-      border-bottom: 1px solid rgba(0,0,0,0.06);
-    }
-
-    .hamburger {
-      width: 44px;
-      height: 44px;
-      display: grid;
-      place-items: center;
-      background: var(--bg);
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(0,0,0,0.04);
-      cursor: pointer;
-    }*/
-
 .topbar {
   position: fixed;
   top: 0;
@@ -83,7 +56,6 @@
   padding: 10px 20px; /* correspond au padding latéral de .container (20px) */
 }
 
-/* garder le style du hamburger inchangé */
 .hamburger {
   width: 44px;
   height: 44px;
@@ -127,8 +99,8 @@
  nav.site-nav {
   position: fixed;
   top: 72px;
-  left: 50%;
-  transform: translateX(calc(-50% + var(--max-width)/-2 + 20px));
+  left: 0;
+  right: 0;
   z-index: 999;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(6px);
@@ -136,11 +108,9 @@
   padding: 10px;
   box-shadow: var(--shadow);
   max-width: 240px;
-  width: 100%;
+  margin-left: calc((100vw - var(--max-width)) / 2 + 20px);
   display: none;
 }
-
-
 
     nav.site-nav a {
       display: block;
@@ -381,13 +351,13 @@
 
 @media (max-width: 600px) {
   .topbar .inner { padding: 10px 12px; }
+
   nav.site-nav {
-    left: 50%;
-    transform: translateX(calc(-50% + var(--max-width)/-2 + 12px));
-    width: calc(100% - 24px);
-    max-width: none;
+    margin-left: 12px; /* match .container padding on mobile */
+    max-width: calc(100% - 24px); /* keep spacing on both sides */
   }
 }
+
 
 
   </style>
