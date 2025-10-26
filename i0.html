@@ -35,7 +35,7 @@
       line-height: 1.5;
     }
 
-    .topbar {
+   /* .topbar {
       position: fixed;
       top: 0;
       left: 0;
@@ -60,7 +60,42 @@
       box-shadow: var(--shadow);
       border: 1px solid rgba(0,0,0,0.04);
       cursor: pointer;
-    }
+    }*/
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  display: block;
+}
+
+.topbar .inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 20px; /* correspond au padding latéral de .container (20px) */
+}
+
+/* garder le style du hamburger inchangé */
+.hamburger {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0,0,0,0.04);
+  cursor: pointer;
+}
+
 
     .hamburger .bars {
       width: 22px;
@@ -339,11 +374,19 @@
       .btn { flex: 1; text-align: center; }
       nav.site-nav { width: calc(100% - 24px); left: 12px; right: 12px; }
     }
+
+    @media (max-width: 600px) {
+  .topbar .inner {
+    padding: 10px 12px;
+  }
+}
+
   </style>
 </head>
 
 <body>
   <div class="topbar">
+    <div class="inner">
     <button class="hamburger" id="hamburger" aria-expanded="false" aria-controls="site-nav" aria-label="Ouvrir le menu">
       <span class="bars"></span>
     </button>
@@ -353,6 +396,7 @@
         <span class="tag">Ma Spécialité — Toulouse</span>
       </div>
     </a>
+  </div>
   </div>
 
   <nav class="site-nav" id="site-nav" aria-hidden="true">
