@@ -262,30 +262,59 @@
   text-align: center;
 }
 
-.stars .half-star {
-  color: transparent; /* Hide the default character */
+/*.stars .half-star {
+  color: transparent; 
   position: relative;
 }
 
 .stars .half-star::before {
-  content: "★"; /* Full star outline */
+  content: "★"; 
   position: absolute;
-  color: var(--muted); /* Use muted gray for outline, e.g., #555 */
+  color: var(--muted); 
   top: 0;
   left: 0;
   z-index: 1;
 }
 
 .stars .half-star::after {
-  content: "★"; /* Full star fill */
+  content: "★"; 
   position: absolute;
-  color: var(--accent); /* Fill with neon pink */
+  color: var(--accent); 
   top: 0;
   left: 0;
   z-index: 2;
-  width: 50%; /* Half fill */
+  width: 50%; 
   overflow: hidden;
-  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); /* Clip to left half */
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%); 
+}*/
+
+    .stars .half-star {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  color: transparent;
+}
+
+.stars .half-star::before {
+  content: "★";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  color: rgba(0, 0, 0, 0.15); /* Much lighter gray (was #555) */
+}
+
+.stars .half-star::after {
+  content: "★";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  color: var(--accent);
+  width: 52%; /* Slightly more than 50% to make it look truly half-filled */
+  overflow: hidden;
+  clip-path: polygon(0 0, 52% 0, 52% 100%, 0 100%);
 }
 
     .map {
