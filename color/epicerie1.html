@@ -243,6 +243,35 @@
       font-weight: 700;
     }
 
+    .stars .half-star {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  color: transparent;
+}
+
+.stars .half-star::before {
+  content: "★";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  color: rgba(0, 0, 0, 0.15); /* Much lighter gray (was #555) */
+}
+
+.stars .half-star::after {
+  content: "★";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  color: var(--accent); 
+  width: 80%; /* Slightly more than 50% to make it look truly half-filled */
+  overflow: hidden;
+  clip-path: polygon(0 0, 80% 0, 80% 100%, 0 100%);
+}
+    
     .map {
       width: 100%;
       height: 300px;
