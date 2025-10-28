@@ -248,39 +248,34 @@
 }
 
 .stars span {
-  display: inline-block;
   position: relative;
+  display: inline-block;
   width: 1em;
   height: 1em;
-  font-size: 1em;
   text-align: center;
   line-height: 1em;
 }
 
-/* --- HALF STAR FIX --- */
-.stars .half-star {
-  color: transparent; /* hide base text */
+/* full stars stay normal */
+.stars span.full {
+  color: var(--accent);
 }
 
-.stars .half-star::before,
+/* --- half (or % fill) star --- */
+.stars .half-star {
+  color: rgba(0,0,0,0.15); /* base gray star */
+}
+
 .stars .half-star::after {
   content: "★";
   position: absolute;
   top: 0;
   left: 0;
-  width: 1em;
-  height: 1em;
-  text-align: center;
-  line-height: 1em;
-}
-
-.stars .half-star::before {
-  color: rgba(0, 0, 0, 0.15); /* background star */
-}
-
-.stars .half-star::after {
+  width: 100%;
+  height: 100%;
   color: var(--accent);
-  clip-path: inset(0 80% 0 0); 
+  mask-image: linear-gradient(to right, black calc(var(--fill, 50%)), transparent 0);
+  -webkit-mask-image: linear-gradient(to right, black calc(var(--fill, 50%)), transparent 0);
 }
     
      /* .stars {
@@ -503,7 +498,11 @@
         <div>
           <div class="muted">Note moyenne — basé sur 124 avis</div>
 
-           <div class="stars" aria-hidden="true">★★★★<span class="half-star"></span></div>
+<div class="stars">
+  ★★★★<span class="half-star" style="--fill:80%;"></span>
+</div>
+          
+           <!--<div class="stars" aria-hidden="true">★★★★<span class="half-star"></span></div>-->
 
           <!--<div class="stars" aria-hidden="true">★★★★★</div>-->
         </div>
