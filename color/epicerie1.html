@@ -264,13 +264,34 @@
   vertical-align: middle;
 }
 
+.stars .half-star::before,
+.stars .half-star::after {
+  content: "★";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
 .stars .half-star::before {
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.stars .half-star::after {
+  color: var(--accent);
+  width: 80%;
+  overflow: hidden;
+  clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+}
+    
+/*.stars .half-star::before {
   content: "★";
   position: absolute;
   top: 0;
   left: 0;
   z-index: 1;
-  color: rgba(0, 0, 0, 0.15); /* Much lighter gray (was #555) */
+  color: rgba(0, 0, 0, 0.15);
 }
 
 .stars .half-star::after {
@@ -280,10 +301,10 @@
   left: 0;
   z-index: 2;
   color: var(--accent); 
-  width: 81%; /* Slightly more than 50% to make it look truly half-filled */
+  width: 81%;
   overflow: hidden;
   clip-path: polygon(0 0, 81% 0, 81% 100%, 0 100%);
-}
+}*/
     
     .map {
       width: 100%;
