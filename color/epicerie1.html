@@ -238,18 +238,63 @@
       border: 1px solid rgba(0,0,0,0.04);
     }
 
-      .stars {
-  color: var(--accent); /* Soft neon pink for full stars */
-  font-weight: 700;
-  display: inline-flex; /* Ensure stars align properly */
+.stars {
+  display: inline-flex;
   align-items: center;
-  gap: 2px; /* Space between stars */
+  gap: 2px;
+  color: var(--accent);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stars span {
+  display: inline-block;
+  position: relative;
+  width: 1em;
+  height: 1em;
+  font-size: 1em;
+  text-align: center;
+  line-height: 1em;
+}
+
+/* --- HALF STAR FIX --- */
+.stars .half-star {
+  color: transparent; /* hide base text */
+}
+
+.stars .half-star::before,
+.stars .half-star::after {
+  content: "★";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1em;
+  height: 1em;
+  text-align: center;
+  line-height: 1em;
+}
+
+.stars .half-star::before {
+  color: rgba(0, 0, 0, 0.15); /* background star */
+}
+
+.stars .half-star::after {
+  color: var(--accent);
+  clip-path: inset(0 80% 0 0); 
+}
+    
+     /* .stars {
+  color: var(--accent); 
+  font-weight: 700;
+  display: inline-flex; 
+  align-items: center;
+  gap: 2px; 
 }
 
 .stars span {
   position: relative;
   display: inline-block;
-  width: 1em; /* Match font size of stars */
+  width: 1em; 
   height: 1em;
   line-height: 1;
   text-align: center;
@@ -283,7 +328,7 @@
   width: 20%;
   overflow: hidden;
   clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
-}
+}*/
     
 /*.stars .half-star::before {
   content: "★";
