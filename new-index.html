@@ -214,11 +214,23 @@
       font-size: 0.95rem;
     }
 
-    .gallery {
+  /*  .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 12px;
-    }
+    }*/
+
+        .gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 400px) {
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
     .hours {
       width: 100%;
@@ -451,9 +463,14 @@
     <section id="photos" aria-labelledby="photos-title">
       <div class="section-title"><h2 id="photos-title">Photos</h2><span class="muted">Notre Sélection</span></div>
       <div class="gallery" id="gallery">
-        <img loading="lazy" src="images/inside1.jpg" alt="inside 1" class="popup-img">
+        <img loading="lazy" src="images/1.jpg" alt="inside 1" class="popup-img">
         <img loading="lazy" src="images/inside2.jpeg" alt="inside 2" class="popup-img">
-        <img loading="lazy" src="images/inside3.jpg" alt="inside 3" class="popup-img">
+        <img loading="lazy" src="images/3.jpg" alt="inside 3" class="popup-img">
+        <img loading="lazy" src="images/4.jpg" alt="inside 4" class="popup-img">
+        <img loading="lazy" src="images/inside1.jpeg" alt="inside 5" class="popup-img">
+        <img loading="lazy" src="images/inside3.jpg" alt="inside 6" class="popup-img">
+        <img loading="lazy" src="images/7.jpg" alt="inside 7" class="popup-img">
+        <img loading="lazy" src="images/8.jpeg" alt="inside 8" class="popup-img">
       </div>
     </section>
 
