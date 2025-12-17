@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Family Helix</title>
+    <style>
+        /* --- CORE SETTINGS --- */
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --accent-color: #00ffcc; /* Cyberpunk Teal */
+            --card-bg: #1a1a1a;
+            --depth: -500px; /* How far back the spiral starts */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace; /* Retro-tech feel */
+            overflow: hidden; /* We handle scrolling via JS for the 3D effect */
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+        }
+
+        /* --- THE UI OVERLAY --- */
+        #ui-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+            box-sizing: border-box;
+            background: radial-gradient(circle at center, transparent 0%, var(--bg-color) 120%);
+        }
+
+        h1 {
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px var(--accent-color);
+            margin: 0;
+        }
+
+        .scroll-indicator {
+            text-align: center;
+            opacity: 0.6;
+            animation: pulse 2s infinite;
+        }
+
+        /* --- THE 3D SCENE --- */
+        #scene-container {
+            perspective: 1000px;
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        #helix-world {
+            transform-style: preserve-3d;
+            width: 0;
+            height: 0;
+            position: relative;
+            transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* --- THE PHOTO CARDS --- */
+        .memory-card {
+            position: absolute;
+            width: 300px;
+            height: 220px;
+            background-color: var(--card-bg);
+            border: 1px solid #333;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+            /* Start hidden to fade in */
+            opacity: 0; 
+            transition: opacity 1s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            backface-visibility: hidden; /* Performance boost */
+        }
+
+        .memory-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 30px var(--accent-color);
+            z-index: 10; /* Bring to very front on hover visually */
+        }
+
+        .memory-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            background-color: #000;
+        }
+
+        .caption {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+
+        /* --- LIGHTBOX (MODAL) --- */
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.95);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        #lightbox.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 80vh;
+            box-shadow: 0 0 50px rgba(255,255,255,0.1);
+            border: 2px solid var(--accent-color);
+        }
+
+        #lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            color: white;
+            cursor: pointer;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes pulse {
+            0%, 100% { transform: translateY(0); opacity: 0.4; }
+            50% { transform: translateY(10px); opacity: 0.8; }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .memory-card {
+                width: 200px;
+                height: 160px;
+            }
+            .memory-card img {
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>The Family Archives</h1>
+        <div class="scroll-indicator">Scroll to Travel Time</div>
+    </div>
+
+    <div id="scene-container">
+        <div id="helix-world">
+            </div>
+    </div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <div id="lightbox-close">&times;</div>
+        <img id="lightbox-img" src="" alt="Full size memory">
+    </div>
+
+    <script>
+        /* ------------------------------------------------
+           CONFIGURATION
+           ------------------------------------------------
+           1. Create a folder named "images" in the same directory as this file.
+           2. Name your photos 1.jpg, 2.jpg, 3.jpg ... up to 100.jpg.
+           3. If you have fewer photos, change TOTAL_IMAGES below.
+           ------------------------------------------------
+        */
+        const CONFIG = {
+            folderPath: 'images/', 
+            totalImages: 100,      
+            helixRadius: 500,      // Width of the spiral
+            verticalSpacing: 300,  // Height between photo rows
+            anglePerItem: 0.5,     // How tight the spiral is (radians)
+        };
+
+        const world = document.getElementById('helix-world');
+        let currentScroll = 0;
+        let targetScroll = 0;
+
+        // --- INITIALIZATION ---
+        function init() {
+            for (let i = 1; i <= CONFIG.totalImages; i++) {
+                createMemoryCard(i);
+            }
+            animate();
+        }
+
+        // --- CREATE CARDS ---
+        function createMemoryCard(index) {
+            const card = document.createElement('div');
+            card.className = 'memory-card';
+            
+            // Calculate 3D Position (Helix Math)
+            const angle = index * CONFIG.anglePerItem;
+            const y = index * CONFIG.verticalSpacing; 
+            const x = Math.cos(angle) * CONFIG.helixRadius;
+            const z = Math.sin(angle) * CONFIG.helixRadius;
+
+            // Apply styles
+            // We rotate Y to face the center slightly, adds to the "vortex" feel
+            card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${90 - (angle * 180 / Math.PI)}deg)`;
+            
+            // Content
+            // NOTE: Using a placeholder service for demonstration. 
+            // CHANGE THIS LINE TO USE YOUR LOCAL IMAGES: 
+            // const imgSrc = `${CONFIG.folderPath}${index}.jpg`;
+            const imgSrc = `https://picsum.photos/400/300?random=${index}`; 
+
+            card.innerHTML = `
+                <img src="${imgSrc}" alt="Memory ${index}" loading="lazy">
+                <div class="caption">MEMORY #${index.toString().padStart(3, '0')}</div>
+            `;
+
+            // Interaction
+            card.onclick = () => openLightbox(imgSrc);
+
+            world.appendChild(card);
+
+            // Staggered fade-in
+            setTimeout(() => {
+                card.style.opacity = 1;
+            }, index * 50); 
+        }
+
+        // --- SCROLL LOGIC ---
+        // We hijack normal scrolling to move the 3D world
+        window.addEventListener('wheel', (e) => {
+            targetScroll -= e.deltaY * 1.5; // Speed multiplier
+        });
+
+        // Touch support for mobile
+        let touchStartY = 0;
+        window.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY);
+        window.addEventListener('touchmove', e => {
+            const touchY = e.touches[0].clientY;
+            const deltaY = touchStartY - touchY;
+            targetScroll -= deltaY * 2;
+            touchStartY = touchY;
+        });
+
+        // --- ANIMATION LOOP ---
+        function animate() {
+            // Smooth scrolling physics (Linear Interpolation)
+            currentScroll += (targetScroll - currentScroll) * 0.08;
+
+            // Rotate the world slightly based on scroll for dynamic feel
+            const rotation = currentScroll * 0.05;
+
+            // Apply transform to the world container
+            // We translate Z to move "through" the tunnel
+            // We rotate Y to spin the tunnel
+            world.style.transform = `
+                translateZ(${currentScroll}px) 
+                rotateY(${rotation}deg)
+            `;
+
+            requestAnimationFrame(animate);
+        }
+
+        // --- LIGHTBOX FUNCTIONS ---
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) {
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        // Start
+        init();
+
+    </script>
+</body>
+</html>
