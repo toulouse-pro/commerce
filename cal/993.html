@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Scattered Archives</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --grid-color: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            touch-action: none;
+            user-select: none;
+            cursor: grab;
+        }
+
+        body:active { cursor: grabbing; }
+
+        /* --- UI OVERLAY --- */
+        #ui-layer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            pointer-events: none;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            transition: opacity 0.3s;
+        }
+
+        h1 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+        }
+
+        p.hint {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* --- BUTTONS --- */
+        .hud-btn {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: white;
+            color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .hud-btn:active { transform: scale(0.9); }
+
+        /* Overview Button (Bottom Left) */
+        #toggle-overview {
+            bottom: 30px;
+            left: 30px;
+        }
+
+        /* Reset Button (Bottom Right) */
+        #reset-view {
+            bottom: 30px;
+            right: 30px;
+        }
+
+        /* --- THE UNIVERSE --- */
+        #universe {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            will-change: transform;
+            /* Smooth zoom transition */
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+
+        /* --- CARDS --- */
+        .polaroid {
+            position: absolute;
+            background: white;
+            padding: 8px 8px 30px 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 160px;
+            transition: transform 0.2s;
+            border-radius: 3px;
+            transform-origin: center;
+        }
+        
+        /* While in overview, disable hover effects on cards */
+        .overview-active .polaroid { pointer-events: auto; }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            background: #eee;
+            display: block;
+            pointer-events: none;
+        }
+
+        .polaroid-caption {
+            color: #222;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.7rem;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        #lightbox.active { opacity: 1; pointer-events: auto; }
+
+        #lightbox img {
+            max-width: 90vw;
+            max-height: 70vh;
+            border: 8px solid white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        #close-btn {
+            margin-top: 20px;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>Archives</h1>
+        <p class="hint" id="status-text">Drag to pan • Tap to view</p>
+    </div>
+
+    <div id="toggle-overview" class="hud-btn" onclick="toggleOverview()">:::</div>
+    
+    <div id="reset-view" class="hud-btn" onclick="resetPosition()">⌖</div>
+
+    <div id="universe"></div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lb-img" src="">
+        <div id="close-btn">Close</div>
+    </div>
+
+    <script>
+        /* --- CONFIGURATION --- */
+        const TOTAL_IMAGES = 60; 
+        const SPREAD_RADIUS = 2000;
+        
+        const universe = document.getElementById('universe');
+        const uiText = document.getElementById('status-text');
+        
+        // State
+        let state = {
+            x: 0,
+            y: 0,
+            scale: 1,
+            isDragging: false,
+            isOverview: false,
+            startX: 0, startY: 0
+        };
+
+        // Inertia
+        let velocityX = 0, velocityY = 0;
+        let lastMouseX = 0, lastMouseY = 0;
+        let animationFrame;
+
+        function init() {
+            resetPosition(); // Start centered
+            for (let i = 1; i <= TOTAL_IMAGES; i++) createPolaroid(i);
+            loop();
+        }
+
+        function createPolaroid(index) {
+            const card = document.createElement('div');
+            card.className = 'polaroid';
+            
+            // Random Scatter
+            const x = (Math.random() - 0.5) * SPREAD_RADIUS;
+            const y = (Math.random() - 0.5) * SPREAD_RADIUS;
+            const rot = (Math.random() * 30) - 15;
+            const z = Math.floor(Math.random() * 50);
+
+            // Store original coordinates on the element for "zoom to card" logic
+            card.dataset.x = x;
+            card.dataset.y = y;
+
+            card.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+            card.style.zIndex = z;
+
+            const src = `https://picsum.photos/400?random=${index}`;
+            card.innerHTML = `<img src="${src}" loading="lazy"><div class="polaroid-caption">#${index}</div>`;
+
+            // Click / Tap Logic
+            let touchStartX = 0, touchStartY = 0;
+
+            card.addEventListener('pointerdown', (e) => {
+                touchStartX = e.clientX;
+                touchStartY = e.clientY;
+                if(!state.isOverview) {
+                    card.style.transition = "transform 0.2s";
+                    card.style.zIndex = 1000; 
+                    card.style.transform = `translate(${x}px, ${y}px) rotate(0deg) scale(1.1)`;
+                }
+            });
+
+            card.addEventListener('pointerup', (e) => {
+                const dist = Math.hypot(e.clientX - touchStartX, e.clientY - touchStartY);
+                
+                // Reset card visual
+                card.style.zIndex = z;
+                card.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(1)`;
+
+                if (dist < 10) {
+                    // Logic Split: Are we in God Mode or Normal Mode?
+                    if (state.isOverview) {
+                        // WARP SPEED: Zoom into this specific card
+                        zoomToCard(x, y);
+                    } else {
+                        // OPEN LIGHTBOX
+                        openLightbox(src);
+                    }
+                }
+            });
+
+            universe.appendChild(card);
+        }
+
+        // --- 2. DRAG & PHYSICS ---
+
+        document.addEventListener('pointerdown', (e) => {
+            if(e.target.closest('.hud-btn') || e.target.closest('#lightbox')) return;
+            
+            // Disable drag in overview mode
+            if(state.isOverview) return;
+
+            state.isDragging = true;
+            state.startX = e.clientX - state.x;
+            state.startY = e.clientY - state.y;
+            velocityX = 0; velocityY = 0;
+            lastMouseX = e.clientX; lastMouseY = e.clientY;
+            document.body.style.cursor = 'grabbing';
+            
+            // Disable transition during drag for instant response
+            universe.style.transition = 'none';
+        });
+
+        document.addEventListener('pointermove', (e) => {
+            if (!state.isDragging) return;
+            e.preventDefault();
+            
+            const x = e.clientX - state.startX;
+            const y = e.clientY - state.startY;
+
+            velocityX = e.clientX - lastMouseX;
+            velocityY = e.clientY - lastMouseY;
+            lastMouseX = e.clientX; lastMouseY = e.clientY;
+
+            state.x = x;
+            state.y = y;
+        });
+
+        document.addEventListener('pointerup', () => {
+            state.isDragging = false;
+            document.body.style.cursor = 'grab';
+            // Re-enable smooth transition for inertia
+            universe.style.transition = 'transform 0.1s linear'; 
+        });
+
+        // --- 3. THE VIEW LOOP ---
+        function loop() {
+            if (!state.isDragging && !state.isOverview) {
+                state.x += velocityX;
+                state.y += velocityY;
+                velocityX *= 0.95;
+                velocityY *= 0.95;
+            }
+
+            // Apply Transform
+            // Note: If we are in overview, the CSS class handles the transform, 
+            // so we only update inline styles when NOT in overview.
+            if (!state.isOverview) {
+                universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${state.scale})`;
+            }
+
+            requestAnimationFrame(loop);
+        }
+
+        // --- 4. OVERVIEW MODE LOGIC ---
+
+        function toggleOverview() {
+            state.isOverview = !state.isOverview;
+            
+            if (state.isOverview) {
+                // Calculate scale to fit everything
+                // We add some padding (divide by slightly larger number)
+                const fitScale = Math.min(window.innerWidth / (SPREAD_RADIUS * 1.5), window.innerHeight / (SPREAD_RADIUS * 1.5));
+                
+                // We pause the JS loop updates by using a specific transform
+                universe.style.transition = 'transform 0.8s cubic-bezier(0.2, 1, 0.3, 1)';
+                
+                // Center the universe visually
+                universe.style.transform = `translate(${window.innerWidth/2}px, ${window.innerHeight/2}px) scale(${fitScale})`;
+                
+                document.body.classList.add('overview-active');
+                uiText.innerText = "Tap an image to warp there";
+            } else {
+                // Return to previous state
+                document.body.classList.remove('overview-active');
+                universe.style.transition = 'transform 0.6s cubic-bezier(0.2, 1, 0.3, 1)';
+                uiText.innerText = "Drag to pan • Tap to view";
+                
+                // The loop will pick up the coordinates automatically next frame
+            }
+        }
+
+        function zoomToCard(cardX, cardY) {
+            // 1. Turn off overview mode
+            state.isOverview = false;
+            document.body.classList.remove('overview-active');
+            uiText.innerText = "Drag to pan • Tap to view";
+
+            // 2. Set the universe coordinates so the specific card is in the center
+            // Target = ScreenCenter - CardPosition
+            state.x = (window.innerWidth / 2) - cardX;
+            state.y = (window.innerHeight / 2) - cardY;
+
+            // 3. Apply transition for the "Warp" effect
+            universe.style.transition = 'transform 1s cubic-bezier(0.2, 1, 0.3, 1)';
+            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+        }
+
+        function resetPosition() {
+            state.x = window.innerWidth / 2;
+            state.y = window.innerHeight / 2;
+            state.isOverview = false;
+            document.body.classList.remove('overview-active');
+            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+        }
+
+        // --- LIGHTBOX ---
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+        function openLightbox(src) {
+            lbImg.src = src;
+            lightbox.classList.add('active');
+        }
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        init();
+
+    </script>
+</body>
+</html>
