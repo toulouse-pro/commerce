@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Scattered Archives</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --grid-color: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            /* This creates a subtle grid so you can see movement */
+            background-image: radial-gradient(var(--grid-color) 1px, transparent 1px);
+            background-size: 40px 40px; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            touch-action: none; /* Stops browser back/forward swipes */
+            user-select: none;
+            cursor: grab;
+        }
+
+        body:active {
+            cursor: grabbing;
+        }
+
+        /* --- UI OVERLAY --- */
+        #ui-layer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            pointer-events: none;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+        }
+
+        p.hint {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* --- THE INFINITE CANVAS --- */
+        #universe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* Will be positioned via JS entirely */
+            width: 0; 
+            height: 0;
+            will-change: transform;
+        }
+
+        /* --- POLAROID CARDS --- */
+        .polaroid {
+            position: absolute;
+            background: white;
+            padding: 8px 8px 30px 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 160px; /* Slightly smaller for mobile screens */
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 3px;
+            pointer-events: auto; /* Ensure cards catch clicks */
+            transform-origin: center;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            background: #eee;
+            display: block;
+            pointer-events: none;
+        }
+
+        .polaroid-caption {
+            color: #222;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.7rem;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        #lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #lightbox img {
+            max-width: 90vw;
+            max-height: 70vh;
+            border: 8px solid white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            border-radius: 2px;
+        }
+
+        #close-btn {
+            margin-top: 20px;
+            color: white;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Reset button for when you get lost */
+        #reset-view {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            color: black;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>Archives</h1>
+        <p class="hint">Drag to pan • Tap to view</p>
+    </div>
+
+    <div id="reset-view" onclick="resetPosition()">⌖</div>
+
+    <div id="universe"></div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lb-img" src="">
+        <div id="close-btn">Close</div>
+    </div>
+
+    <script>
+        /* --- CONFIGURATION --- */
+        const TOTAL_IMAGES = 60; // Kept lower for smooth mobile performance
+        const SPREAD_RADIUS = 2000; // How far images scatter from center
+        
+        const universe = document.getElementById('universe');
+        
+        // Physics State
+        let state = {
+            currentX: 0,
+            currentY: 0,
+            targetX: 0,
+            targetY: 0,
+            isDragging: false,
+            startX: 0,
+            startY: 0
+        };
+
+        // Inertia Physics
+        let velocityX = 0;
+        let velocityY = 0;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let animationFrame;
+
+        // --- 1. GENERATE ---
+        function init() {
+            // Start in the center of the screen
+            resetPosition();
+
+            for (let i = 1; i <= TOTAL_IMAGES; i++) {
+                createPolaroid(i);
+            }
+            
+            // Start the physics loop
+            loop();
+        }
+
+        function createPolaroid(index) {
+            const card = document.createElement('div');
+            card.className = 'polaroid';
+            
+            // Random Scatter Logic
+            // We use (Math.random() - 0.5) to get negative and positive numbers
+            const x = (Math.random() - 0.5) * SPREAD_RADIUS;
+            const y = (Math.random() - 0.5) * SPREAD_RADIUS;
+            const rot = (Math.random() * 30) - 15;
+            const z = Math.floor(Math.random() * 50); // Random z-stacking
+
+            card.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg)`;
+            card.style.zIndex = z;
+
+            // Source
+            const src = `https://picsum.photos/400?random=${index}`;
+
+            card.innerHTML = `
+                <img src="${src}" loading="lazy" draggable="false">
+                <div class="polaroid-caption">#00${index}</div>
+            `;
+
+            // Smart Click Detection
+            // We track where the finger started and where it ended
+            let touchStartX = 0;
+            let touchStartY = 0;
+
+            card.addEventListener('pointerdown', (e) => {
+                touchStartX = e.clientX;
+                touchStartY = e.clientY;
+                // Lift card up when touched
+                card.style.transition = "transform 0.2s";
+                card.style.zIndex = 1000; 
+                card.style.transform = `translate(${x}px, ${y}px) rotate(0deg) scale(1.1)`;
+            });
+
+            card.addEventListener('pointerup', (e) => {
+                // Calculate distance moved
+                const dist = Math.hypot(e.clientX - touchStartX, e.clientY - touchStartY);
+                
+                // Return card to normal state
+                card.style.zIndex = z;
+                card.style.transform = `translate(${x}px, ${y}px) rotate(${rot}deg) scale(1)`;
+
+                // If moved less than 10px, it's a click. If more, it was a drag.
+                if (dist < 10) {
+                    openLightbox(src);
+                }
+            });
+
+            universe.appendChild(card);
+        }
+
+        // --- 2. DRAG & PHYSICS LOGIC ---
+
+        document.addEventListener('pointerdown', (e) => {
+            if(e.target.id === 'lightbox' || e.target.id === 'close-btn' || e.target.id === 'reset-view') return;
+            
+            state.isDragging = true;
+            state.startX = e.clientX - state.currentX;
+            state.startY = e.clientY - state.currentY;
+            
+            // Reset inertia
+            velocityX = 0;
+            velocityY = 0;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            
+            document.body.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('pointermove', (e) => {
+            if (!state.isDragging) return;
+            e.preventDefault();
+
+            // Calculate current position
+            const x = e.clientX - state.startX;
+            const y = e.clientY - state.startY;
+
+            // Calculate velocity for the "throw" effect
+            velocityX = e.clientX - lastMouseX;
+            velocityY = e.clientY - lastMouseY;
+
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+
+            state.currentX = x;
+            state.currentY = y;
+        });
+
+        document.addEventListener('pointerup', () => {
+            state.isDragging = false;
+            document.body.style.cursor = 'grab';
+        });
+
+        document.addEventListener('pointerleave', () => {
+            state.isDragging = false;
+        });
+
+        // The "Game Loop" - Runs 60 times a second
+        function loop() {
+            if (!state.isDragging) {
+                // Apply friction to slow down
+                state.currentX += velocityX;
+                state.currentY += velocityY;
+                
+                velocityX *= 0.95; // Friction (0.95 = slippery, 0.8 = sticky)
+                velocityY *= 0.95;
+
+                // Stop completely if very slow
+                if (Math.abs(velocityX) < 0.1) velocityX = 0;
+                if (Math.abs(velocityY) < 0.1) velocityY = 0;
+            }
+
+            // Apply the movement to the HTML
+            universe.style.transform = `translate3d(${state.currentX}px, ${state.currentY}px, 0)`;
+
+            requestAnimationFrame(loop);
+        }
+
+        function resetPosition() {
+            // Centers the coordinate system in the middle of the screen
+            state.currentX = window.innerWidth / 2;
+            state.currentY = window.innerHeight / 2;
+        }
+
+        // --- 3. LIGHTBOX ---
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+
+        function openLightbox(src) {
+            lbImg.src = src;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        init();
+
+    </script>
+</body>
+</html>
