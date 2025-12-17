@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Love Archives</title>
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --grid-color: rgba(255, 255, 255, 0.05);
+            --accent: #ff4d6d;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, #0f0f13 0%, #1a1a2e 100%);
+            background-size: 40px 40px, 100% 100%; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            touch-action: none;
+            user-select: none;
+            cursor: grab;
+        }
+
+        body:active { cursor: grabbing; }
+
+        /* --- UI OVERLAY --- */
+        #ui-layer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            pointer-events: none;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+            color: var(--accent);
+        }
+
+        p.hint { font-size: 0.75rem; opacity: 0.7; margin-top: 5px; }
+
+        .hud-btn {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .hud-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.3); }
+        #toggle-overview { bottom: 30px; left: 30px; }
+        
+        /* --- MINIMAP (RADAR) --- */
+        #minimap {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 100px;
+            height: 100px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.2);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        #minimap-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px var(--accent);
+            /* Start center */
+            left: 50%;
+            top: 50%;
+        }
+
+        /* --- THE UNIVERSE --- */
+        #universe {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        /* --- DRIFT ANIMATION --- */
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(var(--rot)); }
+            50% { transform: translate(var(--float-x), var(--float-y)) rotate(calc(var(--rot) + var(--float-r))); }
+            100% { transform: translate(0, 0) rotate(var(--rot)); }
+        }
+
+        /* --- CARDS --- */
+        .polaroid {
+            position: absolute;
+            background: white;
+            padding: 6px 6px 25px 6px; /* Slightly smaller padding */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            width: 140px; /* Slightly smaller cards for better density */
+            border-radius: 2px;
+            
+            animation: drift var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+            will-change: transform; 
+        }
+
+        .polaroid:active, .polaroid.interacting {
+            animation-play-state: paused;
+            z-index: 9999 !important;
+            transition: transform 0.2s;
+            transform: scale(1.1) rotate(0deg) !important;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            background: #eee;
+            display: block;
+            pointer-events: none;
+        }
+
+        .polaroid-caption {
+            color: #222;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.6rem;
+            margin-top: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        #lightbox.active { opacity: 1; pointer-events: auto; }
+
+        #lightbox img {
+            max-width: 90vw;
+            max-height: 70vh;
+            border: 8px solid white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        #lightbox.active img { transform: scale(1); }
+
+        #close-btn {
+            margin-top: 20px;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>Heart Archives</h1>
+        <p class="hint" id="status-text">Drag to pan • Tap to view</p>
+    </div>
+
+    <div id="toggle-overview" class="hud-btn" onclick="toggleOverview()">:::</div>
+    
+    <div id="minimap">
+        <div id="minimap-dot"></div>
+    </div>
+
+    <div id="universe"></div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lb-img" src="">
+        <div id="close-btn">Close</div>
+    </div>
+
+    <script>
+        const TOTAL_IMAGES = 60; // Increased count for better shape definition
+        const HEART_SCALE = 55; // Multiplier for the heart equation
+        const SCATTER_AMOUNT = 80; // How much they scatter off the perfect line
+        
+        // Boundaries for the Minimap logic (approximate size of the cloud)
+        const MAP_BOUNDS = 1500; 
+
+        const universe = document.getElementById('universe');
+        const uiText = document.getElementById('status-text');
+        const minimapDot = document.getElementById('minimap-dot');
+        
+        let state = {
+            x: 0, y: 0, scale: 1,
+            isDragging: false, isOverview: false,
+            startX: 0, startY: 0
+        };
+
+        let velocityX = 0, velocityY = 0;
+        let lastMouseX = 0, lastMouseY = 0;
+
+        function init() {
+            resetPosition();
+            createHeartLayout();
+            loop();
+        }
+
+        function createHeartLayout() {
+            for (let i = 0; i < TOTAL_IMAGES; i++) {
+                const card = document.createElement('div');
+                card.className = 'polaroid';
+                
+                // --- HEART SHAPE MATH ---
+                // t represents the angle (0 to 2PI)
+                const t = (i / TOTAL_IMAGES) * Math.PI * 2;
+                
+                // Basic Heart Formula
+                // x = 16sin^3(t)
+                // y = 13cos(t) - 5cos(2t) - 2cos(3t) - cos(4t)
+                let hx = 16 * Math.pow(Math.sin(t), 3);
+                
+                // Note: We flip Y (-1) because screen coordinates go down
+                let hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+
+                // Apply Scale
+                hx *= HEART_SCALE;
+                hy *= HEART_SCALE;
+
+                // Add Random Scatter (Jitter) so it looks like a cloud, not a thin line
+                const randomScatterX = (Math.random() - 0.5) * SCATTER_AMOUNT;
+                const randomScatterY = (Math.random() - 0.5) * SCATTER_AMOUNT;
+
+                const x = hx + randomScatterX;
+                const y = hy + randomScatterY;
+
+                // Set positions
+                card.style.left = `${x}px`;
+                card.style.top = `${y}px`;
+
+                // Random Physics
+                const rot = (Math.random() * 20) - 10;
+                const duration = 3 + Math.random() * 5;
+                const delay = Math.random() * -5;
+                const floatX = (Math.random() * 20) - 10;
+                const floatY = (Math.random() * 30) - 15;
+                const floatR = (Math.random() * 10) - 5;
+
+                card.style.setProperty('--rot', `${rot}deg`);
+                card.style.setProperty('--duration', `${duration}s`);
+                card.style.setProperty('--delay', `${delay}s`);
+                card.style.setProperty('--float-x', `${floatX}px`);
+                card.style.setProperty('--float-y', `${floatY}px`);
+                card.style.setProperty('--float-r', `${floatR}deg`);
+                
+                // Z-index based on vertical position (lower cards on top)
+                card.style.zIndex = Math.floor(y + 1000);
+                
+                const src = `https://picsum.photos/400?random=${i + 100}`;
+                card.innerHTML = `<img src="${src}" loading="lazy"><div class="polaroid-caption">#${i + 1}</div>`;
+
+                // Click/Touch Logic
+                let touchStartX = 0, touchStartY = 0;
+                card.addEventListener('pointerdown', (e) => {
+                    touchStartX = e.clientX;
+                    touchStartY = e.clientY;
+                    if(!state.isOverview) card.classList.add('interacting');
+                });
+
+                card.addEventListener('pointerup', (e) => {
+                    const dist = Math.hypot(e.clientX - touchStartX, e.clientY - touchStartY);
+                    card.classList.remove('interacting');
+                    if (dist < 10) {
+                        if (state.isOverview) zoomToCard(x, y);
+                        else openLightbox(src);
+                    }
+                });
+
+                universe.appendChild(card);
+            }
+        }
+
+        // --- DRAG LOGIC ---
+
+        document.addEventListener('pointerdown', (e) => {
+            if(e.target.closest('.hud-btn') || e.target.closest('#lightbox')) return;
+            if(state.isOverview) return;
+
+            state.isDragging = true;
+            state.startX = e.clientX - state.x;
+            state.startY = e.clientY - state.y;
+            velocityX = 0; velocityY = 0;
+            lastMouseX = e.clientX; lastMouseY = e.clientY;
+            document.body.style.cursor = 'grabbing';
+            universe.style.transition = 'none';
+        });
+
+        document.addEventListener('pointermove', (e) => {
+            if (!state.isDragging) return;
+            e.preventDefault();
+            const x = e.clientX - state.startX;
+            const y = e.clientY - state.startY;
+            velocityX = e.clientX - lastMouseX;
+            velocityY = e.clientY - lastMouseY;
+            lastMouseX = e.clientX; lastMouseY = e.clientY;
+            state.x = x; state.y = y;
+        });
+
+        document.addEventListener('pointerup', () => {
+            state.isDragging = false;
+            document.body.style.cursor = 'grab';
+            universe.style.transition = 'transform 0.1s linear'; 
+        });
+
+        // --- MAIN LOOP ---
+
+        function loop() {
+            if (!state.isDragging && !state.isOverview) {
+                state.x += velocityX;
+                state.y += velocityY;
+                velocityX *= 0.95;
+                velocityY *= 0.95;
+            }
+            if (!state.isOverview) {
+                universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${state.scale})`;
+                updateMinimap();
+            }
+            requestAnimationFrame(loop);
+        }
+
+        // --- MINIMAP LOGIC ---
+
+        function updateMinimap() {
+            // We map the universe coordinates to percentage (0% to 100%)
+            // Since dragging universe RIGHT means looking LEFT, we invert the X/Y
+            // We assume a bounding box of roughly -MAP_BOUNDS to +MAP_BOUNDS
+            
+            // 0.5 is the center. 
+            // We divide state.x by (MAP_BOUNDS * 2) to get a ratio relative to total size
+            
+            let pctX = 0.5 - (state.x / (MAP_BOUNDS * 2.5)); 
+            let pctY = 0.5 - (state.y / (MAP_BOUNDS * 2.5));
+
+            // Clamp values so dot stays inside box
+            pctX = Math.max(0, Math.min(1, pctX));
+            pctY = Math.max(0, Math.min(1, pctY));
+
+            minimapDot.style.left = `${pctX * 100}%`;
+            minimapDot.style.top = `${pctY * 100}%`;
+        }
+
+        // --- VIEW MODES ---
+
+        function toggleOverview() {
+            state.isOverview = !state.isOverview;
+            if (state.isOverview) {
+                // Zoom out to see whole heart
+                const fitScale = Math.min(window.innerWidth / 2000, window.innerHeight / 2000); // adjusted for heart size
+                universe.style.transition = 'transform 0.8s cubic-bezier(0.2, 1, 0.3, 1)';
+                universe.style.transform = `translate(${window.innerWidth/2}px, ${window.innerHeight/2}px) scale(${fitScale})`;
+                uiText.innerText = "Tap an image to warp there";
+                
+                // Hide dot in overview
+                minimapDot.style.opacity = '0';
+            } else {
+                universe.style.transition = 'transform 0.6s cubic-bezier(0.2, 1, 0.3, 1)';
+                uiText.innerText = "Drag to pan • Tap to view";
+                minimapDot.style.opacity = '1';
+                // Return to last known position
+                universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+            }
+        }
+
+        function zoomToCard(cardX, cardY) {
+            state.isOverview = false;
+            uiText.innerText = "Drag to pan • Tap to view";
+            state.x = (window.innerWidth / 2) - cardX;
+            state.y = (window.innerHeight / 2) - cardY;
+            minimapDot.style.opacity = '1';
+            universe.style.transition = 'transform 1s cubic-bezier(0.2, 1, 0.3, 1)';
+            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+        }
+
+        function resetPosition() {
+            state.x = window.innerWidth / 2;
+            state.y = window.innerHeight / 2;
+            state.isOverview = false;
+            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+        }
+
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+        function openLightbox(src) {
+            lbImg.src = src;
+            lightbox.classList.add('active');
+        }
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        init();
+    </script>
+</body>
+</html>
