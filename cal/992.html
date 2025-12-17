@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Floating Archives</title>
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --grid-color: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(to bottom, #0f0f13 0%, #1a1a2e 100%);
+            background-size: 40px 40px, 100% 100%; 
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            touch-action: none;
+            user-select: none;
+            cursor: grab;
+        }
+
+        body:active { cursor: grabbing; }
+
+        /* --- UI OVERLAY --- */
+        #ui-layer {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            pointer-events: none;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 0;
+        }
+
+        p.hint { font-size: 0.75rem; opacity: 0.7; margin-top: 5px; }
+
+        .hud-btn {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .hud-btn:active { transform: scale(0.9); background: rgba(255,255,255,0.3); }
+        #toggle-overview { bottom: 30px; left: 30px; }
+        #reset-view { bottom: 30px; right: 30px; }
+
+        /* --- THE UNIVERSE --- */
+        #universe {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            will-change: transform;
+            transition: transform 0.1s linear; /* Default for drag */
+        }
+
+        /* --- DRIFT ANIMATION --- */
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(var(--rot)); }
+            50% { transform: translate(var(--float-x), var(--float-y)) rotate(calc(var(--rot) + var(--float-r))); }
+            100% { transform: translate(0, 0) rotate(var(--rot)); }
+        }
+
+        /* --- CARDS --- */
+        .polaroid {
+            position: absolute;
+            background: white;
+            padding: 8px 8px 30px 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            width: 160px;
+            border-radius: 3px;
+            
+            /* Apply the floating animation */
+            animation: drift var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+            
+            /* Hardware acceleration */
+            will-change: transform; 
+        }
+
+        /* Stop floating when you hover/touch a specific card */
+        .polaroid:active, .polaroid.interacting {
+            animation-play-state: paused;
+            z-index: 9999 !important;
+            transition: transform 0.2s;
+            transform: scale(1.1) rotate(0deg) !important;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            background: #eee;
+            display: block;
+            pointer-events: none;
+        }
+
+        .polaroid-caption {
+            color: #222;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.7rem;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* --- LIGHTBOX --- */
+        #lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        #lightbox.active { opacity: 1; pointer-events: auto; }
+
+        #lightbox img {
+            max-width: 90vw;
+            max-height: 70vh;
+            border: 8px solid white;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        #lightbox.active img { transform: scale(1); }
+
+        #close-btn {
+            margin-top: 20px;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="ui-layer">
+        <h1>Zero-G Archives</h1>
+        <p class="hint" id="status-text">Drag to pan • Tap to view</p>
+    </div>
+
+    <div id="toggle-overview" class="hud-btn" onclick="toggleOverview()">:::</div>
+    <div id="reset-view" class="hud-btn" onclick="resetPosition()">⌖</div>
+
+    <div id="universe"></div>
+
+    <div id="lightbox" onclick="closeLightbox()">
+        <img id="lb-img" src="">
+        <div id="close-btn">Close</div>
+    </div>
+
+    <script>
+        const TOTAL_IMAGES = 50; 
+        const SPREAD_RADIUS = 1800;
+        const universe = document.getElementById('universe');
+        const uiText = document.getElementById('status-text');
+        
+        let state = {
+            x: 0, y: 0, scale: 1,
+            isDragging: false, isOverview: false,
+            startX: 0, startY: 0
+        };
+
+        // Inertia vars
+        let velocityX = 0, velocityY = 0;
+        let lastMouseX = 0, lastMouseY = 0;
+
+        function init() {
+            resetPosition();
+            for (let i = 1; i <= TOTAL_IMAGES; i++) createPolaroid(i);
+            loop();
+        }
+
+        function createPolaroid(index) {
+            const card = document.createElement('div');
+            card.className = 'polaroid';
+            
+            // 1. POSITION (Static base coordinates)
+            // We use Left/Top for position, and Transform for animation
+            const x = (Math.random() - 0.5) * SPREAD_RADIUS;
+            const y = (Math.random() - 0.5) * SPREAD_RADIUS;
+            
+            card.style.left = `${x}px`;
+            card.style.top = `${y}px`;
+
+            // 2. RANDOMIZE FLOATING PHYSICS (CSS Variables)
+            const rot = (Math.random() * 20) - 10; // Base rotation
+            const duration = 3 + Math.random() * 5; // Speed (3s to 8s)
+            const delay = Math.random() * -5; // Start offset so they don't sync
+            const floatX = (Math.random() * 20) - 10; // Drift distance X
+            const floatY = (Math.random() * 30) - 15; // Drift distance Y
+            const floatR = (Math.random() * 10) - 5;  // Drift rotation amount
+
+            card.style.setProperty('--rot', `${rot}deg`);
+            card.style.setProperty('--duration', `${duration}s`);
+            card.style.setProperty('--delay', `${delay}s`);
+            card.style.setProperty('--float-x', `${floatX}px`);
+            card.style.setProperty('--float-y', `${floatY}px`);
+            card.style.setProperty('--float-r', `${floatR}deg`);
+            
+            // Random Z-Index
+            const z = Math.floor(Math.random() * 50);
+            card.style.zIndex = z;
+            
+            // Image Content
+            const src = `https://picsum.photos/400?random=${index}`;
+            card.innerHTML = `<img src="${src}" loading="lazy"><div class="polaroid-caption">#${index}</div>`;
+
+            // Interaction
+            let touchStartX = 0, touchStartY = 0;
+
+            card.addEventListener('pointerdown', (e) => {
+                touchStartX = e.clientX;
+                touchStartY = e.clientY;
+                if(!state.isOverview) {
+                    card.classList.add('interacting'); // Pauses animation via CSS
+                }
+            });
+
+            card.addEventListener('pointerup', (e) => {
+                const dist = Math.hypot(e.clientX - touchStartX, e.clientY - touchStartY);
+                
+                card.classList.remove('interacting'); // Resumes animation
+
+                if (dist < 10) {
+                    if (state.isOverview) {
+                        zoomToCard(x, y);
+                    } else {
+                        openLightbox(src);
+                    }
+                }
+            });
+
+            universe.appendChild(card);
+        }
+
+        // --- DRAG LOGIC ---
+
+        document.addEventListener('pointerdown', (e) => {
+            if(e.target.closest('.hud-btn') || e.target.closest('#lightbox')) return;
+            if(state.isOverview) return;
+
+            state.isDragging = true;
+            state.startX = e.clientX - state.x;
+            state.startY = e.clientY - state.y;
+            velocityX = 0; velocityY = 0;
+            lastMouseX = e.clientX; lastMouseY = e.clientY;
+            document.body.style.cursor = 'grabbing';
+            universe.style.transition = 'none';
+        });
+
+        document.addEventListener('pointermove', (e) => {
+            if (!state.isDragging) return;
+            e.preventDefault();
+            const x = e.clientX - state.startX;
+            const y = e.clientY - state.startY;
+            velocityX = e.clientX - lastMouseX;
+            velocityY = e.clientY - lastMouseY;
+            lastMouseX = e.clientX; lastMouseY = e.clientY;
+            state.x = x; state.y = y;
+        });
+
+        document.addEventListener('pointerup', () => {
+            state.isDragging = false;
+            document.body.style.cursor = 'grab';
+            universe.style.transition = 'transform 0.1s linear'; 
+        });
+
+        function loop() {
+            if (!state.isDragging && !state.isOverview) {
+                state.x += velocityX;
+                state.y += velocityY;
+                velocityX *= 0.95;
+                velocityY *= 0.95;
+            }
+            if (!state.isOverview) {
+                universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${state.scale})`;
+            }
+            requestAnimationFrame(loop);
+        }
+
+        // --- VIEW MODES ---
+
+        function toggleOverview() {
+            state.isOverview = !state.isOverview;
+            if (state.isOverview) {
+                const fitScale = Math.min(window.innerWidth / (SPREAD_RADIUS * 1.6), window.innerHeight / (SPREAD_RADIUS * 1.6));
+                universe.style.transition = 'transform 0.8s cubic-bezier(0.2, 1, 0.3, 1)';
+                universe.style.transform = `translate(${window.innerWidth/2}px, ${window.innerHeight/2}px) scale(${fitScale})`;
+                uiText.innerText = "Tap an image to warp there";
+            } else {
+                universe.style.transition = 'transform 0.6s cubic-bezier(0.2, 1, 0.3, 1)';
+                uiText.innerText = "Drag to pan • Tap to view";
+            }
+        }
+
+        function zoomToCard(cardX, cardY) {
+            state.isOverview = false;
+            uiText.innerText = "Drag to pan • Tap to view";
+            state.x = (window.innerWidth / 2) - cardX;
+            state.y = (window.innerHeight / 2) - cardY;
+            universe.style.transition = 'transform 1s cubic-bezier(0.2, 1, 0.3, 1)';
+            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+        }
+
+        function resetPosition() {
+            state.x = window.innerWidth / 2;
+            state.y = window.innerHeight / 2;
+            state.isOverview = false;
+            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+        }
+
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+        function openLightbox(src) {
+            lbImg.src = src;
+            lightbox.classList.add('active');
+        }
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        init();
+    </script>
+</body>
+</html>
