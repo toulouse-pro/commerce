@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Family Helix - Mobile</title>
+    <title>The Scattered Archives</title>
     <style>
         :root {
-            --bg-color: #050505;
-            --text-color: #ffffff;
-            --accent-color: #00ffcc;
-            --card-bg: #1a1a1a;
+            --bg-color: #111;
+            --card-bg: #fff;
+            --text-color: #eee;
         }
 
         body {
@@ -17,292 +16,260 @@
             padding: 0;
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden; 
-            height: 100vh;
+            font-family: Helvetica, sans-serif;
+            overflow: hidden; /* No native scrollbars */
             width: 100vw;
-            /* CRITICAL FOR IPHONE: Disables native pan/zoom gestures */
-            touch-action: none; 
-            -webkit-font-smoothing: antialiased;
+            height: 100vh;
+            touch-action: none; /* Critical for drag handling */
+            cursor: grab;
         }
 
+        body:active {
+            cursor: grabbing;
+        }
+
+        /* --- UI OVERLAY --- */
         #ui-layer {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
             pointer-events: none;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 1.5rem;
-            box-sizing: border-box;
-            background: linear-gradient(to bottom, rgba(5,5,5,0.8) 0%, transparent 20%, transparent 80%, rgba(5,5,5,0.8) 100%);
         }
 
         h1 {
+            font-size: 1.2rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-size: 1.2rem;
-            text-shadow: 0 0 10px var(--accent-color);
-            margin: 0;
-            text-align: center;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 4px;
+            backdrop-filter: blur(4px);
         }
 
-        .scroll-indicator {
-            text-align: center;
+        p.hint {
             font-size: 0.8rem;
-            opacity: 0.6;
-            animation: pulse 2s infinite;
-        }
-
-        #scene-container {
-            perspective: 800px; /* Brought closer for mobile impact */
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        #helix-world {
-            transform-style: preserve-3d;
-            width: 0;
-            height: 0;
-            position: relative;
-        }
-
-        .memory-card {
-            position: absolute;
-            /* Responsive sizing handled in CSS now */
-            width: 260px; 
-            height: 190px;
-            background-color: var(--card-bg);
-            border: 1px solid #444;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-            box-sizing: border-box;
-            /* Hardware acceleration for smooth iOS scroll */
-            will-change: transform, opacity;
-            backface-visibility: hidden; 
-            cursor: pointer;
-        }
-
-        .memory-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            background-color: #111;
-            display: block;
-        }
-
-        .caption {
+            opacity: 0.7;
             margin-top: 5px;
-            font-size: 0.7rem;
-            color: #aaa;
         }
 
+        /* --- THE INFINITE CANVAS --- */
+        #universe {
+            position: absolute;
+            /* The canvas is much bigger than the screen */
+            width: 5000px;
+            height: 5000px;
+            /* We start centered */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%); 
+            transform-origin: center center;
+            will-change: transform;
+        }
+
+        /* --- POLAROID CARDS --- */
+        .polaroid {
+            position: absolute;
+            background: white;
+            padding: 10px 10px 30px 10px; /* Bottom padding for "Polaroid" look */
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            width: 200px; /* Fixed width for consistency */
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), z-index 0s;
+            cursor: pointer;
+            border-radius: 2px;
+            /* Hardware acceleration */
+            transform: translateZ(0); 
+        }
+
+        .polaroid:hover {
+            transform: scale(1.1) rotate(0deg) !important; /* Pop up and straighten */
+            z-index: 999 !important; /* Bring to top */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 1/1; /* Square photos */
+            object-fit: cover;
+            background: #eee;
+            display: block;
+            pointer-events: none; /* Let clicks pass to card */
+        }
+
+        .polaroid-caption {
+            color: #333;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* --- LIGHTBOX --- */
         #lightbox {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0,0,0,0.95);
-            z-index: 200;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
             display: flex;
             justify-content: center;
             align-items: center;
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px); /* iOS support */
         }
 
         #lightbox.active {
             opacity: 1;
-            pointer-events: all;
+            pointer-events: auto;
         }
 
         #lightbox img {
-            max-width: 95%;
-            max-height: 80vh;
-            box-shadow: 0 0 30px rgba(255,255,255,0.1);
-            border: 1px solid var(--accent-color);
+            max-width: 95vw;
+            max-height: 85vh;
+            border: 5px solid white;
+            box-shadow: 0 0 50px rgba(255,255,255,0.2);
         }
 
-        #lightbox-close {
+        #close-btn {
             position: absolute;
-            top: 2rem;
-            right: 2rem;
-            font-size: 2rem;
+            bottom: 30px;
             color: white;
-            padding: 20px; /* Bigger touch target */
+            font-size: 1rem;
+            border: 1px solid white;
+            padding: 10px 20px;
+            border-radius: 20px;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: translateY(0); opacity: 0.4; }
-            50% { transform: translateY(-5px); opacity: 0.8; }
-        }
     </style>
 </head>
 <body>
 
     <div id="ui-layer">
-        <h1>The Archives</h1>
-        <div class="scroll-indicator">Swipe Up/Down</div>
+        <h1>The Memory Board</h1>
+        <p class="hint">Drag to explore • Tap to view</p>
     </div>
 
-    <div id="scene-container">
-        <div id="helix-world"></div>
-    </div>
+    <div id="universe">
+        </div>
 
     <div id="lightbox" onclick="closeLightbox()">
-        <div id="lightbox-close">&times;</div>
-        <img id="lightbox-img" src="" alt="Full Memory">
+        <img id="lb-img" src="">
+        <div id="close-btn">Close</div>
     </div>
 
     <script>
-        // --- MOBILE DETECTION ---
-        const isMobile = window.innerWidth < 768;
-
         /* --- CONFIGURATION --- */
-        const CONFIG = {
-            folderPath: 'images/', 
-            totalImages: 100,      
-            // If mobile, radius is 160 (tight tunnel). If Desktop, 500 (wide spiral).
-            helixRadius: isMobile ? 160 : 500,  
-            // Distance between photos vertically
-            verticalSpacing: isMobile ? 220 : 300, 
-             // Angle between photos
-            anglePerItem: isMobile ? 0.6 : 0.5,    
-        };
+        const TOTAL_IMAGES = 100;
+        const FOLDER_PATH = 'images/';
+        const SCATTER_WIDTH = 4000; // How wide the area is (px)
+        const SCATTER_HEIGHT = 4000; // How tall the area is (px)
+        
+        const universe = document.getElementById('universe');
+        
+        // State for dragging
+        let isDragging = false;
+        let startX, startY;
+        let translateX = -SCATTER_WIDTH / 2 + window.innerWidth / 2;
+        let translateY = -SCATTER_HEIGHT / 2 + window.innerHeight / 2;
+        let currentX = translateX;
+        let currentY = translateY;
 
-        const world = document.getElementById('helix-world');
-        let currentScroll = 0;
-        let targetScroll = 0;
-        let cards = []; // Keep track of cards
-
+        // --- 1. GENERATE THE CHAOS ---
         function init() {
-            // Center the view initially slightly down so item 1 is visible
-            targetScroll = -CONFIG.verticalSpacing; 
-            currentScroll = targetScroll;
+            // Set initial position
+            updateUniversePosition();
 
-            for (let i = 1; i <= CONFIG.totalImages; i++) {
-                createMemoryCard(i);
+            for (let i = 1; i <= TOTAL_IMAGES; i++) {
+                createPolaroid(i);
             }
-            animate();
         }
 
-        function createMemoryCard(index) {
+        function createPolaroid(index) {
             const card = document.createElement('div');
-            card.className = 'memory-card';
+            card.className = 'polaroid';
             
-            // --- 3D MATH ---
-            const angle = index * CONFIG.anglePerItem;
-            const y = index * CONFIG.verticalSpacing; 
-            const x = Math.cos(angle) * CONFIG.helixRadius;
-            const z = Math.sin(angle) * CONFIG.helixRadius;
-
-            // Store raw coordinates for the animation loop
-            card.dataset.x = x;
-            card.dataset.y = y;
-            card.dataset.z = z;
-            card.dataset.angle = angle;
-
-            // Place initial transform
-            updateCardTransform(card, x, y, z, angle);
+            // Random Position within the "Universe"
+            // We keep a buffer so they don't spawn on the very edge
+            const x = Math.random() * (SCATTER_WIDTH - 300);
+            const y = Math.random() * (SCATTER_HEIGHT - 300);
             
-            // Image Source (Placeholder logic)
-            // UNCOMMENT BELOW FOR YOUR REAL IMAGES
-            // const imgSrc = `${CONFIG.folderPath}${index}.jpg`;
-            const imgSrc = `https://picsum.photos/400/300?random=${index}`;
+            // Random Rotation (-20 to 20 degrees)
+            const rot = (Math.random() * 40) - 20;
+
+            card.style.left = `${x}px`;
+            card.style.top = `${y}px`;
+            card.style.transform = `rotate(${rot}deg)`;
+
+            // Image Source
+            // CHANGE THIS to your folder path logic
+            // const src = `${FOLDER_PATH}${index}.jpg`;
+            const src = `https://picsum.photos/400?random=${index}`;
 
             card.innerHTML = `
-                <img src="${imgSrc}" loading="lazy" alt="Img ${index}">
-                <div class="caption">#${index}</div>
+                <img src="${src}" loading="lazy">
+                <div class="polaroid-caption">#${index}</div>
             `;
 
-            card.onclick = () => openLightbox(imgSrc);
-            world.appendChild(card);
-            cards.push(card);
-        }
-
-        function updateCardTransform(card, x, y, z, angle) {
-            // We rotate the card to face slightly inward (Vortex effect)
-            const rotY = 90 - (angle * 180 / Math.PI);
-            card.style.transform = `translate3d(${x}px, ${y}px, ${z}px) rotateY(${rotY}deg)`;
-        }
-
-        // --- MOBILE TOUCH EVENTS ---
-        let touchStartY = 0;
-
-        // "passive: false" is CRITICAL for iPhone to allow us to hijack the scroll
-        window.addEventListener('touchstart', e => {
-            touchStartY = e.touches[0].clientY;
-        }, { passive: false });
-
-        window.addEventListener('touchmove', e => {
-            e.preventDefault(); // STOP native screen drag
-            const touchY = e.touches[0].clientY;
-            const deltaY = (touchStartY - touchY) * 2.5; // Sensitivity
-            targetScroll -= deltaY;
-            touchStartY = touchY;
-        }, { passive: false });
-
-        // --- DESKTOP WHEEL ---
-        window.addEventListener('wheel', (e) => {
-            targetScroll -= e.deltaY;
-        });
-
-        // --- ANIMATION LOOP ---
-        function animate() {
-            // Ease currentScroll towards targetScroll
-            currentScroll += (targetScroll - currentScroll) * 0.08;
-
-            // Rotate the whole world based on scroll depth
-            const rotation = currentScroll * 0.1;
-
-            // Move the world
-            // We use translateZ to move the camera through the tunnel
-            world.style.transform = `translateZ(${currentScroll}px) rotateY(${rotation}deg)`;
-
-            // VISIBILITY OPTIMIZATION (Culling)
-            // On mobile, if a card is too far behind or ahead, hide it to save battery
-            cards.forEach(card => {
-                const cardY = parseFloat(card.dataset.y);
-                // Calculate distance from camera relative to scroll
-                const dist = cardY + currentScroll; 
-                
-                // If it's effectively visible (range -1000 to 2000)
-                if(dist > -1500 && dist < 1500) {
-                   card.style.opacity = 1;
-                   card.style.display = 'flex';
-                } else {
-                   card.style.opacity = 0;
-                   card.style.display = 'none'; // big performance boost
-                }
+            // Interaction
+            // We use 'pointerup' to detect clicks but distinguish from drags
+            let isDragClick = false;
+            card.addEventListener('pointerdown', () => isDragClick = false);
+            card.addEventListener('pointermove', () => isDragClick = true);
+            card.addEventListener('pointerup', (e) => {
+                if(!isDragClick) openLightbox(src);
             });
 
-            requestAnimationFrame(animate);
+            universe.appendChild(card);
         }
 
-        // --- LIGHTBOX ---
+        // --- 2. DRAG LOGIC (Unified Mouse & Touch) ---
+        
+        document.addEventListener('pointerdown', (e) => {
+            // Ignore if clicking the lightbox
+            if(e.target.closest('#lightbox')) return;
+
+            isDragging = true;
+            startX = e.clientX - currentX;
+            startY = e.clientY - currentY;
+            document.body.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('pointermove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault(); // Stop text selection/native scroll
+
+            currentX = e.clientX - startX;
+            currentY = e.clientY - startY;
+
+            // Optional: Boundaries (keeps you from dragging the table off screen entirely)
+            // You can remove this block if you want truly infinite feel
+            /*
+            if(currentX > 200) currentX = 200;
+            if(currentY > 200) currentY = 200;
+            if(currentX < -SCATTER_WIDTH + window.innerWidth) currentX = -SCATTER_WIDTH + window.innerWidth;
+            if(currentY < -SCATTER_HEIGHT + window.innerHeight) currentY = -SCATTER_HEIGHT + window.innerHeight;
+            */
+
+            updateUniversePosition();
+        });
+
+        document.addEventListener('pointerup', () => {
+            isDragging = false;
+            document.body.style.cursor = 'grab';
+        });
+
+        function updateUniversePosition() {
+            universe.style.transform = `translate(${currentX}px, ${currentY}px)`;
+        }
+
+        // --- 3. LIGHTBOX LOGIC ---
         const lightbox = document.getElementById('lightbox');
-        const lightboxImg = document.getElementById('lightbox-img');
+        const lbImg = document.getElementById('lb-img');
 
         function openLightbox(src) {
-            lightboxImg.src = src;
+            lbImg.src = src;
             lightbox.classList.add('active');
         }
 
