@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Family Memory Galaxy</title>
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --accent: #00ffcc;
+            --polaroid-white: #fdfdfd;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            width: 100vw; height: 100vh;
+            touch-action: none;
+            user-select: none;
+        }
+
+        /* UI ELEMENTS */
+        #ui {
+            position: fixed; top: 20px; left: 20px; z-index: 100;
+            pointer-events: none;
+        }
+        h1 { margin: 0; font-weight: 300; letter-spacing: 4px; font-size: 1.2rem; color: var(--accent); }
+        .hint { font-size: 0.7rem; opacity: 0.5; margin-top: 5px; }
+
+        /* THE RADAR (MINI-MAP) */
+        #radar {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 150px; height: 150px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            overflow: hidden;
+        }
+        #radar-viewport {
+            position: absolute;
+            border: 1px solid var(--accent);
+            background: rgba(0, 255, 204, 0.1);
+            pointer-events: none;
+        }
+        .radar-dot {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        /* THE UNIVERSE */
+        #viewport {
+            width: 100vw; height: 100vh;
+            overflow: hidden;
+            cursor: grab;
+        }
+        #universe {
+            position: absolute;
+            width: 4000px; height: 4000px;
+            will-change: transform;
+        }
+
+        /* PHOTO CARDS */
+        .card {
+            position: absolute;
+            background: var(--polaroid-white);
+            padding: 8px 8px 25px 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            width: 180px;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .card:hover { transform: scale(1.1) !important; z-index: 500 !important; }
+        .card img { width: 100%; height: auto; display: block; filter: sepia(0.2); }
+        .card-num { color: #333; font-family: monospace; font-size: 10px; margin-top: 8px; text-align: right; }
+
+        /* LIGHTBOX */
+        #lightbox {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 2000; display: none; align-items: center; justify-content: center;
+        }
+        #lightbox img { max-width: 90%; max-height: 80vh; border: 10px solid white; }
+    </style>
+</head>
+<body>
+
+    <div id="ui">
+        <h1>THE FAMILY GALAXY</h1>
+        <div class="hint">DRAG TO MOVE • SCROLL/PINCH TO ZOOM</div>
+    </div>
+
+    <div id="radar">
+        <div id="radar-viewport"></div>
+    </div>
+
+    <div id="viewport">
+        <div id="universe"></div>
+    </div>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lb-img" src="">
+    </div>
+
+    <script>
+        const UNIVERSE_SIZE = 4000;
+        const universe = document.getElementById('universe');
+        const viewport = document.getElementById('viewport');
+        const radar = document.getElementById('radar');
+        const radarView = document.getElementById('radar-viewport');
+
+        let state = {
+            x: -UNIVERSE_SIZE/2 + window.innerWidth/2,
+            y: -UNIVERSE_SIZE/2 + window.innerHeight/2,
+            zoom: 0.5,
+            isDragging: false,
+            lastMouse: { x: 0, y: 0 }
+        };
+
+        function init() {
+            for (let i = 1; i <= 100; i++) {
+                createPhoto(i);
+            }
+            update();
+            window.addEventListener('wheel', handleWheel, { passive: false });
+            viewport.addEventListener('pointerdown', onPointerDown);
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerup', () => state.isDragging = false);
+        }
+
+        function createPhoto(i) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            const x = Math.random() * (UNIVERSE_SIZE - 200);
+            const y = Math.random() * (UNIVERSE_SIZE - 250);
+            const rot = (Math.random() * 30) - 15;
+            
+            card.style.left = `${x}px`;
+            card.style.top = `${y}px`;
+            card.style.transform = `rotate(${rot}deg)`;
+            
+            // NOTE: Replace with your images folder logic
+            const src = `https://picsum.photos/400/400?random=${i}`;
+            card.innerHTML = `<img src="${src}" loading="lazy"><div class="card-num">MEM_${i.toString().padStart(3,'0')}</div>`;
+            
+            card.onclick = (e) => {
+                if(Math.abs(state.lastMouse.x - e.clientX) < 5) {
+                    document.getElementById('lb-img').src = src;
+                    document.getElementById('lightbox').style.display = 'flex';
+                }
+            };
+
+            universe.appendChild(card);
+
+            // Add dot to radar
+            const dot = document.createElement('div');
+            dot.className = 'radar-dot';
+            dot.style.left = (x / UNIVERSE_SIZE * 150) + 'px';
+            dot.style.top = (y / UNIVERSE_SIZE * 150) + 'px';
+            radar.appendChild(dot);
+        }
+
+        function handleWheel(e) {
+            e.preventDefault();
+            const delta = e.deltaY > 0 ? 0.9 : 1.1;
+            state.zoom = Math.min(Math.max(state.zoom * delta, 0.1), 1.5);
+            update();
+        }
+
+        function onPointerDown(e) {
+            state.isDragging = true;
+            state.lastMouse = { x: e.clientX, y: e.clientY };
+        }
+
+        function onPointerMove(e) {
+            if (!state.isDragging) return;
+            const dx = e.clientX - state.lastMouse.x;
+            const dy = e.clientY - state.lastMouse.y;
+            
+            state.x += dx / state.zoom;
+            state.y += dy / state.zoom;
+            state.lastMouse = { x: e.clientX, y: e.clientY };
+            update();
+        }
+
+        function update() {
+            universe.style.transform = `scale(${state.zoom}) translate(${state.x}px, ${state.y}px)`;
+            
+            // Update Radar Viewport Box
+            const rw = (window.innerWidth / (UNIVERSE_SIZE * state.zoom)) * 150;
+            const rh = (window.innerHeight / (UNIVERSE_SIZE * state.zoom)) * 150;
+            const rx = (-state.x / UNIVERSE_SIZE) * 150;
+            const ry = (-state.y / UNIVERSE_SIZE) * 150;
+            
+            radarView.style.width = Math.min(rw, 150) + 'px';
+            radarView.style.height = Math.min(rh, 150) + 'px';
+            radarView.style.left = rx + 'px';
+            radarView.style.top = ry + 'px';
+        }
+
+        init();
+    </script>
+</body>
+</html>
