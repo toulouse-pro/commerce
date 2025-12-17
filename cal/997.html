@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Family Galaxy v3</title>
+    <style>
+        :root {
+            --bg: #050505;
+            --accent: #00ffcc;
+            --polaroid: #ffffff;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            width: 100vw; height: 100vh;
+            touch-action: none;
+        }
+
+        /* NAVIGATION OVERLAY */
+        #ui {
+            position: fixed; top: 25px; left: 25px; z-index: 100;
+            pointer-events: none;
+            border-left: 2px solid var(--accent);
+            padding-left: 15px;
+        }
+        h1 { margin: 0; font-size: 1.1rem; letter-spacing: 3px; color: var(--accent); }
+        .hint { font-size: 0.7rem; opacity: 0.6; margin-top: 5px; text-transform: uppercase; }
+
+        /* RADAR (CORRECTED MAPPING) */
+        #radar {
+            position: fixed; bottom: 25px; right: 25px;
+            width: 160px; height: 160px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        #radar-viewport {
+            position: absolute;
+            border: 1px solid var(--accent);
+            background: rgba(0, 255, 204, 0.05);
+            pointer-events: none;
+            box-sizing: border-box;
+        }
+        .radar-dot {
+            position: absolute;
+            width: 3px; height: 3px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.4;
+            transform: translate(-50%, -50%);
+        }
+
+        /* VIEWPORT & UNIVERSE */
+        #viewport {
+            width: 100vw; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #universe {
+            position: relative;
+            width: 4000px; height: 4000px;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 100px 100px; /* Grid helps with orientation */
+            will-change: transform;
+        }
+
+        /* PHOTO CARDS */
+        .card {
+            position: absolute;
+            background: var(--polaroid);
+            padding: 8px 8px 30px 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            width: 160px;
+            transition: transform 0.2s ease-out;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+        .card img { width: 100%; height: 160px; object-fit: cover; display: block; }
+        .card-label { color: #222; font-size: 10px; margin-top: 10px; text-align: center; font-weight: bold; }
+
+        /* FULLSCREEN VIEW */
+        #lightbox {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.98);
+            z-index: 2000; display: none; align-items: center; justify-content: center;
+            flex-direction: column;
+        }
+        #lightbox img { max-width: 90vw; max-height: 80vh; border: 4px solid white; box-shadow: 0 0 50px var(--accent); }
+        #close-txt { color: white; margin-top: 20px; font-size: 0.8rem; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+
+    <div id="ui">
+        <h1>MEMENTO GALAXY</h1>
+        <div class="hint">Grab to pan • Pinch/Scroll to zoom</div>
+    </div>
+
+    <div id="radar">
+        <div id="radar-viewport"></div>
+    </div>
+
+    <div id="viewport">
+        <div id="universe"></div>
+    </div>
+
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lb-img" src="">
+        <div id="close-txt">TAP ANYWHERE TO CLOSE</div>
+    </div>
+
+    <script>
+        const UNIVERSE_SIZE = 4000;
+        const RADAR_SIZE = 160;
+        const universe = document.getElementById('universe');
+        const radar = document.getElementById('radar');
+        const radarView = document.getElementById('radar-viewport');
+
+        let state = {
+            // Start centered
+            x: -UNIVERSE_SIZE / 2,
+            y: -UNIVERSE_SIZE / 2,
+            zoom: 0.6,
+            isDragging: false,
+            lastX: 0, lastY: 0
+        };
+
+        function init() {
+            for (let i = 1; i <= 100; i++) {
+                createPhoto(i);
+            }
+            update();
+            window.addEventListener('wheel', handleWheel, { passive: false });
+            window.addEventListener('pointerdown', onPointerDown);
+            window.addEventListener('pointermove', onPointerMove);
+            window.addEventListener('pointerup', () => state.isDragging = false);
+        }
+
+        function createPhoto(i) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            // Random distribution within the 4000x4000 grid
+            const posX = 200 + Math.random() * (UNIVERSE_SIZE - 400);
+            const posY = 200 + Math.random() * (UNIVERSE_SIZE - 400);
+            const rot = (Math.random() * 24) - 12;
+
+            card.style.left = `${posX}px`;
+            card.style.top = `${posY}px`;
+            card.style.transform = `rotate(${rot}deg)`;
+            
+            const src = `https://picsum.photos/400/400?random=${i}`;
+            card.innerHTML = `<img src="${src}" loading="lazy"><div class="card-label">EST. 2024 / NO_${i}</div>`;
+            
+            card.onclick = () => {
+                document.getElementById('lb-img').src = src;
+                document.getElementById('lightbox').style.display = 'flex';
+            };
+
+            universe.appendChild(card);
+
+            // Add dot to radar (Mapped 1:1)
+            const dot = document.createElement('div');
+            dot.className = 'radar-dot';
+            dot.style.left = (posX / UNIVERSE_SIZE * RADAR_SIZE) + 'px';
+            dot.style.top = (posY / UNIVERSE_SIZE * RADAR_SIZE) + 'px';
+            radar.appendChild(dot);
+        }
+
+        function handleWheel(e) {
+            e.preventDefault();
+            const factor = e.deltaY > 0 ? 0.9 : 1.1;
+            state.zoom = Math.min(Math.max(state.zoom * factor, 0.15), 1.2);
+            update();
+        }
+
+        function onPointerDown(e) {
+            state.isDragging = true;
+            state.lastX = e.clientX;
+            state.lastY = e.clientY;
+        }
+
+        function onPointerMove(e) {
+            if (!state.isDragging) return;
+            // Adjust movement based on zoom level so it feels natural
+            state.x += (e.clientX - state.lastX) / state.zoom;
+            state.y += (e.clientY - state.lastY) / state.zoom;
+            state.lastX = e.clientX;
+            state.lastY = e.clientY;
+            update();
+        }
+
+        function update() {
+            // Apply transformation to the universe
+            // Center of screen is (innerWidth/2, innerHeight/2)
+            universe.style.transform = `scale(${state.zoom}) translate(${state.x + (window.innerWidth / 2 / state.zoom)}px, ${state.y + (window.innerHeight / 2 / state.zoom)}px)`;
+            
+            // MATH FOR THE RADAR VIEWPORT BOX:
+            // The box represents the visible window dimensions relative to the universe
+            const visibleWidth = window.innerWidth / state.zoom;
+            const visibleHeight = window.innerHeight / state.zoom;
+            
+            const radarW = (visibleWidth / UNIVERSE_SIZE) * RADAR_SIZE;
+            const radarH = (visibleHeight / UNIVERSE_SIZE) * RADAR_SIZE;
+            
+            // X and Y in the radar are the inverse of our negative translation
+            const radarX = (-state.x / UNIVERSE_SIZE) * RADAR_SIZE - (radarW / 2);
+            const radarY = (-state.y / UNIVERSE_SIZE) * RADAR_SIZE - (radarH / 2);
+            
+            radarView.style.width = Math.min(radarW, RADAR_SIZE) + 'px';
+            radarView.style.height = Math.min(radarH, RADAR_SIZE) + 'px';
+            radarView.style.left = radarX + 'px';
+            radarView.style.top = radarY + 'px';
+        }
+
+        window.addEventListener('resize', update);
+        init();
+    </script>
+</body>
+</html>
