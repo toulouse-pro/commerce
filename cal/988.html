@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>The Heart Archives</title>
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --accent: #ff4d6d;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-color);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            overflow: hidden;
+            width: 100vw; height: 100vh;
+            color: white;
+        }
+
+        /* UTILITIES */
+        .hidden { display: none !important; }
+        a { text-decoration: none; color: inherit; }
+
+        /* ============================
+           VIEW 1: THE UNIVERSE (HEART)
+           ============================ */
+        #universe-view {
+            width: 100%; height: 100%;
+            background-image: 
+                radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, #0f0f13 0%, #1a1a2e 100%);
+            background-size: 40px 40px, 100% 100%; 
+            cursor: grab;
+            overflow: hidden;
+            position: relative;
+        }
+        #universe-view:active { cursor: grabbing; }
+
+        /* UI Elements */
+        #ui-layer { position: fixed; top: 20px; left: 20px; z-index: 100; pointer-events: none; }
+        h1 { font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; margin: 0; color: var(--accent); }
+        .hud-btn {
+            position: fixed; width: 50px; height: 50px;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(5px);
+            color: white; border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: bold; z-index: 1000; cursor: pointer; bottom: 30px; left: 30px;
+            user-select: none;
+        }
+        
+        /* Minimap */
+        #minimap {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 100px; height: 100px;
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2);
+            z-index: 1000; backdrop-filter: blur(4px); pointer-events: none;
+        }
+        #minimap-dot {
+            position: absolute; width: 6px; height: 6px;
+            background: var(--accent); border-radius: 50%;
+            transform: translate(-50%, -50%); box-shadow: 0 0 8px var(--accent);
+            left: 50%; top: 50%;
+        }
+
+        /* The Heart Cloud */
+        #universe { position: absolute; top: 0; left: 0; will-change: transform; }
+        
+        .polaroid {
+            position: absolute; background: white;
+            padding: 6px 6px 25px 6px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            width: 140px; border-radius: 2px;
+            animation: drift var(--duration) ease-in-out infinite;
+            will-change: transform; 
+        }
+        /* Special cards get a glow */
+        .polaroid.special { border: 2px solid var(--accent); box-shadow: 0 0 20px var(--accent); }
+        
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(var(--rot)); }
+            50% { transform: translate(var(--float-x), var(--float-y)) rotate(calc(var(--rot) + var(--float-r))); }
+            100% { transform: translate(0, 0) rotate(var(--rot)); }
+        }
+
+        .polaroid img { width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; background: #222; display: block; }
+        .polaroid-caption {
+            color: #222; font-family: 'Courier New', Courier, monospace;
+            font-size: 0.6rem; margin-top: 8px; text-align: center; font-weight: bold;
+        }
+        
+        /* Lightbox */
+        #lightbox {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            z-index: 2000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+            backdrop-filter: blur(8px);
+        }
+        #lightbox.active { opacity: 1; pointer-events: auto; }
+        #lightbox img {
+            max-width: 80vw; max-height: 60vh; border: 8px solid white;
+            transform: scale(0.9); transition: transform 0.3s;
+        }
+        #lightbox.active img { transform: scale(1); }
+
+        .lb-controls { margin-top: 20px; display: flex; gap: 15px; }
+        .btn {
+            padding: 10px 20px; border-radius: 30px; text-transform: uppercase;
+            font-size: 0.8rem; letter-spacing: 1px; cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.3); background: transparent; color: white;
+            transition: 0.2s;
+        }
+        .btn:hover { background: white; color: black; }
+        .btn-glow {
+            border-color: var(--accent); color: var(--accent);
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.3);
+        }
+        .btn-glow:hover { background: var(--accent); color: white; box-shadow: 0 0 30px var(--accent); }
+
+        /* ============================
+           VIEW 2: INDIVIDUAL FUN PAGE
+           ============================ */
+        #single-view {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            background: linear-gradient(45deg, #111, #222, #111);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            perspective: 1000px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #fun-image-container {
+            position: relative;
+            transform-style: preserve-3d;
+            transform: rotateX(0deg) rotateY(0deg);
+            transition: transform 0.1s;
+        }
+
+        #fun-img {
+            width: 300px; height: 300px;
+            border: 15px solid white;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            object-fit: cover;
+            border-bottom: 50px solid white;
+        }
+
+        #fun-caption {
+            position: absolute; bottom: 15px; width: 100%;
+            text-align: center; color: #222;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold; font-size: 1.2rem;
+            transform: translateZ(20px);
+        }
+
+        .back-link {
+            position: absolute; top: 30px; left: 30px;
+            color: white; font-weight: bold; text-transform: uppercase;
+            letter-spacing: 2px; border-bottom: 1px solid transparent;
+            cursor: pointer; z-index: 10;
+        }
+        .back-link:hover { border-bottom: 1px solid white; }
+
+        .particle {
+            position: absolute; pointer-events: none;
+            background: white; border-radius: 50%;
+            opacity: 0.5; animation: floatUp linear infinite;
+        }
+        @keyframes floatUp {
+            to { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="universe-view">
+        <div id="ui-layer">
+            <h1>Heart Archives</h1>
+            <p class="hint">Drag to pan • Find the glowing cards</p>
+        </div>
+
+        <div class="hud-btn" onclick="toggleOverview()">:::</div>
+        
+        <div id="minimap"><div id="minimap-dot"></div></div>
+
+        <div id="universe"></div>
+
+        <div id="lightbox">
+            <img id="lb-img" src="">
+            <div class="lb-controls">
+                <button class="btn" onclick="closeLightbox()">Close</button>
+                <a id="lb-link" href="#" class="btn btn-glow hidden">Enter This Memory</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="single-view" class="hidden">
+        <a href="?" class="back-link">← Return to Universe</a>
+        
+        <div id="fun-image-container">
+            <img id="fun-img" src="">
+            <div id="fun-caption">Memory</div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATION
+        const TOTAL_IMAGES = 170; 
+        const FILE_EXTENSION = '.jpeg'; 
+        const FOLDER_PATH = 'images/';
+        
+        // This array defines the titles and themes for your first 10 images
+        const SPECIAL_MEMORIES = [
+            { id: 1, title: "Our First Trip", color: "#2d6a4f" },
+            { id: 2, title: "Summer Vibes", color: "#0077b6" },
+            { id: 3, title: "The Party", color: "#e9c46a" },
+            { id: 4, title: "Quiet Moment", color: "#ffb703" },
+            { id: 5, title: "Adventures", color: "#264653" },
+            { id: 6, title: "By The Sea", color: "#457b9d" },
+            { id: 7, title: "Sunset", color: "#f4a261" },
+            { id: 8, title: "Night Out", color: "#e76f51" },
+            { id: 9, title: "Road Trip", color: "#a8dadc" },
+            { id: 10, title: "Forever", color: "#1d3557" }
+        ];
+
+        // --- ROUTER LOGIC ---
+        function checkRoute() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id'); 
+
+            if (id) {
+                document.getElementById('universe-view').classList.add('hidden');
+                document.getElementById('single-view').classList.remove('hidden');
+                initSinglePage(id);
+            } else {
+                document.getElementById('universe-view').classList.remove('hidden');
+                document.getElementById('single-view').classList.add('hidden');
+                initUniverse();
+            }
+        }
+
+        // ===============================================
+        // LOGIC FOR SINGLE "FUN" PAGE
+        // ===============================================
+        function initSinglePage(indexStr) {
+            const index = parseInt(indexStr);
+            const data = SPECIAL_MEMORIES[index - 1] || SPECIAL_MEMORIES[0];
+
+            const img = document.getElementById('fun-img');
+            const caption = document.getElementById('fun-caption');
+            const container = document.getElementById('single-view');
+            const card3d = document.getElementById('fun-image-container');
+
+            // --- CHANGED LOGIC HERE ---
+            // Forces a '0' before the number. 
+            // e.g., index 1 becomes '01.jpeg', index 10 becomes '010.jpeg'
+            img.src = `${FOLDER_PATH}0${index}${FILE_EXTENSION}`;
+            
+            caption.innerText = data.title;
+            container.style.background = `linear-gradient(45deg, #111, ${data.color}, #111)`;
+
+            // 3D Tilt Effect
+            document.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 20;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+                card3d.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+
+            // Particles
+            for(let i=0; i<20; i++) {
+                let p = document.createElement('div');
+                p.className = 'particle';
+                p.style.left = Math.random() * 100 + 'vw';
+                p.style.top = '110vh';
+                p.style.width = p.style.height = (Math.random() * 10 + 5) + 'px';
+                p.style.background = Math.random() > 0.5 ? '#fff' : data.color;
+                p.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                p.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(p);
+            }
+        }
+
+        // ===============================================
+        // LOGIC FOR UNIVERSE (HEART) PAGE
+        // ===============================================
+        
+        let state = { x: 0, y: 0, scale: 1, isDragging: false, isOverview: false, startX: 0, startY: 0 };
+        const HEART_SCALE = 55;
+        const MAP_BOUNDS = 1800; 
+        let velocityX = 0, velocityY = 0;
+        let lastMouseX = 0, lastMouseY = 0;
+        const universe = document.getElementById('universe');
+
+        function initUniverse() {
+            if(universe.children.length > 0) return;
+            resetPosition();
+            
+            for (let i = 1; i <= TOTAL_IMAGES; i++) {
+                createPolaroid(i);
+            }
+            
+            loop();
+        }
+
+        function createPolaroid(i) {
+            const card = document.createElement('div');
+            card.className = 'polaroid';
+            
+            // Heart Math
+            const t = (i / TOTAL_IMAGES) * Math.PI * 2;
+            let hx = 16 * Math.pow(Math.sin(t), 3);
+            let hy = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+            const x = (hx * HEART_SCALE) + (Math.random() - 0.5) * 80;
+            const y = (hy * HEART_SCALE) + (Math.random() - 0.5) * 80;
+
+            card.style.left = `${x}px`;
+            card.style.top = `${y}px`;
+
+            // Physics
+            const rot = (Math.random() * 20) - 10;
+            card.style.setProperty('--rot', `${rot}deg`);
+            card.style.setProperty('--duration', `${3 + Math.random() * 5}s`);
+            card.style.setProperty('--delay', `${Math.random() * -5}s`);
+            card.style.setProperty('--float-x', `${(Math.random()*20)-10}px`);
+            card.style.setProperty('--float-y', `${(Math.random()*30)-15}px`);
+            card.style.setProperty('--float-r', `${(Math.random()*10)-5}deg`);
+            card.style.zIndex = Math.floor(y + 2000);
+            
+            // --- CHANGED LOGIC HERE ---
+            // Forces a '0' before the number: 01.jpeg, 010.jpeg, 0170.jpeg
+            const src = `${FOLDER_PATH}0${i}${FILE_EXTENSION}`;
+            
+            let isSpecial = false;
+
+            if (i <= 10) {
+                isSpecial = true;
+                card.classList.add('special');
+            }
+
+            card.innerHTML = `<img src="${src}" loading="lazy"><div class="polaroid-caption">#${isSpecial ? '★ ' + i : i}</div>`;
+
+            // Interactions
+            let touchStartX = 0, touchStartY = 0;
+            card.addEventListener('pointerdown', (e) => {
+                touchStartX = e.clientX; touchStartY = e.clientY;
+                if(!state.isOverview) card.classList.add('interacting');
+            });
+            card.addEventListener('pointerup', (e) => {
+                const dist = Math.hypot(e.clientX - touchStartX, e.clientY - touchStartY);
+                card.classList.remove('interacting');
+                if (dist < 10) {
+                    if (state.isOverview) zoomToCard(x, y);
+                    else openLightbox(src, isSpecial, i);
+                }
+            });
+            universe.appendChild(card);
+        }
+
+        // --- LIGHTBOX LOGIC ---
+        const lightbox = document.getElementById('lightbox');
+        const lbImg = document.getElementById('lb-img');
+        const lbLink = document.getElementById('lb-link');
+
+        function openLightbox(src, isSpecial, id) {
+            lbImg.src = src;
+            lightbox.classList.add('active');
+            
+            if(isSpecial) {
+                lbLink.classList.remove('hidden');
+                lbLink.href = `?id=${id}`; 
+            } else {
+                lbLink.classList.add('hidden');
+            }
+        }
+        function closeLightbox() { lightbox.classList.remove('active'); }
+
+        // --- NAVIGATION & PHYSICS ---
+        document.addEventListener('pointerdown', (e) => {
+            if(e.target.closest('.hud-btn') || e.target.closest('#lightbox') || e.target.closest('.back-link')) return;
+            if(state.isOverview) return;
+            state.isDragging = true; state.startX = e.clientX - state.x; state.startY = e.clientY - state.y;
+            velocityX = 0; velocityY = 0; lastMouseX = e.clientX; lastMouseY = e.clientY;
+            document.getElementById('universe-view').style.cursor = 'grabbing';
+            universe.style.transition = 'none';
+        });
+        document.addEventListener('pointermove', (e) => {
+            if (!state.isDragging) return;
+            e.preventDefault();
+            const x = e.clientX - state.startX; const y = e.clientY - state.startY;
+            velocityX = e.clientX - lastMouseX; velocityY = e.clientY - lastMouseY;
+            lastMouseX = e.clientX; lastMouseY = e.clientY;
+            state.x = x; state.y = y;
+        });
+        document.addEventListener('pointerup', () => {
+            state.isDragging = false;
+            document.getElementById('universe-view').style.cursor = 'grab';
+            universe.style.transition = 'transform 0.1s linear'; 
+        });
+
+        function loop() {
+            if (!document.getElementById('universe-view').classList.contains('hidden')) {
+                if (!state.isDragging && !state.isOverview) {
+                    state.x += velocityX; state.y += velocityY;
+                    velocityX *= 0.95; velocityY *= 0.95;
+                }
+                if (!state.isOverview) {
+                    universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${state.scale})`;
+                    updateMinimap();
+                }
+                requestAnimationFrame(loop);
+            }
+        }
+
+        function updateMinimap() {
+            let pctX = 0.5 - (state.x / (MAP_BOUNDS * 2.5)); 
+            let pctY = 0.5 - (state.y / (MAP_BOUNDS * 2.5));
+            pctX = Math.max(0, Math.min(1, pctX)); pctY = Math.max(0, Math.min(1, pctY));
+            document.getElementById('minimap-dot').style.left = `${pctX * 100}%`;
+            document.getElementById('minimap-dot').style.top = `${pctY * 100}%`;
+        }
+
+        function toggleOverview() {
+            state.isOverview = !state.isOverview;
+            const uiText = document.querySelector('.hint');
+            if (state.isOverview) {
+                const fitScale = Math.min(window.innerWidth / 2500, window.innerHeight / 2500); 
+                universe.style.transition = 'transform 0.8s cubic-bezier(0.2, 1, 0.3, 1)';
+                universe.style.transform = `translate(${window.innerWidth/2}px, ${window.innerHeight/2}px) scale(${fitScale})`;
+                uiText.innerText = "Tap an image to warp there";
+            } else {
+                universe.style.transition = 'transform 0.6s cubic-bezier(0.2, 1, 0.3, 1)';
+                uiText.innerText = "Drag to pan • Find the glowing cards";
+                universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+            }
+        }
+
+        function zoomToCard(cardX, cardY) {
+            state.isOverview = false;
+            document.querySelector('.hint').innerText = "Drag to pan • Find the glowing cards";
+            state.x = (window.innerWidth / 2) - cardX;
+            state.y = (window.innerHeight / 2) - cardY;
+            universe.style.transition = 'transform 1s cubic-bezier(0.2, 1, 0.3, 1)';
+            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+        }
+        function resetPosition() {
+            state.x = window.innerWidth / 2; state.y = window.innerHeight / 2;
+            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
+        }
+
+        checkRoute();
+
+    </script>
+</body>
+</html>
