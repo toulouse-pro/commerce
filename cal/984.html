@@ -18,6 +18,7 @@
             width: 100vw; height: 100vh;
             color: white;
             user-select: none;
+            -webkit-user-select: none;
         }
 
         /* UTILITIES */
@@ -36,6 +37,7 @@
             cursor: grab;
             overflow: hidden;
             position: relative;
+            touch-action: none; /* Critical for performance */
         }
         #universe-view:active { cursor: grabbing; }
 
@@ -64,40 +66,54 @@
         }
 
         /* The Heart Cloud */
-        #universe { position: absolute; top: 0; left: 0; }
+        #universe { 
+            position: absolute; top: 0; left: 0; 
+            will-change: transform; /* Hint to browser to optimize */
+        }
         
         .polaroid {
             position: absolute; background: white;
             padding: 6px 6px 25px 6px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
             width: 140px; border-radius: 2px;
-            /* Critical for dragging: stops browser from trying to scroll when touching a card */
             touch-action: none; 
             cursor: grab;
+            /* Optimize rendering */
+            backface-visibility: hidden;
+            transform-style: preserve-3d;
         }
         
-        /* Animation class for the "Drifting" effect */
+        /* The Drifting Animation */
         .drifting {
             animation: drift var(--duration) ease-in-out infinite;
         }
         
-        /* Class added when we "Snap Back" to reset positions */
-        .snapping-back {
-            transition: left 0.8s cubic-bezier(0.2, 1, 0.3, 1), 
-                        top 0.8s cubic-bezier(0.2, 1, 0.3, 1), 
-                        transform 0.8s cubic-bezier(0.2, 1, 0.3, 1) !important;
+        /* When dragging, we disable animation and scale up slightly */
+        .is-dragging {
+            animation: none !important;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            z-index: 10000 !important;
+            scale: 1.05;
         }
 
-        .polaroid:active { cursor: grabbing; z-index: 9999 !important; }
+        /* Snap back transition */
+        .snapping {
+            transition: transform 0.6s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
         .polaroid.special { border: 2px solid var(--accent); box-shadow: 0 0 20px var(--accent); z-index: 5000; }
         
         @keyframes drift {
-            0% { transform: translate(0, 0) rotate(var(--rot)); }
-            50% { transform: translate(var(--float-x), var(--float-y)) rotate(calc(var(--rot) + var(--float-r))); }
-            100% { transform: translate(0, 0) rotate(var(--rot)); }
+            0% { transform: translate3d(0, 0, 0) rotate(var(--rot)); }
+            50% { transform: translate3d(var(--float-x), var(--float-y), 0) rotate(calc(var(--rot) + var(--float-r))); }
+            100% { transform: translate3d(0, 0, 0) rotate(var(--rot)); }
         }
 
-        .polaroid img { width: 100%; height: auto; aspect-ratio: 1/1; object-fit: cover; background: #222; display: block; pointer-events: none; }
+        .polaroid img { 
+            width: 100%; height: auto; aspect-ratio: 1/1; 
+            object-fit: cover; background: #222; display: block; 
+            pointer-events: none; 
+        }
         .polaroid-caption {
             color: #222; font-family: 'Courier New', Courier, monospace;
             font-size: 0.6rem; margin-top: 8px; text-align: center; font-weight: bold; pointer-events: none;
@@ -309,20 +325,31 @@
         // LOGIC FOR UNIVERSE (HEART) PAGE
         // ===============================================
         
-        // UNIVERSE STATE
-        let state = { x: 0, y: 0, scale: 1, isDragging: false, isOverview: false, startX: 0, startY: 0 };
-        // CARD DRAGGING STATE
+        // --- GLOBAL STATE ---
+        // 'mode' can be: 'IDLE', 'PAN_UNIVERSE', 'DRAG_CARD'
+        let inputMode = 'IDLE';
+        
+        // Universe Pan State
+        let uState = { x: 0, y: 0, scale: 1, isOverview: false };
+        let panStart = { x: 0, y: 0 };
+        let panLast = { x: 0, y: 0 };
+        let velocity = { x: 0, y: 0 };
+
+        // Card Drag State
         let activeCard = null;
-        let cardOffset = { x: 0, y: 0 };
-        let cardHasMoved = false;
+        let cardDragStart = { x: 0, y: 0 }; // Pointer position at start
+        let cardCurrentTransform = { x: 0, y: 0 }; // Current translation
 
         const HEART_SCALE = 55;
         const MAP_BOUNDS = 1800; 
-        let velocityX = 0, velocityY = 0;
-        let lastMouseX = 0, lastMouseY = 0;
         const universe = document.getElementById('universe');
+        const universeView = document.getElementById('universe-view');
         const loadingDiv = document.getElementById('loading');
         let shuffledPositions = [];
+
+        // Store card runtime data (current drag offset)
+        // Map<HTMLElement, { tx: number, ty: number }>
+        const cardData = new Map();
 
         function initUniverse() {
             if(universe.children.length > 0) return;
@@ -335,18 +362,26 @@
             }
 
             let currentImageIndex = 1;
-            const batchSize = 5;
+            const batchSize = 10; // Increased batch size for faster loading
 
             function loadBatch() {
                 if (currentImageIndex > TOTAL_IMAGES) {
                     loadingDiv.style.display = 'none';
-                    loop();
+                    startLoop();
                     return;
                 }
                 const endLimit = Math.min(currentImageIndex + batchSize, TOTAL_IMAGES + 1);
+                
+                // Use a DocumentFragment to minimize reflows
+                const fragment = document.createDocumentFragment();
+                
                 for (let i = currentImageIndex; i < endLimit; i++) {
-                    createPolaroid(i, shuffledPositions[i-1]);
+                    const card = createPolaroid(i, shuffledPositions[i-1]);
+                    fragment.appendChild(card);
                 }
+                
+                universe.appendChild(fragment);
+                
                 currentImageIndex += batchSize;
                 loadingDiv.innerText = `Loading ${Math.round((currentImageIndex/TOTAL_IMAGES)*100)}%`;
                 requestAnimationFrame(loadBatch);
@@ -378,93 +413,242 @@
             card.style.setProperty('--float-y', `${(Math.random()*30)-15}px`);
             card.style.setProperty('--float-r', `${(Math.random()*10)-5}deg`);
             
-            card.style.zIndex = Math.floor(y + 2000);
+            // Base Z-index based on Y position (pseudo-3D)
+            const baseZ = Math.floor(y + 2000);
+            card.style.zIndex = baseZ;
+            card.dataset.baseZ = baseZ; 
             
-            // --- SAVE ORIGIN FOR RESET ---
-            card.dataset.origX = x;
-            card.dataset.origY = y;
-            card.dataset.origRot = rot;
+            // Initialize data for this card
+            cardData.set(card, { tx: 0, ty: 0, moved: false, special: imgIndex <= 10, id: imgIndex, src: `${FOLDER_PATH}0${imgIndex}${FILE_EXTENSION}` });
 
-            const src = `${FOLDER_PATH}0${imgIndex}${FILE_EXTENSION}`;
-            
-            let isSpecial = false;
-            if (imgIndex <= 10) {
-                isSpecial = true;
-                card.classList.add('special');
-            }
+            const src = cardData.get(card).src;
+            const isSpecial = cardData.get(card).special;
 
-            card.innerHTML = `<img src="${src}" loading="lazy" decoding="async"><div class="polaroid-caption">#${isSpecial ? '★ ' + imgIndex : imgIndex}</div>`;
+            if (isSpecial) card.classList.add('special');
 
-            // --- CARD INTERACTIONS (New Logic) ---
-            
-            // 1. Mouse Down on Card
-            card.addEventListener('pointerdown', (e) => {
-                if(state.isOverview) return; // Don't drag cards in overview mode
-                e.stopPropagation(); // Stop the universe from panning
-                
-                activeCard = card;
-                cardHasMoved = false;
-                
-                // Pause the float animation while dragging
-                card.classList.remove('drifting');
-                card.style.transition = 'none'; // Instant movement
-                
-                // Calculate offset relative to the card's current position
-                // We need to account for the current left/top values
-                const rect = card.getBoundingClientRect();
-                
-                // Get the position inside the card we clicked
-                // But we are moving 'left' and 'top' styles, so we need pointer relative to that
-                // Simplified: Capture pointer, and we will apply delta
-                card.setPointerCapture(e.pointerId);
-                
-                // Store initial pointer pos
-                card.dataset.pointerX = e.clientX;
-                card.dataset.pointerY = e.clientY;
-                // Store initial CSS pos
-                card.dataset.currentLeft = parseFloat(card.style.left);
-                card.dataset.currentTop = parseFloat(card.style.top);
-            });
+            // MEMORY OPTIMIZATION: decoding="async" and loading="lazy"
+            card.innerHTML = `<img src="${src}" loading="lazy" decoding="async" draggable="false"><div class="polaroid-caption">#${isSpecial ? '★ ' + imgIndex : imgIndex}</div>`;
 
-            // 2. Mouse Move on Card
-            card.addEventListener('pointermove', (e) => {
-                if (activeCard !== card) return;
-                
-                const dx = e.clientX - parseFloat(card.dataset.pointerX);
-                const dy = e.clientY - parseFloat(card.dataset.pointerY);
-                
-                // If moved more than a few pixels, mark as moved (prevents lightbox opening)
-                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) cardHasMoved = true;
-
-                const newLeft = parseFloat(card.dataset.currentLeft) + dx;
-                const newTop = parseFloat(card.dataset.currentTop) + dy;
-                
-                card.style.left = `${newLeft}px`;
-                card.style.top = `${newTop}px`;
-                card.style.zIndex = 9999; // Bring to front
-            });
-
-            // 3. Mouse Up on Card
-            card.addEventListener('pointerup', (e) => {
-                if (activeCard !== card) return;
-                
-                if (!cardHasMoved) {
-                    // It was a tap! Open Lightbox
-                    if (state.isOverview) zoomToCard(x, y);
-                    else openLightbox(src, isSpecial, imgIndex);
-                } else {
-                    // It was a drag. Leave it there.
-                    // Re-enable drifting animation? No, let it sit still where we put it.
-                }
-
-                activeCard = null;
-                card.releasePointerCapture(e.pointerId);
-            });
-
-            universe.appendChild(card);
+            return card;
         }
 
-        // --- LIGHTBOX LOGIC ---
+        // --- UNIFIED EVENT DELEGATION (PERFORMANCE FIX) ---
+        // We attach listeners only to the View, not every card.
+
+        universeView.addEventListener('pointerdown', (e) => {
+            if(e.target.closest('.hud-btn') || e.target.closest('#lightbox') || e.target.closest('.back-link')) return;
+            
+            // Check if we hit a card
+            const card = e.target.closest('.polaroid');
+            
+            if (card && !uState.isOverview) {
+                // --- MODE: CARD DRAG ---
+                inputMode = 'DRAG_CARD';
+                activeCard = card;
+                
+                // Get current transform data
+                const data = cardData.get(activeCard);
+                cardDragStart.x = e.clientX;
+                cardDragStart.y = e.clientY;
+                cardCurrentTransform.x = data.tx;
+                cardCurrentTransform.y = data.ty;
+                
+                // Visuals
+                activeCard.classList.add('is-dragging');
+                activeCard.classList.remove('drifting');
+                activeCard.classList.remove('snapping');
+                activeCard.style.zIndex = 10000; // Bring to absolute front
+                activeCard.setPointerCapture(e.pointerId); // Keep tracking if mouse leaves element
+                
+            } else {
+                // --- MODE: UNIVERSE PAN ---
+                inputMode = 'PAN_UNIVERSE';
+                panStart.x = e.clientX - uState.x;
+                panStart.y = e.clientY - uState.y;
+                panLast.x = e.clientX;
+                panLast.y = e.clientY;
+                velocity.x = 0; velocity.y = 0;
+                
+                universeView.style.cursor = 'grabbing';
+                universe.style.transition = 'none'; // Disable transition for direct control
+            }
+        });
+
+        window.addEventListener('pointermove', (e) => {
+            if (inputMode === 'IDLE') return;
+            e.preventDefault(); // Prevent browser scrolling
+
+            if (inputMode === 'DRAG_CARD' && activeCard) {
+                const dx = e.clientX - cardDragStart.x;
+                const dy = e.clientY - cardDragStart.y;
+                
+                // If moved significantly, mark as "moved" so we don't open lightbox
+                if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                    cardData.get(activeCard).moved = true;
+                }
+
+                // Update Data
+                const newTx = cardCurrentTransform.x + dx;
+                const newTy = cardCurrentTransform.y + dy;
+                const data = cardData.get(activeCard);
+                data.tx = newTx;
+                data.ty = newTy;
+                
+                // Apply Transform directly (GPU efficient)
+                activeCard.style.transform = `translate3d(${newTx}px, ${newTy}px, 0) rotate(0deg)`;
+
+            } else if (inputMode === 'PAN_UNIVERSE') {
+                const x = e.clientX - panStart.x;
+                const y = e.clientY - panStart.y;
+                
+                velocity.x = e.clientX - panLast.x;
+                velocity.y = e.clientY - panLast.y;
+                
+                panLast.x = e.clientX;
+                panLast.y = e.clientY;
+                
+                uState.x = x;
+                uState.y = y;
+                
+                // Update Universe Transform
+                if (!uState.isOverview) {
+                    universe.style.transform = `translate3d(${uState.x}px, ${uState.y}px, 0) scale(${uState.scale})`;
+                }
+            }
+        });
+
+        window.addEventListener('pointerup', (e) => {
+            if (inputMode === 'DRAG_CARD' && activeCard) {
+                const data = cardData.get(activeCard);
+                
+                activeCard.classList.remove('is-dragging');
+                activeCard.releasePointerCapture(e.pointerId);
+
+                // If it was a click (not dragged much), Open Lightbox
+                if (!data.moved) {
+                     // Reset visual state since we didn't actually move it
+                    activeCard.classList.add('drifting');
+                    activeCard.style.zIndex = activeCard.dataset.baseZ;
+                    
+                    if (uState.isOverview) {
+                        // Zoom to it
+                        const rect = activeCard.getBoundingClientRect();
+                        // This logic is complex in overview, let's just center universe
+                        zoomToCard(parseFloat(activeCard.style.left), parseFloat(activeCard.style.top));
+                    } else {
+                        openLightbox(data.src, data.special, data.id);
+                    }
+                } else {
+                    // It was dragged. Keep it there.
+                    // Do NOT re-add 'drifting' class, so it stays still where user put it.
+                    // We leave Z-index high so it stays on top of the pile? 
+                    // Or reset it? Let's keep it high but not 10000.
+                    activeCard.style.zIndex = 9000; 
+                }
+                
+                // Reset move flag for next time
+                data.moved = false;
+                activeCard = null;
+
+            } else if (inputMode === 'PAN_UNIVERSE') {
+                universeView.style.cursor = 'grab';
+                universe.style.transition = 'transform 0.1s linear'; 
+            }
+            
+            inputMode = 'IDLE';
+        });
+
+
+        // --- ANIMATION LOOP ---
+        function startLoop() {
+            loop();
+        }
+
+        function loop() {
+            if (!universeView.classList.contains('hidden')) {
+                // Apply inertia only if panning universe
+                if (inputMode === 'IDLE' && !uState.isOverview) {
+                    if (Math.abs(velocity.x) > 0.1 || Math.abs(velocity.y) > 0.1) {
+                        uState.x += velocity.x;
+                        uState.y += velocity.y;
+                        velocity.x *= 0.95;
+                        velocity.y *= 0.95;
+                        
+                        universe.style.transform = `translate3d(${uState.x}px, ${uState.y}px, 0) scale(${uState.scale})`;
+                        updateMinimap();
+                    }
+                } else if (inputMode === 'PAN_UNIVERSE') {
+                    updateMinimap();
+                }
+                requestAnimationFrame(loop);
+            }
+        }
+
+        function updateMinimap() {
+            let pctX = 0.5 - (uState.x / (MAP_BOUNDS * 2.5)); 
+            let pctY = 0.5 - (uState.y / (MAP_BOUNDS * 2.5));
+            pctX = Math.max(0, Math.min(1, pctX)); pctY = Math.max(0, Math.min(1, pctY));
+            document.getElementById('minimap-dot').style.left = `${pctX * 100}%`;
+            document.getElementById('minimap-dot').style.top = `${pctY * 100}%`;
+        }
+
+        // --- CONTROLS ---
+
+        function toggleOverview() {
+            uState.isOverview = !uState.isOverview;
+            const uiText = document.querySelector('.hint');
+            
+            if (uState.isOverview) {
+                // --- ZOOM OUT & RESET CARDS ---
+                const fitScale = Math.min(window.innerWidth / 2500, window.innerHeight / 2500); 
+                universe.style.transition = 'transform 0.8s cubic-bezier(0.2, 1, 0.3, 1)';
+                universe.style.transform = `translate(${window.innerWidth/2}px, ${window.innerHeight/2}px) scale(${fitScale})`;
+                uiText.innerText = "Tap an image to warp there";
+
+                // Snap cards back
+                document.querySelectorAll('.polaroid').forEach(card => {
+                    const data = cardData.get(card);
+                    // Reset internal tracking
+                    data.tx = 0; 
+                    data.ty = 0;
+                    
+                    // Add transition class for smooth snap
+                    card.classList.add('snapping');
+                    card.classList.add('drifting'); // Re-enable float
+                    
+                    // Reset CSS transform
+                    // We must respect the rotation variable in the animation
+                    card.style.transform = ''; 
+                    card.style.zIndex = card.dataset.baseZ;
+
+                    setTimeout(() => {
+                        card.classList.remove('snapping');
+                    }, 600);
+                });
+
+            } else {
+                // --- ZOOM IN ---
+                universe.style.transition = 'transform 0.6s cubic-bezier(0.2, 1, 0.3, 1)';
+                uiText.innerText = "Drag images to clear the pile • Drag background to pan";
+                universe.style.transform = `translate3d(${uState.x}px, ${uState.y}px, 0) scale(1)`;
+            }
+        }
+
+        function zoomToCard(cardX, cardY) {
+            uState.isOverview = false;
+            document.querySelector('.hint').innerText = "Drag images to clear the pile • Drag background to pan";
+            uState.x = (window.innerWidth / 2) - cardX;
+            uState.y = (window.innerHeight / 2) - cardY;
+            universe.style.transition = 'transform 1s cubic-bezier(0.2, 1, 0.3, 1)';
+            universe.style.transform = `translate3d(${uState.x}px, ${uState.y}px, 0) scale(1)`;
+        }
+
+        function resetPosition() {
+            uState.x = window.innerWidth / 2; uState.y = window.innerHeight / 2;
+            universe.style.transform = `translate3d(${uState.x}px, ${uState.y}px, 0) scale(1)`;
+        }
+
+        // --- LIGHTBOX ---
         const lightbox = document.getElementById('lightbox');
         const lbImg = document.getElementById('lb-img');
         const lbLink = document.getElementById('lb-link');
@@ -480,116 +664,6 @@
             }
         }
         function closeLightbox() { lightbox.classList.remove('active'); }
-
-        // --- UNIVERSE PANNING LOGIC (Standard) ---
-        document.getElementById('universe-view').addEventListener('pointerdown', (e) => {
-            if(e.target.closest('.hud-btn') || e.target.closest('#lightbox') || e.target.closest('.back-link')) return;
-            if(state.isOverview) return;
-            
-            // Only pan if NOT dragging a card
-            if (activeCard) return;
-
-            state.isDragging = true; 
-            state.startX = e.clientX - state.x; 
-            state.startY = e.clientY - state.y;
-            velocityX = 0; velocityY = 0; 
-            lastMouseX = e.clientX; lastMouseY = e.clientY;
-            
-            document.getElementById('universe-view').style.cursor = 'grabbing';
-            universe.style.transition = 'none';
-        });
-
-        document.addEventListener('pointermove', (e) => {
-            if (!state.isDragging) return;
-            e.preventDefault();
-            const x = e.clientX - state.startX; 
-            const y = e.clientY - state.startY;
-            velocityX = e.clientX - lastMouseX; velocityY = e.clientY - lastMouseY;
-            lastMouseX = e.clientX; lastMouseY = e.clientY;
-            state.x = x; state.y = y;
-        });
-
-        document.addEventListener('pointerup', () => {
-            state.isDragging = false;
-            document.getElementById('universe-view').style.cursor = 'grab';
-            universe.style.transition = 'transform 0.1s linear'; 
-        });
-
-        function loop() {
-            if (!document.getElementById('universe-view').classList.contains('hidden')) {
-                // Inertia for universe panning
-                if (!state.isDragging && !state.isOverview) {
-                    state.x += velocityX; state.y += velocityY;
-                    velocityX *= 0.95; velocityY *= 0.95;
-                }
-                if (!state.isOverview) {
-                    universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(${state.scale})`;
-                    updateMinimap();
-                }
-                requestAnimationFrame(loop);
-            }
-        }
-
-        function updateMinimap() {
-            let pctX = 0.5 - (state.x / (MAP_BOUNDS * 2.5)); 
-            let pctY = 0.5 - (state.y / (MAP_BOUNDS * 2.5));
-            pctX = Math.max(0, Math.min(1, pctX)); pctY = Math.max(0, Math.min(1, pctY));
-            document.getElementById('minimap-dot').style.left = `${pctX * 100}%`;
-            document.getElementById('minimap-dot').style.top = `${pctY * 100}%`;
-        }
-
-        // --- OVERVIEW & RESET LOGIC ---
-        function toggleOverview() {
-            state.isOverview = !state.isOverview;
-            const uiText = document.querySelector('.hint');
-            
-            if (state.isOverview) {
-                // ENTERING OVERVIEW -> SNAP BACK
-                
-                // 1. Calculate zoom to fit
-                const fitScale = Math.min(window.innerWidth / 2500, window.innerHeight / 2500); 
-                universe.style.transition = 'transform 0.8s cubic-bezier(0.2, 1, 0.3, 1)';
-                universe.style.transform = `translate(${window.innerWidth/2}px, ${window.innerHeight/2}px) scale(${fitScale})`;
-                uiText.innerText = "Tap an image to warp there";
-
-                // 2. RESET ALL CARDS TO ORIGINAL POSITIONS
-                const cards = document.querySelectorAll('.polaroid');
-                cards.forEach(card => {
-                    // Add smooth transition class
-                    card.classList.add('snapping-back');
-                    card.classList.add('drifting'); // restart float animation
-                    
-                    // Reset coordinates to dataset originals
-                    card.style.left = card.dataset.origX + 'px';
-                    card.style.top = card.dataset.origY + 'px';
-                    card.style.zIndex = Math.floor(parseFloat(card.dataset.origY) + 2000);
-                    
-                    // Clean up transition class after animation is done so dragging works fast again later
-                    setTimeout(() => {
-                        card.classList.remove('snapping-back');
-                    }, 800);
-                });
-
-            } else {
-                // EXITING OVERVIEW
-                universe.style.transition = 'transform 0.6s cubic-bezier(0.2, 1, 0.3, 1)';
-                uiText.innerText = "Drag images to clear the pile • Drag background to pan";
-                universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
-            }
-        }
-
-        function zoomToCard(cardX, cardY) {
-            state.isOverview = false;
-            document.querySelector('.hint').innerText = "Drag images to clear the pile • Drag background to pan";
-            state.x = (window.innerWidth / 2) - cardX;
-            state.y = (window.innerHeight / 2) - cardY;
-            universe.style.transition = 'transform 1s cubic-bezier(0.2, 1, 0.3, 1)';
-            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
-        }
-        function resetPosition() {
-            state.x = window.innerWidth / 2; state.y = window.innerHeight / 2;
-            universe.style.transform = `translate3d(${state.x}px, ${state.y}px, 0) scale(1)`;
-        }
 
         checkRoute();
 
